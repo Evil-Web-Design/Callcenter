@@ -1,0 +1,435 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D994C60E-2116-473D-BF14-0DAA77FFEB26}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Sub Main</StartupObject>
+    <RootNamespace>Intelepros</RootNamespace>
+    <AssemblyName>Intelepros</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>ftp://hazel.arvixe.com/intelepros.com/wwwroot/publish/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>true</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://intelepros.com/publish/</InstallUrl>
+    <TargetCulture>en-US</TargetCulture>
+    <ProductName>Intelepros</ProductName>
+    <PublisherName>Call Center</PublisherName>
+    <MinimumRequiredVersion>1.0.1.12</MinimumRequiredVersion>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>13</ApplicationRevision>
+    <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <CreateDesktopShortcut>true</CreateDesktopShortcut>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>Intelepros.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>Intelepros.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>Internet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>C73E9CF5025F4E0AD13B055C726B14141358C66E</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Intelepros_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Collections.ObjectModel" />
+    <Import Include="System.ComponentModel.Design" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Threading.Tasks" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Code\main.vb" />
+    <Compile Include="Control\ctl_DateTime.Designer.vb">
+      <DependentUpon>ctl_DateTime.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Control\ctl_DateTime.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\ctl_MasterCal.Designer.vb">
+      <DependentUpon>ctl_MasterCal.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Control\ctl_MasterCal.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\ctl_Phone.Designer.vb">
+      <DependentUpon>ctl_Phone.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Control\ctl_Phone.vb">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Control\CustomToolStripControl.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Control\ExtendedDateTimePicker.Designer.vb">
+      <DependentUpon>ExtendedDateTimePicker.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Control\ExtendedDateTimePicker.vb">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_Employees.Designer.vb">
+      <DependentUpon>Frm_Employees.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_Employees.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_History.Designer.vb">
+      <DependentUpon>Frm_History.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_History.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_Log.Designer.vb">
+      <DependentUpon>Frm_Log.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_Log.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_Main.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_Main.Designer.vb">
+      <DependentUpon>Frm_Main.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_NewRecord.Designer.vb">
+      <DependentUpon>Frm_NewRecord.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_NewRecord.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_OpRecord.Designer.vb">
+      <DependentUpon>Frm_OpRecord.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_OpRecord.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_Progress.Designer.vb">
+      <DependentUpon>Frm_Progress.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_Progress.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_Record.Designer.vb">
+      <DependentUpon>Frm_Record.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_Record.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_Results.Designer.vb">
+      <DependentUpon>Frm_Results.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_Results.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_Search.Designer.vb">
+      <DependentUpon>Frm_Search.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_Search.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frm_Settings.Designer.vb">
+      <DependentUpon>frm_Settings.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frm_Settings.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_SignIn.designer.vb">
+      <DependentUpon>Frm_SignIn.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_SignIn.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Settings.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Control\ctl_DateTime.resx">
+      <DependentUpon>ctl_DateTime.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\ctl_MasterCal.resx">
+      <DependentUpon>ctl_MasterCal.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Control\ctl_Phone.resx">
+      <DependentUpon>ctl_Phone.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_Employees.resx">
+      <DependentUpon>Frm_Employees.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_History.resx">
+      <DependentUpon>Frm_History.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_Log.resx">
+      <DependentUpon>Frm_Log.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_Main.resx">
+      <DependentUpon>Frm_Main.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_NewRecord.resx">
+      <DependentUpon>Frm_NewRecord.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_OpRecord.resx">
+      <DependentUpon>Frm_OpRecord.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_Progress.resx">
+      <DependentUpon>Frm_Progress.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_Record.resx">
+      <DependentUpon>Frm_Record.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_Results.resx">
+      <DependentUpon>Frm_Results.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_Search.resx">
+      <DependentUpon>Frm_Search.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frm_Settings.resx">
+      <DependentUpon>frm_Settings.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_SignIn.resx">
+      <DependentUpon>Frm_SignIn.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Intelepros.vbproj.vsspell" />
+    <None Include="Intelepros_TemporaryKey.pfx" />
+    <None Include="My Project\app.manifest" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CallCenter\Base\Base.vbproj">
+      <Project>{5a4f9d3c-4ef4-453f-9ddf-1b4363cc3a63}</Project>
+      <Name>Base</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Block.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tv_static.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\phone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\phone_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\phone_delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\telephone.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\telephone_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\telephone_link.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\telephone_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\magnifier.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\book_add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\book_previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\book_next.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\report.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\book.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stop.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_xp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_cascade.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_tile_horizontal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\application_tile_vertical.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\user_edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+    <None Include="Resources\wrench.png" />
+    <None Include="Resources\arrow_down.png" />
+    <None Include="Resources\disk.png" />
+    <None Include="Resources\page_excel.png" />
+    <None Include="Resources\database_gear.png" />
+    <None Include="Resources\folder_user.png" />
+    <None Include="Resources\report_user.png" />
+    <None Include="Resources\user_add.png" />
+    <None Include="Resources\user.png" />
+    <None Include="Resources\user_delete.png" />
+    <None Include="Resources\user_comment.png" />
+    <None Include="Resources\user_gray.png" />
+    <None Include="Resources\user_go.png" />
+    <None Include="Resources\user_female.png" />
+    <None Include="Resources\user_edit1.png" />
+    <None Include="Resources\user_red.png" />
+    <None Include="Resources\user_orange.png" />
+    <None Include="Resources\user_green1.png" />
+    <None Include="Resources\user_suit.png" />
+    <None Include="Resources\user_green.png" />
+    <None Include="Resources\Menu.bmp" />
+    <None Include="Resources\menu.png" />
+    <None Include="Resources\cog.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

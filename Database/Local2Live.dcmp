@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataComparison>
+  <Version>10</Version>
+  <ConnectionProperties1>
+    <ConnectionString>Data Source=localhost;Initial Catalog=Callcenter;Integrated Security=True;Persist Security Info=False;Pooling=False</ConnectionString>
+    <FullDisplayName>localhost.Callcenter (Ken-PC\Ken)</FullDisplayName>
+  </ConnectionProperties1>
+  <ConnectionProperties2>
+    <ConnectionString>Data Source=Hazel.arvixe.com;Initial Catalog=callcenter;Integrated Security=False;Persist Security Info=True;User ID=app;Pooling=False</ConnectionString>
+    <FullDisplayName>Hazel.arvixe.com.callcenter (app)</FullDisplayName>
+  </ConnectionProperties2>
+  <SessionSettings>Default</SessionSettings>
+  <DeselectedTable>[dbo].[tbl_AccessLevel]</DeselectedTable>
+  <DeselectedTable>[dbo].[tbl_AccessLevelRights]</DeselectedTable>
+</DataComparison>
