@@ -44,20 +44,29 @@ Public Class Frm_Record
       FillBooking()
       ViewTab(Tabs.Location)
       FocusIt.Select()
-
+      DrawHist()
     End If
   End Sub
   Private Sub cmd_NavBack_Click(sender As Object, e As EventArgs) Handles cmd_NavBack.Click
     DataRecord.BookingIndex -= 1
     FillBooking()
     ViewTab(Tabs.Location)
+    DrawHist()
   End Sub
   Private Sub cmd_NavNext_Click(sender As Object, e As EventArgs) Handles cmd_NavNext.Click
     DataRecord.BookingIndex += 1
     FillBooking()
     ViewTab(Tabs.Location)
+    DrawHist
   End Sub
-
+  Sub DrawHist()
+    If Not IsNothing(History) Then
+      If IsNothing(DataRecord.Booking(DataRecord.BookingIndex).Hist) Then
+        CC.LoadBookingHistory(DataRecord, DataRecord.BookingIndex)
+      End If
+      History.ShowHistory(DataRecord.Booking(DataRecord.BookingIndex))
+    End If
+  End Sub
 
 
   Private Sub cmd_History_Click(sender As Object, e As EventArgs) Handles cmd_History.Click
@@ -186,12 +195,17 @@ Public Class Frm_Record
           FillStatus(cbo_Status, CC.Status, .StatusID)
           FillStaff(cbo_Booker, CC.StaffList, .BookerID, "Select Bookers's Name")
           FillStaff(cbo_Confirmer, CC.StaffList, .ConfirmerID, "Select Confirmer's Name")
+          Console.Write("Form Appt.Value:" & .Appt.ToString("MM/dd/yyyy hh:mm tt") & vbCrLf)
+          Ctl_Appt.Value = InputVar(.Appt, New Date)
+          Console.Write("------------------------: " & vbCrLf)
+          Console.Write("------FillDate START: " & (.LocationID > default_Int).ToString & vbCrLf)
           If .LocationID > default_Int Then
             FillDate(Ctl_Appt, CC.LocationList(CC.GetLocationlistIndex(.LocationID)).ShowTimes)
           Else
             FillDate(Ctl_Appt, Nothing)
-
           End If
+          Console.Write("------FillDate END: " & (.LocationID > default_Int).ToString & vbCrLf)
+          Console.Write("------------------------: " & vbCrLf)
           'date_Appt.Value = InputVar(.Appt, date_Appt.MinDate)
           'Ctl_Appt.Value = InputVar(.Appt, New Date)
 
@@ -206,9 +220,7 @@ Public Class Frm_Record
             Table_Booking.Controls.Remove(lbl_ClaimNumber)
             Table_Booking.Controls.Add(txt_ClaimNumber, 1, 0)
           End If
-          Console.Write("Ctl_Appt.Value:" & .Appt & vbCrLf)
 
-          Ctl_Appt.Value = InputVar(.Appt, New Date)
 
           FillGifts(DataRecord.BookingIndex)
 
@@ -358,9 +370,11 @@ Public Class Frm_Record
   End Sub
   Sub NextCall()
     Dim RecordLoaded As Boolean = DataRecord.Contact.ID > default_Int
-    If RecordLoaded Then ClearDataRecord(DataRecord)
-    ViewTab(Tabs.None)
-    Me.Hide()
+    If Not CC.CurStaff.Rights.MultiRecordUI Then
+      If RecordLoaded Then ClearDataRecord(DataRecord)
+      ViewTab(Tabs.None)
+      Me.Hide()
+    End If
     ' OpenNewRecord()
   End Sub
   Private Sub Frm_SignIn_Move(sender As Object, e As EventArgs) Handles MyBase.Move, MyBase.Resize
@@ -410,11 +424,15 @@ Public Class Frm_Record
     If ControlsActive Then
       Dim Obj_Combo As ComboBox = CType(sender, ComboBox)
       Dim Obj_Value As Integer = CInt(CType(Obj_Combo.SelectedItem, ValueDescriptionPair).Value)
-      Dim FormField As New TypeFormField With {.ControlName = Obj_Combo.Name,
-                                         .NewValue = Obj_Value,
-                                         .FieldName = "NA"}
-      UpdateBooking(DataRecord, Me, FormField)
-      FillBooking()
+      If Obj_Value > default_Int Then
+        Dim FormField As New TypeFormField With {.ControlName = Obj_Combo.Name,
+                                            .NewValue = Obj_Value,
+                                            .FieldName = "NA"}
+        UpdateBooking(DataRecord, Me, FormField)
+        FillBooking()
+      Else
+        Obj_Combo.BackColor = Color.Red
+      End If
       FocusIt.TabIndex = Obj_Combo.TabIndex
       FocusIt.Select()
     End If
@@ -427,7 +445,12 @@ Public Class Frm_Record
                                      .NewValue = Obj_Date.Value,
                                      .FieldName = "NA"}
         UpdateBooking(DataRecord, Me, FormField)
+        FillBooking()
+      Else
+        Obj_Date.BackColor = Color.Red
       End If
+      FocusIt.TabIndex = Obj_Date.TabIndex
+      FocusIt.Select()
     End If
   End Sub
   Private Sub Date_ValueChanged(sender As Object, e As EventArgs) Handles date_Booked.LostFocus, date_Conf.LostFocus

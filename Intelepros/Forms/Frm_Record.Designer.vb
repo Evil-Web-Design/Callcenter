@@ -940,9 +940,10 @@ Partial Class Frm_Record
     '
     Me.Ctl_Appt.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.Ctl_Appt.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+    Me.Ctl_Appt.autoUpdate = False
     Me.Ctl_Appt.AvailDates = New Date() {New Date(2015, 1, 1, 0, 0, 0, 0)}
     Me.Ctl_Appt.BackColor = System.Drawing.SystemColors.ButtonFace
-    Me.Ctl_Appt.DateFormat = "MM-dd-yyyy"
+    Me.Ctl_Appt.DateFormat = "dddd MMM-dd-yyyy"
     Me.Ctl_Appt.Location = New System.Drawing.Point(85, 50)
     Me.Ctl_Appt.Margin = New System.Windows.Forms.Padding(0)
     Me.Ctl_Appt.MaximumSize = New System.Drawing.Size(1024, 25)

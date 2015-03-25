@@ -1,4 +1,6 @@
 ﻿Imports UniBase
+Imports UniBase.Class_CallCenter
+
 Public Class Frm_History
 
   Private Sub Frm_History_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -10,6 +12,10 @@ Public Class Frm_History
     Dim regKey As New RegEdit(AppName)
     regKey.SetSavedFormLocation(Me)
     regKey.Close()
+  End Sub
+  Public Sub ShowHistory(Booking As Type_ContactBooking)
+    History.Show()
+    FillBookingHistory(Grid_Results, Booking)
   End Sub
   Private Sub Grid_Bookings_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles Grid_Results.CellContentClick
     'Beep()

@@ -343,26 +343,7 @@ Start:
     End If
   End Sub
 
-  ''' <summary>
-  ''' I hope this is core...
-  ''' </summary>
-  ''' <param name="ContactID"></param>
-  ''' <param name="BookingID"></param>
-  ''' <returns></returns>
-  ''' <remarks></remarks>
-  Public Function OpenRecord(ContactID As Integer, Optional BookingID As Integer = default_Int) As Boolean
-    Dim RecordExists As Boolean = False
-    Dim DataRecord As New Class_CallCenter.Type_ContactRecord
-    FormProgress.ShowMessage("Loading Contact.")
-    RecordExists = CC.FindRecord(DataRecord, ContactID)
-    If RecordExists Then
-      FormProgress.ShowMessage("Loading Bookings.")
-      Call CC.LoadContactBookings(DataRecord, BookingID)
-      OpenRecord(DataRecord)
-    End If
-    FormProgress.Hide()
-    Return RecordExists
-  End Function
+
   Public Function OpenRecord(RecordPhone As String, Optional ClaimNumber As String = "") As Boolean
     Dim RecordExists As Boolean = False
     Dim ClaimUsed As Boolean = False
@@ -445,6 +426,29 @@ Start:
     Return DoOpenRecord
 
   End Function
+  ''' <summary>
+  ''' I hope this is core...
+  ''' </summary>
+  ''' <param name="ContactID"></param>
+  ''' <param name="BookingID"></param>
+  ''' <returns></returns>
+  ''' <remarks></remarks>
+  Public Function OpenRecord(ContactID As Integer, Optional BookingID As Integer = default_Int) As Boolean
+    Dim RecordExists As Boolean = False
+    Dim DataRecord As New Class_CallCenter.Type_ContactRecord
+    FormProgress.ShowMessage("Loading Contact.")
+    RecordExists = CC.FindRecord(DataRecord, ContactID)
+    If RecordExists Then
+      FormProgress.ShowMessage("Loading Bookings.")
+      Call CC.LoadContactBookings(DataRecord, BookingID)
+      OpenRecord(DataRecord)
+    End If
+    FormProgress.Hide()
+    Return RecordExists
+  End Function
+  Public Function OpenBooking(ByRef DataRecord As Type_ContactRecord, Optional BookingID As Integer = default_Int) As Boolean
+    Call CC.LoadContactBookings(DataRecord, BookingID)
+  End Function
   Public Sub NewBooking(ByRef DataRecord As Type_ContactRecord,
                          Optional PromoClaimNumber As String = Nothing,
                          Optional PromoLocationName As String = Nothing,
@@ -507,9 +511,7 @@ Start:
     CC.LoadBookingHistory(Record, Bookingindex)
     If Not IsNothing(History) Then History.Dispose()
     History = New Frm_History
-    History.Show()
-    FillBookingHistory(History.Grid_Results, Record, Bookingindex)
-
+    History.ShowHistory(Record.Booking(Bookingindex))
   End Sub
 
   Public Sub OpenResults()
@@ -576,6 +578,7 @@ Start:
     SaveField(DataRecord, ThisForm, FormField)
   End Sub
   Sub UpdateBooking(ByRef DataRecord As Type_ContactRecord, ThisForm As Form, FormField As TypeFormField)
+    Dim DoUpdate As Boolean = True
     With DataRecord.Booking(DataRecord.BookingIndex).Booking
       FormField.FieldMessage = ""
       Select Case FormField.ControlName
@@ -586,7 +589,11 @@ Start:
             .ClaimNumberValid = True
           End If
           If .ClaimNumberValid Then
-            FormField.OldValue = .ClaimNumber : .ClaimNumber = FormField.NewValue : FormField.FieldName = "ClaimNumber"
+            If FormField.NewValue.Length > 0 Then
+              FormField.OldValue = .ClaimNumber : .ClaimNumber = FormField.NewValue : FormField.FieldName = "ClaimNumber"
+            Else
+              DoUpdate = False
+            End If
             'txt_ClaimNumber.BackColor = Color.FromArgb(255, 192, 255, 192)
           Else
             FormField.FieldMessage = "Invalid Claim Number"
@@ -616,16 +623,44 @@ Start:
         Case "txt_BookNotes" : FormField.OldValue = .Notes : .Notes = FormField.NewValue : FormField.FieldName = "Notes"
         Case Else
       End Select
-      If DataRecord.Booking(DataRecord.BookingIndex).Exists Then
-        FormField.FieldType = EnumFieldType.Booking
-        SaveField(DataRecord, ThisForm, FormField)
-      Else
-        If CC.CreateBooking(DataRecord.Booking(DataRecord.BookingIndex)) Then DataRecord.Booking(DataRecord.BookingIndex).Exists = True
+      If DoUpdate Then
+
+        If DataRecord.Booking(DataRecord.BookingIndex).Exists Then
+          FormField.FieldType = EnumFieldType.Booking
+          If SaveField(DataRecord, ThisForm, FormField) And DoUpdate Then
+            'AddHist(DataRecord.Booking(DataRecord.BookingIndex).Hist, FormField)
+            CC.LoadBookingHistory(DataRecord, DataRecord.BookingIndex)
+            If Not IsNothing(History) Then History.ShowHistory(DataRecord.Booking(DataRecord.BookingIndex))
+          End If
+        Else
+          If CC.CreateBooking(DataRecord.Booking(DataRecord.BookingIndex)) And DoUpdate Then
+            DataRecord.Booking(DataRecord.BookingIndex).Exists = True
+            'OpenBooking(DataRecord)
+            'DataRecord.BookingIndex = DataRecord.Booking.Length
+          End If
+        End If
       End If
+
     End With
   End Sub
-
-  Sub SaveField(ByRef DataRecord As Type_ContactRecord, ThisForm As Form, FormField As TypeFormField)
+  'Sub AddHist(ByRef Hist As Type_BookingHist(), FormField As TypeFormField)
+  '  Dim Index As Integer = Hist.Length
+  '  ReDim Preserve Hist(Index)
+  '  With Hist(Index)
+  '    .ActionTime = Now
+  '    .Employee =
+  '    .EmployeeID =
+  '    .Field = FormField.FieldName
+  '    .ID =
+  '    .Index =
+  '    .NewVal =
+  '    .NewValStr = FormField.FieldName
+  '    .OldVal = FormField.FieldName
+  '    .OldValStr = FormField.OldValue
+  '  End With
+  'End Sub
+  Function SaveField(ByRef DataRecord As Type_ContactRecord, ThisForm As Form, FormField As TypeFormField) As Boolean
+    Dim UpdateHist As Boolean = False
     Dim TempControlsActive = ControlsActive : ControlsActive = False
     Dim OkToWrite As Boolean = (FormField.OldValue <> FormField.NewValue) And (FormField.FieldMessage.Length = 0)
 
@@ -635,6 +670,7 @@ Start:
       If WriteUpdate(DataRecord, FormField) Then
         Field_Status(ThisForm, FormField.FieldName & " Saved.")
         colorField(ThisForm, FormField, Color.FromArgb(200, 255, 200))
+        UpdateHist = True
       Else
         Field_Status(ThisForm, "Error saving: " & FormField.FieldName)
         colorField(ThisForm, FormField, Color.FromArgb(255, 128, 128)).focus()
@@ -650,7 +686,8 @@ Start:
       End If
     End If
     ControlsActive = TempControlsActive
-  End Sub
+    Return UpdateHist
+  End Function
   Function WriteUpdate(ByRef DataRecord As Type_ContactRecord, FormField As TypeFormField)
     Dim result As Boolean = False
     Select Case FormField.FieldType
@@ -678,6 +715,9 @@ Start:
           txt.BackColor = NewColor
         Case "dat"
           Dim txt As DateTimePicker = CType(Obj, DateTimePicker)
+          txt.BackColor = NewColor
+        Case "Ctl"
+          Dim txt As ctl_MasterCal = CType(Obj, ctl_MasterCal)
           txt.BackColor = NewColor
       End Select
     Catch ex As Exception
@@ -1511,11 +1551,14 @@ Public Module FillControls
   '    Ctl_Appt.Add(Now)
   Public Sub FillDate(ByRef Combo As ctl_MasterCal, ShowTimes() As Type_ShowTimes, Optional ThisDate As Date = default_DateTime)
     If Not IsNothing(ShowTimes) Then
+      Combo.autoUpdate = False
+      Combo.ClearAvailDates()
       For Each item In ShowTimes
-        Combo.Add(item.Showtime)
+        Combo.AddAvailDate(item.Showtime)
       Next
+      Combo.UpdateMe()
     Else
-      Combo.Clear()
+      Combo.ClearAvailDates()
     End If
   End Sub
 
@@ -1625,12 +1668,11 @@ Public Module FillControls
     End With
   End Sub
 
-  Public Sub FillBookingHistory(thisGrid As DataGridView, Record As Type_ContactRecord, BookingIndex As Integer)
+  Public Sub FillBookingHistory(thisGrid As DataGridView, Booking As Type_ContactBooking)
     'thisGrid.DataSource = Nothing
     thisGrid.Rows.Clear()
     Dim NewIndex As Integer = 0, Selected As Integer = default_Int
-    If Not IsNothing(Record.Booking) And BookingIndex > default_Int Then
-      With Record.Booking(BookingIndex)
+      With Booking
         If Not IsNothing(.Hist) Then
           For Each Hist As Type_BookingHist In .Hist
             NewIndex = thisGrid.Rows.Add()
@@ -1645,7 +1687,6 @@ Public Module FillControls
           Next
         End If
       End With
-    End If
     'thisGrid.Rows(0).Selected = False
     If Selected > default_Int Then thisGrid.Rows(Selected).Selected = True Else thisGrid.ClearSelection()
     Application.DoEvents()
@@ -1780,8 +1821,8 @@ Public Module Functions
     Return Regex.Replace(str, "^(\d{5})[ .-]?(\d{4})$", "$1-$2")
   End Function
   Function getControlFromName(ByRef containerObj As Object, _
-                         ByVal name As String) As Control
-    Dim retCtl As Control = Nothing, found As Boolean = True
+                         ByVal name As String) As Object
+    Dim retCtl As Object = Nothing, found As Boolean = True
     Try
       For Each tempCtrl As Control In containerObj.Controls
         If tempCtrl.Name.ToUpper.Trim = name.ToUpper.Trim Then
@@ -1789,7 +1830,20 @@ Public Module Functions
         Else
           retCtl = getControlFromName(tempCtrl, name)
         End If
-        If Not IsNothing(retCtl) Then Exit For
+        If IsNothing(retCtl) Then
+          If TypeOf tempCtrl Is ToolStrip Then
+            Dim ts As ToolStrip = tempCtrl
+            For Each item As ToolStripItem In ts.Items
+              If item.Name.ToUpper.Trim = name.ToUpper.Trim Then retCtl = item
+            Next
+          End If
+          If TypeOf tempCtrl Is ToolStripContainer Then
+            Dim ts As ToolStripContainer = tempCtrl
+            retCtl = getControlFromName(ts.BottomToolStripPanel, name)
+          End If
+        Else
+          Exit For
+        End If
       Next tempCtrl
     Catch ex As Exception
       found = False

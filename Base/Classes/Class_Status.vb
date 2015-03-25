@@ -539,9 +539,9 @@ Public Class Class_CallCenter
         Dim Claim As String = "", ClaimNumber As String = ""
         If .ClaimNumber.Length > 0 And .ClaimNumberValid Then Claim = ",ClaimNumber" : ClaimNumber = ",'" & .ClaimNumber & "'"
         Sqlstr = "INSERT INTO tbl_Booking (ContactID,LocationID,StatusID,BookerID,Booked" & Claim & ") " & _
-            "VALUES (" & .ContactID & "," & .LocationID & "," & .StatusID & "," & .BookerID & ",CONVERT(DATETIME, '" & .Booked.ToString("yyyy-MM-dd hh:mm:ss") & "', 102)" & ClaimNumber & ") "
+            "VALUES (" & .ContactID & "," & .LocationID & "," & .StatusID & "," & .BookerID & ",CONVERT(DATETIME, '" & .Booked.ToString("yyyy-MM-dd hh:mm:00") & "', 102)" & ClaimNumber & ") "
         Success = RunSQL(Sqlstr)
-        If Success Then GetBookingByRef(ContactBooking)
+        If Success Then Success = GetBookingByRef(ContactBooking)
       End If
       'Dim HasAppt As Boolean = .Appt <> YesterdayDateTime
     End With
@@ -556,7 +556,7 @@ Public Class Class_CallCenter
       AddWhere(SQLWhere, "StatusID='" & .StatusID & "'", " AND ")
       AddWhere(SQLWhere, "BookerID='" & .BookerID & "'", " AND ")
       If .ClaimNumber.Length > 0 Then AddWhere(SQLWhere, "ClaimNumber='" & .ClaimNumber & "'", " AND ")
-      AddWhere(SQLWhere, "Booked='" & .Booked & "'", " AND ")
+      AddWhere(SQLWhere, "Booked='" & .Booked.ToString("yyyy-MM-dd hh:mm:00") & "'", " AND ")
     End With
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
     Dim sSQL As String = "SELECT * FROM vw_Booking  WHERE " & SQLWhere
@@ -590,7 +590,7 @@ Public Class Class_CallCenter
     End If
     DBManager.CloseConnection()
   End Sub
-  Public Sub LoadContactBookings(ByRef Record As Type_ContactRecord, Optional BookingID As Integer = default_Int)
+  Public Sub LoadContactBookings(ByRef Record As Type_ContactRecord, Optional SelectedBookingID As Integer = default_Int)
     Erase Record.Booking
     Record.BookingIndex = default_Int
     Dim sSQL As String = "SELECT * FROM vw_Booking WHERE ContactID='" & Record.Contact.ID & "'"
@@ -606,7 +606,7 @@ Public Class Class_CallCenter
           Record.Booking(NewItem).Booking = BookingFrom_DataReader(Rdr)
           With Record.Booking(NewItem)
             .Index = NewItem
-            If BookingID = .Booking.ID Then Record.BookingIndex = .Index
+            If SelectedBookingID = .Booking.ID Then Record.BookingIndex = .Index
             .Exists = True
           End With
           NewItem += 1
@@ -626,7 +626,6 @@ Public Class Class_CallCenter
 
         Sqlstr = "UPDATE tbl_Booking SET " & Field & " = " & DBManager.Default_ToNULL(Value) & " WHERE (ID = " & .ID & ")"
         Success = RunSQL(Sqlstr)
- 
 
       End With
     End If
@@ -640,7 +639,6 @@ Public Class Class_CallCenter
         "(BookingID, EmployeeID, Field, Old, New, ActionTime) VALUES " & _
         "(" & ID & ", " & CurStaff.ID & ", N'" & Field & "', N'" & OldValue.ToString & "', N'" & NewValue.ToString & "', GETDATE())"
       Success = RunSQL(Sqlstr)
-
 
     End If
     Return Success
