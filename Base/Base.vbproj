@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Class_DataManager.vb" />
+    <Compile Include="Classes\Class_MySQL.vb" />
     <Compile Include="Classes\Class_Status.vb">
       <SubType>Component</SubType>
     </Compile>

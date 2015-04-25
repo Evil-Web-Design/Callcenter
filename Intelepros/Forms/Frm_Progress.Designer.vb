@@ -56,8 +56,9 @@ Partial Class Frm_Progress
     Me.Controls.Add(Me.ProgressBar)
     Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
     Me.Name = "Frm_Progress"
+    Me.ShowInTaskbar = False
     Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-    Me.Text = "Frm_Progress"
+    Me.Text = "Progress"
     Me.TopMost = True
     Me.ResumeLayout(False)
 

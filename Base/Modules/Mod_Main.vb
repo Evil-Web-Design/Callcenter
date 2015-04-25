@@ -8,7 +8,7 @@ Public Module Functions
   Public Const default_Int As Integer = -1
   Public Const default_Date As Date = #1/1/1900#
   Public Const default_DateTime As Date = #1/1/1900 9:00:00 AM#
-  Public YesterdayDateTime As Date
+  'Public YesterdayDateTime As Date
   ' ''' <summary>
   ' ''' USE THIS FOR ADDING JS
   ' ''' </summary>

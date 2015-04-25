@@ -8,6 +8,7 @@ Public Class Frm_Log
   End Sub
 
   Private Sub Frm_Log_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Dim TempControlsActive = ControlsActive : ControlsActive = False
     Dim regKey As New RegEdit(AppName)
     regKey.GetSavedFormLocation(Me)
 
@@ -15,11 +16,14 @@ Public Class Frm_Log
 
     mnu_ToggleAutoLaunch.Checked = StartLogOpen
     regKey.Close()
+    ControlsActive = TempControlsActive
   End Sub
   Private Sub Frm_SignIn_Move(sender As Object, e As EventArgs) Handles MyBase.Move, MyBase.Resize
-    Dim regKey As New RegEdit(AppName)
-    regKey.SetSavedFormLocation(Me)
-    regKey.Close()
+    If ControlsActive Then
+      Dim regKey As New RegEdit(AppName)
+      regKey.SetSavedFormLocation(Me)
+      regKey.Close()
+    End If
   End Sub
   Public Sub Logit(StringEntry As String)
     Dim index As Integer = List.Items.Add(StringEntry)

@@ -230,6 +230,14 @@ Public Module VarManagement
       End If
     End If
   End Function
+  Public Function InputVar(ByVal Value As Boolean, ByVal DefaultValue As Integer) As Integer
+    If Value = True Then
+      Return 1
+    Else
+      Return 0
+    End If
+  End Function
+
   Public Function InputVar(ByVal Value As Object, ByVal DefaultValue As Long) As Long
     If Value Is Nothing OrElse IsDBNull(Value) OrElse Value Is "" Then
       Return DefaultValue

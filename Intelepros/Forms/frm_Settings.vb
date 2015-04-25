@@ -9,6 +9,7 @@ Public Class frm_Settings
   End Sub
 
   Private Sub frm_Settings_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Dim TempControlsActive = ControlsActive : ControlsActive = False
     Dim regKey As New RegEdit(AppName)
     Erase TempCon
     Dim DBID As Integer = InputVar(regKey.GetAppValue("DBID", 0), 0)
@@ -36,11 +37,14 @@ Public Class frm_Settings
       Loop
       Me.Dispose()
     End If
+    ControlsActive = TempControlsActive
   End Sub
   Private Sub Frm_SignIn_Move(sender As Object, e As EventArgs) Handles MyBase.Move, MyBase.Resize
-    Dim regKey As New RegEdit(AppName)
-    regKey.SetSavedFormLocation(Me)
-    regKey.Close()
+    If ControlsActive Then
+      Dim regKey As New RegEdit(AppName)
+      regKey.SetSavedFormLocation(Me)
+      regKey.Close()
+    End If
   End Sub
   '      regKey.SetAppValue("DBID", DBID)
   '      regKey.SetAppValue("DBMAXID", DBMAXID)

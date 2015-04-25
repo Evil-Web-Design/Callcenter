@@ -39,7 +39,7 @@ Public Class Class_CallCenter
     'Dim HasRooms As Boolean
     Dim Enabled As Boolean
     Dim Script As Type_LocationScript()
-    Dim Status As Type_Status()
+    Dim Status As Type_LocationStatus()
     Dim ShowTimes As Type_ShowTimes()
     Dim Rooms As Type_Simple()
   End Structure
@@ -234,6 +234,7 @@ Public Class Class_CallCenter
     Dim MultiRecordUI As Boolean '11
     Dim EditEmployees As Boolean '12
     Dim SimpleUI As Boolean '13
+    Dim DeleteRecords As Boolean '14
   End Structure
 
   Public Structure type_Hours
@@ -246,8 +247,16 @@ Public Class Class_CallCenter
     Dim Name As String
     Dim LogOnly As Boolean
     Dim IsBooking As Boolean
+    Dim IsConfirm As Boolean
     Dim Enabled As Boolean
     Dim LockBooking As Boolean
+  End Structure
+  Public Structure Type_LocationStatus
+    Dim CurrentID As Integer
+    Dim AllowedID As Integer
+    Dim AlwaysVis As Boolean
+    Dim Permission As Boolean
+    Dim AccessLevelID As Integer
   End Structure
   Public Structure Type_ShowTimes
     Dim ID As Integer
@@ -318,6 +327,46 @@ Public Class Class_CallCenter
     End If
     Return Index
   End Function
+  Public Function GetLocationStatusIndex(LocationID As Integer, AllowedID As Integer) As Integer
+    Dim StatIndex As Integer = default_Int
+    Dim Index As Integer = GetLocationlistIndex(LocationID)
+    With LocationList(Index)
+      If Not IsNothing(.Status) Then
+        For i As Integer = 0 To .Status.Length - 1
+          If .Status(i).AllowedID = AllowedID Then StatIndex = i
+        Next
+      End If
+    End With
+    Return StatIndex
+  End Function
+  Public Sub RemoveLocationStatusArray(LocationID As Integer, AllowedID As Integer)
+    Dim LIndex As Integer = GetLocationlistIndex(LocationID)
+    Dim SIndex As Integer = GetLocationStatusIndex(LocationID, AllowedID)
+    With LocationList(LIndex)
+      System.Array.Clear(.Status, SIndex, 1)
+    End With
+  End Sub
+
+
+  Public Function GetLocationShowTimeIndex(LocationID As Integer, ShowTime As Date) As Integer
+    Dim StatIndex As Integer = default_Int
+    Dim Index As Integer = GetLocationlistIndex(LocationID)
+    With LocationList(Index)
+      If Not IsNothing(.ShowTimes) Then
+        For i As Integer = 0 To .ShowTimes.Length - 1
+          If .ShowTimes(i).Showtime = ShowTime Then StatIndex = i
+        Next
+      End If
+    End With
+    Return StatIndex
+  End Function
+  Public Sub RemoveLocationShowTimeArray(LocationID As Integer, RemoveDate As Date)
+    Dim LIndex As Integer = GetLocationlistIndex(LocationID)
+    Dim SIndex As Integer = GetLocationShowTimeIndex(LocationID, RemoveDate)
+    With LocationList(LIndex)
+      System.Array.Clear(.ShowTimes, SIndex, 1)
+    End With
+  End Sub
   Public Function GetBookingsIDIndex(Record As Type_ContactRecord, BookingsID As Integer) As Integer
     Dim Index As Integer = default_Int
     If Not IsNothing(Record.Booking) Then
@@ -333,14 +382,14 @@ Public Class Class_CallCenter
   Public Sub initMarital()
     Dim sSQL As String = "SELECT * FROM tbl_Marital ORDER BY Name"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     Marital = ReadSimpleRdr(Rdr)
     DBManager.CloseConnection()
   End Sub
   Public Sub initIncome()
     Dim sSQL As String = "SELECT * FROM tbl_Income ORDER BY Name"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     Income = ReadSimpleRdr(Rdr)
     DBManager.CloseConnection()
   End Sub
@@ -359,8 +408,8 @@ Public Class Class_CallCenter
         Dim DateString As String = ""
         If .DateAction = enum_DateAction.AppointmentOn Then DateString = "Appt" Else DateString = "Booked"
 
-        Condution = AddWhere(Condution, "(CAST(" & DateString & " AS DATE) BETWEEN CONVERT(DATETIME, '" & .DateStart.ToString("yyyy-MM-dd") & " 00:00:00', 102) AND " & _
-                              "CONVERT(DATETIME, '" & .DateEnd.ToString("yyyy-MM-dd") & " 00:00:00', 102))", "AND")
+        Condution = AddWhere(Condution, "(" & DateString & " BETWEEN CONVERT(DATETIME, '" & .DateStart.ToString("yyyy-MM-dd HH:mm") & "', 102) AND " & _
+                              "CONVERT(DATETIME, '" & .DateEnd.ToString("yyyy-MM-dd HH:mm") & "', 102))", "AND")
       End If
       If .UseString Then
         If .SearchString.Length > 0 Then
@@ -387,7 +436,7 @@ Public Class Class_CallCenter
     Dim sSQL As String = "SELECT * FROM vw_SearchBookings" & Condution
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
     Erase SearchResult
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     If Not IsNothing(Rdr) Then
       If Rdr.HasRows Then
         Dim NewItem As Integer = 0
@@ -407,36 +456,39 @@ Public Class Class_CallCenter
     Return FindClaim(TempRecord, ClaimNumber)
   End Function
   Public Function FindClaim(ByRef Record As Type_ContactRecord, ClaimNumber As String) As Boolean ', ClaimNumber As String, Optional Telephone As String = ""
-    Dim Found As Boolean = False
+    Dim Found As Boolean = False, Phone As String = Record.Contact.Telephone
     If ClaimNumber.Length > 0 Then
       Dim sSQL As String = "SELECT TOP 1 * FROM vw_MailDropContact where ClaimNumber='" & ClaimNumber & "'"
       DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-      Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+      Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
       Record = Nothing
       Record.Promo.ClaimNumber = ClaimNumber
       Found = ContactReader(Rdr, Record.Contact, Record.Promo)
+      Record.Contact.Telephone = Phone
       DBManager.CloseConnection()
     End If
     Return Found ' Or RecordFound
   End Function
 
   Public Function FindRecord(ByRef Record As Type_ContactRecord) As Boolean
-    Dim Found As Boolean = False, UpdatePhone As Boolean = False
-    Dim sSQL As String = "SELECT TOP 1 * FROM vw_Contact where Telephone='" & Record.Contact.Telephone & "'"
+    Dim Found As Boolean = False, Phone As String = Record.Contact.Telephone
+    Dim sSQL As String = "SELECT TOP 1 * FROM vw_Contact where Telephone='" & Phone & "'"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     Record = Nothing
     Found = ContactReader(Rdr, Record.Contact)
+    Record.Contact.Telephone = Phone
     DBManager.CloseConnection()
     Return Found
   End Function
   Public Function FindRecord(ByRef Record As Type_ContactRecord, ContactID As Integer) As Boolean
-    Dim Found As Boolean = False, UpdatePhone As Boolean = False
+    Dim Found As Boolean = False, Phone As String = Record.Contact.Telephone
     Dim sSQL As String = "SELECT TOP 1 * FROM vw_Contact where ContactID='" & ContactID & "'"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     Record = Nothing
     Found = ContactReader(Rdr, Record.Contact)
+    If Not IsNothing(Phone) Then Record.Contact.Telephone = Phone
     DBManager.CloseConnection()
     Return Found
   End Function
@@ -457,15 +509,88 @@ Public Class Class_CallCenter
   End Function
 
 
+  Function DeleteContact(ContactID As Integer) As Boolean
+    Dim parms() As SqlClient.SqlParameter = Nothing, RetVal As Boolean = False
+    DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
+    DBManager.AddParameter(parms, "@ContactID", SqlDbType.Int, CInt(ContactID))
+    DBManager.AddParameter(parms, "@RetVal", SqlDbType.Int, RetVal)
+    Dim Rdr As SqlClient.SqlDataReader = DBManager.GetDataReaderFromSP("DeleteContactRecord", parms)
+    '-----------------------------------------------------------------------------------------
+    '-- Check Return Value. --
+    If Not IsNothing(Rdr) Then
+      If Rdr.HasRows Then
+        While Rdr.Read()
+          RetVal = InputVar(Rdr("RetVal"), 0) = 1
+        End While
+      End If
+      Rdr.Close()
+    End If
+    DBManager.CloseConnection()
+    Return RetVal
 
+  End Function
 
+  Function DeleteBooking(BookingID As Integer) As Boolean
+    Dim parms() As SqlClient.SqlParameter = Nothing, RetVal As Boolean = False
+    DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
+    DBManager.AddParameter(parms, "@BookingID", SqlDbType.Int, CInt(BookingID))
+    DBManager.AddParameter(parms, "@RetVal", SqlDbType.Int, RetVal)
+    Dim Rdr As SqlClient.SqlDataReader = DBManager.GetDataReaderFromSP("DeleteBookingRecord", parms)
+    '-----------------------------------------------------------------------------------------
+    '-- Check Return Value. --
+    If Not IsNothing(Rdr) Then
+      If Rdr.HasRows Then
+        While Rdr.Read()
+          RetVal = InputVar(Rdr("RetVal"), 0) = 1
+        End While
+      End If
+      Rdr.Close()
+    End If
+    DBManager.CloseConnection()
+    Return RetVal
 
+  End Function
+  Function CreateBooking(ByRef ContactBooking As Type_ContactBooking) As Boolean
+    Dim parms() As SqlClient.SqlParameter = Nothing, RetVal As Boolean = False, NewID As Integer = 0
+    DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
+    With ContactBooking.Booking
+      DBManager.AddParameter(parms, "@ContactID", SqlDbType.Int, .ContactID)
+      DBManager.AddParameter(parms, "@LocationID", SqlDbType.Int, .LocationID)
+      DBManager.AddParameter(parms, "@BookerID", SqlDbType.Int, .BookerID)
+      DBManager.AddParameter(parms, "@Booked", SqlDbType.DateTime, .Booked)
+    End With
+
+    DBManager.AddParameter(parms, "@RetVal", SqlDbType.Int, RetVal)
+    Dim Rdr As SqlClient.SqlDataReader = DBManager.GetDataReaderFromSP("CreateBooking", parms)
+    '-----------------------------------------------------------------------------------------
+    '-- Check Return Value. --
+    If Not IsNothing(Rdr) Then
+      If Rdr.HasRows Then
+        While Rdr.Read()
+          NewID = InputVar(Rdr("ID"), default_Int)
+          RetVal = InputVar(Rdr("RetVal"), 0) = 1
+        End While
+        ContactBooking.Exists = RetVal
+      End If
+      Rdr.Close()
+    End If
+    DBManager.CloseConnection()
+    ContactBooking.Booking.ID = NewID
+    Return RetVal
+
+  End Function
   'Function CreateContact(ByRef Record As Type_ContactRecord, Telephone As String) As Boolean
   '  Record.Contact.Telephone = Telephone
   '  Return CreateContact(Record)
   'End Function
 
-
+  ''' <summary>
+  ''' Updates Database
+  ''' </summary>
+  ''' <param name="Record"></param>
+  ''' <param name="CreateNew"></param>
+  ''' <returns></returns>
+  ''' <remarks></remarks>
   Function CreateContact(ByRef Record As Type_ContactRecord, Optional CreateNew As Boolean = False) As Boolean
     Dim Success As Boolean, Sqlstr As String
     If CreateNew Then
@@ -497,6 +622,117 @@ Public Class Class_CallCenter
     GetContactByRef(Record.Contact)
     Return Success
   End Function
+  Public Function isNewBookingNeeded(ByRef DataRecord As Type_ContactRecord) As Boolean
+    Dim Newindex As Integer = 0
+    Dim DoNew As Boolean = False
+    If IsNothing(DataRecord.Booking) Then
+      DoNew = True
+    Else
+
+      Newindex = DataRecord.Booking.Length
+      With DataRecord.Booking(DataRecord.Booking.Length - 1)
+        If .Exists = True Then
+          If .Booking.StatusID > default_Int Then
+            Dim index As Integer = GetStatuslistIndex(.Booking.StatusID)
+            If Status(index).LockBooking Then
+              DoNew = True
+            End If
+          End If
+        End If
+      End With
+
+    End If
+    Return DoNew
+  End Function
+
+
+
+  ''' <summary>
+  ''' No Database FOR NOW
+  ''' </summary>
+  ''' <param name="DataRecord"></param>
+  ''' <param name="BookerID"></param>
+  ''' <param name="PromoClaimNumber"></param>
+  ''' <param name="PromoLocationName"></param>
+  ''' <param name="PromoLocationID"></param>
+  ''' <remarks></remarks>
+  Public Sub InitNewBooking(ByRef DataRecord As Type_ContactRecord,
+                       ByVal BookerID As Integer,
+                      ByVal AskToCreate As Boolean,
+                       Optional PromoClaimNumber As String = Nothing,
+                       Optional PromoLocationName As String = Nothing,
+                       Optional PromoLocationID As Integer = default_Int)
+    Dim Newindex As Integer = 0 'DataRecord.BookingIndex
+    If isNewBookingNeeded(DataRecord) Then
+      If CreateBookingQuestion(DataRecord, Not AskToCreate) Then
+        If Not IsNothing(DataRecord.Booking) Then Newindex = DataRecord.Booking.Length
+        ReDim Preserve DataRecord.Booking(Newindex)
+        DataRecord.Booking(Newindex).Index = Newindex
+        With DataRecord.Booking(Newindex).Booking
+          .ContactID = DataRecord.Contact.ID
+          .ClaimNumber = InputVar(PromoClaimNumber, "")
+          .ClaimNumberValid = .ClaimNumber.Length > 0
+          .Appt = default_DateTime
+          .Booked = Now
+          .Conf = default_DateTime
+          .ConfirmerID = default_Int
+          .Location.Name = InputVar(PromoLocationName, "New Booking")
+          .LocationID = InputVar(PromoLocationID, default_Int)
+          .StatusID = default_Int
+          .BookerID = BookerID
+        End With
+      End If
+    Else
+      Newindex = DataRecord.Booking.Length - 1
+    End If
+    DataRecord.BookingIndex = Newindex
+  End Sub
+
+
+  Public Function DeleteBookingQuestion(ByRef DataRecord As Type_ContactRecord) As Boolean
+    Return CreateQuestion(DataRecord, "This will delete A Record From Contact:" & FormatPhoneNumber(DataRecord.Contact.Telephone) & ". " & vbCrLf & _
+             "This can NOT be undone. " & vbCrLf & _
+             "Do you really want to delete it?", "Delete Booking.", MsgBoxStyle.YesNo)
+  End Function
+  Public Function DeleteContactQuestion(ByRef DataRecord As Type_ContactRecord) As Boolean
+    Return CreateQuestion(DataRecord, "This will delete Contact:" & FormatPhoneNumber(DataRecord.Contact.Telephone) & ". " & vbCrLf & _
+             "And all bookings. This can NOT be undone. " & vbCrLf & _
+             "Do you really want to delete it?", "Delete Contact.", MsgBoxStyle.YesNo)
+  End Function
+  Public Function CreateMissingClaimBookingQuestion(ByRef DataRecord As Type_ContactRecord, ClaimNumber As String) As Boolean
+    Return CreateQuestion(DataRecord, "I could not find ClaimNumber:" & ClaimNumber & ". " & vbCrLf & _
+             "However I did find a record with the Telephone number " & FormatPhoneNumber(DataRecord.Contact.Telephone) & ". " & vbCrLf & _
+             "Do you want to open it?", "Claim Number Not Found.", MsgBoxStyle.YesNo)
+  End Function
+  Public Function CreateBookingQuestion(ByRef DataRecord As Type_ContactRecord, ClaimNumber As String) As Boolean
+    Return CreateQuestion(DataRecord, "I could not find ClaimNumber:" & ClaimNumber & ". " & vbCrLf & _
+            "Would you like to open Telephone:" & FormatPhoneNumber(DataRecord.Contact.Telephone) & " anyway?", _
+            "Claim Number Not Found.", MsgBoxStyle.YesNo)
+  End Function
+  Public Function CreateBookingQuestion(ByRef DataRecord As Type_ContactRecord, BypassPrompt As Boolean) As Boolean
+    If BypassPrompt Then
+      Return True
+    Else
+      Return CreateQuestion(DataRecord, "This will Create a New Booking for Telephone:" & _
+                            FormatPhoneNumber(DataRecord.Contact.Telephone) & vbCrLf & _
+                            "You will have to provide a status for this new Booking." & vbCrLf & vbCrLf & _
+                            "Do you still want to Create a new booking?", "Create a New Booking.", MsgBoxStyle.YesNo)
+    End If
+  End Function
+  Public Function CreateContactQuestion(ByRef DataRecord As Type_ContactRecord) As Boolean
+    Return CreateQuestion(DataRecord, "I could not find " & FormatPhoneNumber(DataRecord.Contact.Telephone) & ". " & vbCrLf & _
+      " Should I create a new Record?", "Create New Contact?", MsgBoxStyle.YesNo)
+  End Function
+  Public Function CreateQuestion(ByRef DataRecord As Type_ContactRecord,
+                                        Optional Question As String = "", Optional Heading As String = "", Optional MsgStyle As MsgBoxStyle = MsgBoxStyle.OkCancel) As Boolean
+    Dim ReturnVal As Boolean = False
+    If Heading = "" Then Heading = "Create New?"
+    If Question = "" Then Question = "I create a new...?"
+    Dim responce As MsgBoxResult = MsgBox(Question, MsgStyle, Heading)
+    If responce = MsgBoxResult.Ok Or responce = MsgBoxResult.Yes Then ReturnVal = True
+    Return ReturnVal
+  End Function
+
   Function GetContactByRef(ByRef Contact As Type_Contact) As Boolean
     Dim SQLWhere As String = "", Found As Boolean = False
     With Contact
@@ -509,7 +745,7 @@ Public Class Class_CallCenter
     End With
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
     Dim sSQL As String = "SELECT * FROM vw_Contact  WHERE " & SQLWhere
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     Contact = Nothing
     Found = ContactReader(Rdr, Contact)
     DBManager.CloseConnection()
@@ -532,14 +768,43 @@ Public Class Class_CallCenter
     End If
     Return Success
   End Function
-  Function CreateBooking(ByRef ContactBooking As Type_ContactBooking) As Boolean
+  Function UpdateMailDropContact(ClaimNumber As String, CallDate As Date, Telephone As String) As Boolean
+    Dim Success As Boolean = False, Sqlstr As String
+    If ClaimNumber.Length > 0 Then
+      Sqlstr = "UPDATE     dbo.tbl_MailDropContact " & _
+                "SET CallDate = CONVERT(DATETIME, '" & CallDate.ToString("yyyy-MM-dd hh:mm tt") & "', 102), " & _
+                "Telephone = '" & Telephone & "' " & _
+                "WHERE (ClaimNumber = N'" & ClaimNumber & "' and CallDate IS NULL)"
+      Success = RunSQL(Sqlstr)
+    End If
+    Return Success
+  End Function
+  ''' <summary>
+  ''' Inserts Into Database
+  ''' </summary>
+  ''' <param name="ContactBooking"></param>
+  ''' <returns></returns>
+  ''' <remarks></remarks>
+  Function CreateBooking(ByRef ContactBooking As Type_ContactBooking, Telephone As String) As Boolean
     Dim Success As Boolean, Sqlstr As String
     With ContactBooking.Booking
-      If (.ContactID > default_Int) And (.LocationID > default_Int) And (.StatusID > default_Int) And (.BookerID > default_Int) Then '2015-03-07 02:36:19
+      If (.ContactID > default_Int) And (.BookerID > default_Int) Then '2015-03-07 02:36:19
         Dim Claim As String = "", ClaimNumber As String = ""
         If .ClaimNumber.Length > 0 And .ClaimNumberValid Then Claim = ",ClaimNumber" : ClaimNumber = ",'" & .ClaimNumber & "'"
-        Sqlstr = "INSERT INTO tbl_Booking (ContactID,LocationID,StatusID,BookerID,Booked" & Claim & ") " & _
-            "VALUES (" & .ContactID & "," & .LocationID & "," & .StatusID & "," & .BookerID & ",CONVERT(DATETIME, '" & .Booked.ToString("yyyy-MM-dd hh:mm:00") & "', 102)" & ClaimNumber & ") "
+
+        Dim Status As String = "", StatusID As String = ""
+        If .StatusID > default_Int Then Status = ",StatusID" : StatusID = ",'" & .StatusID & "'"
+
+        Dim Location As String = "", LocationID As String = ""
+        If .LocationID > default_Int Then Location = ",LocationID" : LocationID = ",'" & .LocationID & "'"
+
+        Dim Appt As String = "", ApptDate As String = ""
+        If .Appt <> default_DateTime Then Appt = ",Appt" : ApptDate = ",CONVERT(DATETIME, '" & .Appt.ToString("yyyy-MM-dd HH:mm:00") & "', 102)"
+
+        Sqlstr = "INSERT INTO tbl_Booking (ContactID,BookerID,Booked" & Claim & Status & Location & Appt & ") " & _
+            "VALUES (" & .ContactID & "," & .BookerID & ", " & _
+            "CONVERT(DATETIME, '" & .Booked.ToString("yyyy-MM-dd HH:mm:00") & "', 102)" & _
+            ClaimNumber & StatusID & LocationID & ApptDate & ") "
         Success = RunSQL(Sqlstr)
         If Success Then Success = GetBookingByRef(ContactBooking)
       End If
@@ -547,20 +812,27 @@ Public Class Class_CallCenter
     End With
     Return Success
   End Function
+  ''' <summary>
+  ''' This needs improvement.
+  ''' </summary>
+  ''' <param name="ContactBooking"></param>
+  ''' <returns></returns>
+  ''' <remarks></remarks>
   Function GetBookingByRef(ByRef ContactBooking As Type_ContactBooking) As Boolean
     Dim Bookingindex As Integer = ContactBooking.Index
     Dim SQLWhere As String = "", Found As Boolean = False
     With ContactBooking.Booking
       AddWhere(SQLWhere, "ContactID='" & .ContactID & "'", " AND ")
-      AddWhere(SQLWhere, "LocationID='" & .LocationID & "'", " AND ")
-      AddWhere(SQLWhere, "StatusID='" & .StatusID & "'", " AND ")
-      AddWhere(SQLWhere, "BookerID='" & .BookerID & "'", " AND ")
+      If .LocationID > default_Int Then AddWhere(SQLWhere, "LocationID='" & .LocationID & "'", " AND ")
+      If .StatusID > default_Int Then AddWhere(SQLWhere, "StatusID='" & .StatusID & "'", " AND ")
+      If .BookerID > default_Int Then AddWhere(SQLWhere, "BookerID='" & .BookerID & "'", " AND ")
       If .ClaimNumber.Length > 0 Then AddWhere(SQLWhere, "ClaimNumber='" & .ClaimNumber & "'", " AND ")
-      AddWhere(SQLWhere, "Booked='" & .Booked.ToString("yyyy-MM-dd hh:mm:00") & "'", " AND ")
+      If .Appt <> default_DateTime Then AddWhere(SQLWhere, "CONVERT(DATETIME, '" & .Appt.ToString("yyyy-MM-dd HH:mm:00") & "'", " AND ")
+      AddWhere(SQLWhere, "Booked='" & .Booked.ToString("yyyy-MM-dd HH:mm:00") & "'", " AND ")
     End With
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
     Dim sSQL As String = "SELECT * FROM vw_Booking  WHERE " & SQLWhere
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     If Not IsNothing(Rdr) Then
       If Rdr.HasRows Then
         Found = True
@@ -578,7 +850,7 @@ Public Class Class_CallCenter
     Dim Bookingindex As Integer = ContactBooking.Index
     Dim sSQL As String = "SELECT * FROM vw_Booking WHERE BookingID='" & ContactBooking.Booking.ID & "'"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     If Not IsNothing(Rdr) Then
       If Rdr.HasRows Then
         While Rdr.Read
@@ -595,7 +867,7 @@ Public Class Class_CallCenter
     Record.BookingIndex = default_Int
     Dim sSQL As String = "SELECT * FROM vw_Booking WHERE ContactID='" & Record.Contact.ID & "'"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     If Not IsNothing(Rdr) Then
 
       If Rdr.HasRows Then
@@ -611,7 +883,7 @@ Public Class Class_CallCenter
           End With
           NewItem += 1
         End While
-
+        If Record.BookingIndex = 0 Then Record.BookingIndex = Record.Booking.Length - 1
       End If
       Rdr.Close()
     End If
@@ -632,6 +904,7 @@ Public Class Class_CallCenter
     Return Success
   End Function
   Function InsertBookingHistory(ID As Integer, Field As String, NewValue As Object, OldValue As Object) As Boolean
+    If IsNothing(OldValue) Then OldValue = ""
     Dim Success As Boolean, Sqlstr As String
     If ID > default_Int Then
 
@@ -647,7 +920,7 @@ Public Class Class_CallCenter
 
     Dim sSQL As String = "SELECT * FROM vw_Booking_Hist WHERE BookingID='" & Record.Booking(BookingIndex).Booking.ID & "'"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     If Not IsNothing(Rdr) Then
       If Rdr.HasRows Then
         With Record.Booking(BookingIndex)
@@ -683,7 +956,7 @@ Public Class Class_CallCenter
     If ActiveOnly = True Then Condution = "WHERE (Active = 1) "
     Dim sSQL As String = "SELECT * FROM vw_Employee " & Condution & "ORDER BY FirstName"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     Erase StaffList
     If Not IsNothing(Rdr) Then
 
@@ -704,7 +977,7 @@ Public Class Class_CallCenter
   Public Function initSite() As Type_Site()
     Dim sSQL As String = "SELECT * FROM tbl_Site"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     Erase SiteList
     If Not IsNothing(Rdr) Then
       If Rdr.HasRows Then
@@ -728,7 +1001,7 @@ Public Class Class_CallCenter
     Dim sSQL As String = "SELECT * FROM vw_AccessLevelList where value=1"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
     Erase AccessLevel
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     If Not IsNothing(Rdr) Then
 
       If Rdr.HasRows Then
@@ -752,7 +1025,7 @@ Public Class Class_CallCenter
     Dim sSQL As String = "SELECT * FROM  vw_AccessRights"
     Erase RightsList
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     If Not IsNothing(Rdr) Then
 
       If Rdr.HasRows Then
@@ -798,14 +1071,14 @@ Public Class Class_CallCenter
       "VALUES (0, '" & FirstName & "', '" & LastName & "', '', '', '', '', '', '', '', '', '', 1, 'Password')"
 
     Success = RunSQL(Sqlstr)
- 
+
     Return Success
   End Function
   Function GetStaffID(FirstName As String, LastName As String) As Integer
     Dim sSQL As String = "Select ID FROM tbl_Employee WHERE FirstName='" & FirstName & "' AND LastName='" & LastName & "'"
     Dim TheID As Integer = default_Int
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     If Not IsNothing(Rdr) Then
       If Rdr.HasRows Then
         While Rdr.Read
@@ -845,8 +1118,8 @@ Public Class Class_CallCenter
       Success = DBManager.RunSQL(Sqlstr)
       DBManager.CloseConnection()
       Success = True
-    Catch
-      log("ERROR: " & Err.Description)
+    Catch Ex As Exception
+      log("ERROR: " & Ex.Message)
       Success = False
     End Try
 
@@ -969,11 +1242,16 @@ Public Class Class_CallCenter
 #End Region
 #Region "Status"
   Public Status As Type_Status()
+  ''' <summary>
+  ''' All Status List
+  ''' </summary>
+  ''' <param name="Refresh"></param>
+  ''' <remarks></remarks>
   Public Sub initStatus(Optional Refresh As Boolean = False)
     If IsNothing(Status) Or Refresh Then
       Dim sSQL As String = "SELECT * FROM tbl_Status ORDER BY Name"
       DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-      Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+      Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
       Status = ReadStatusRdr(Rdr)
       DBManager.CloseConnection()
     End If
@@ -1024,7 +1302,7 @@ Public Class Class_CallCenter
 
     Dim sSQL As String = "SELECT * FROM vw_Locations" & Condition & " ORDER BY LocationName"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     If Not IsNothing(Rdr) Then
       If Rdr.HasRows Then
         Dim NewItem As Integer = 0
@@ -1055,7 +1333,7 @@ Public Class Class_CallCenter
 
     Dim sSQL As String = "SELECT * FROM vw_Locations" & Condition & " ORDER BY LocationName"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-    Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+    Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
     Erase LocationList
     If Not IsNothing(Rdr) Then
       If Rdr.HasRows Then
@@ -1070,46 +1348,106 @@ Public Class Class_CallCenter
     End If
     DBManager.CloseConnection()
   End Sub
-
-  Public Sub initStatus(LocationID As Integer, Optional Refresh As Boolean = False)
-    Dim Index As Integer = GetLocationlistIndex(LocationID)
-    If Index > default_Int Then
-      With LocationList(Index)
+  ''' <summary>
+  ''' Location Status
+  ''' </summary>
+  ''' <param name="LocationID"></param>
+  ''' <param name="StatusID"></param>
+  ''' <param name="Refresh"></param>
+  ''' <remarks></remarks>
+  Public Sub initStatus(LocationID As Integer, StatusID As Integer, Optional Refresh As Boolean = False)
+    Dim LIndex As Integer = GetLocationlistIndex(LocationID)
+    Dim SIndex As Integer = GetStatuslistIndex(StatusID)
+    If LIndex > default_Int Then
+      If StatusID = default_Int Then StatusID = 0
+      With LocationList(LIndex)
         If IsNothing(.Status) Or Refresh Then
-          Dim sSQL = "SELECT * FROM vw_Location_Status WHERE (LocationID = " & .ID & ")"
+          Dim sSQL = "SELECT DISTINCT CurrentID, AllowedID, AlwaysVis, Permission, AccessLevelID " & _
+          "FROM dbo.vw_Location_Status " & _
+          "WHERE (LocationID = " & LocationID & ")"
           DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-          Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
-          .Status = ReadStatusRdr(Rdr)
+          Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
+          .Status = ReadLocationStatusRdr(Rdr)
+
+          'GetStatuslistIndex(StatusID)
         End If
         DBManager.CloseConnection()
       End With
     End If
   End Sub
-  Public Function GetLocationStatus(LocationID As Integer, StatusID As Integer) As Type_Status
-    If LocationID > 0 Then
-      Dim LocationIndex As Integer = GetLocationlistIndex(LocationID)
-      Dim StatusIndex As Integer = default_Int
-      If LocationIndex > default_Int Then
+  Function initStatusSP(LocationID As Integer, Optional Refresh As Boolean = False) As Boolean
+    Dim parms() As SqlClient.SqlParameter = Nothing, RetVal As Boolean = False
+    '-----------------------------------------------------------------------------------------
+    '-- Check Return Value. --
+    Dim LIndex As Integer = GetLocationlistIndex(LocationID)
+    With LocationList(LIndex)
+      If IsNothing(.Status) Or Refresh Then
 
-        With LocationList(LocationIndex)
-          If Not IsNothing(.Status) Then
-            For i As Integer = 0 To .Status.Length - 1
-              If .Status(i).ID = StatusID Then StatusIndex = i
-            Next
-          End If
-          If StatusIndex > default_Int Then
-            Return .Status(StatusIndex)
-          Else
-            Return Nothing
-          End If
-        End With
+        DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
+        DBManager.AddParameter(parms, "@LocationID", SqlDbType.Int, CInt(LocationID))
+        DBManager.AddParameter(parms, "@RetVal", SqlDbType.Int, RetVal)
+        Dim Rdr As SqlClient.SqlDataReader = DBManager.GetDataReaderFromSP("GetLocation_Status", parms)
+
+        .Status = ReadLocationStatusRdr(Rdr)
+
+        DBManager.CloseConnection()
+
+      End If
+    End With
+    Return RetVal
+
+  End Function
+
+  Public Enum LocationStatusType
+    AllowedID
+    CurrentID
+  End Enum
+  Public Function GetLocationStatus(LocationID As Integer, StatusID As Integer, Optional SearchType As LocationStatusType = LocationStatusType.AllowedID) As Type_LocationStatus
+    Dim Index As Integer = default_Int
+
+    Dim LIndex As Integer = GetLocationlistIndex(LocationID)
+    With LocationList(LIndex)
+
+      If Not IsNothing(.Status) Then
+        For i As Integer = 0 To .Status.Length - 1
+          If SearchType = LocationStatusType.AllowedID And .Status(i).AllowedID = StatusID Then Index = i
+          If SearchType = LocationStatusType.CurrentID And .Status(i).CurrentID = StatusID Then Index = i
+        Next
+      End If
+      If Index > default_Int Then
+        Return LocationList(LIndex).Status(Index)
       Else
         Return Nothing
       End If
-    Else
-      Return Nothing
-    End If
+    End With
   End Function
+
+
+  'Public Function GetLocationStatus(LocationID As Integer, StatusID As Integer) As Type_Status
+  '  If LocationID > 0 Then
+  '    Dim LocationIndex As Integer = GetLocationlistIndex(LocationID)
+  '    Dim StatusIndex As Integer = default_Int
+  '    If LocationIndex > default_Int Then
+
+  '      With LocationList(LocationIndex)
+  '        If Not IsNothing(.Status) Then
+  '          For i As Integer = 0 To .Status.Length - 1
+  '            If .Status(i).ID = StatusID Then StatusIndex = i
+  '          Next
+  '        End If
+  '        If StatusIndex > default_Int Then
+  '          Return .Status(StatusIndex)
+  '        Else
+  '          Return Nothing
+  '        End If
+  '      End With
+  '    Else
+  '      Return Nothing
+  '    End If
+  '  Else
+  '    Return Nothing
+  '  End If
+  'End Function
 
 
   Public Sub initShowTimes(LocationID As Integer, Optional Refresh As Boolean = False)
@@ -1119,10 +1457,10 @@ Public Class Class_CallCenter
         If IsNothing(.ShowTimes) Or Refresh Then
           Dim sSQL = "SELECT * FROM vw_ShowTimes WHERE (LocationID = " & .ID & ") ORDER BY Showtime"
           DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-          Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+          Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
           .ShowTimes = ReadShowTimesRdr(Rdr)
+          DBManager.CloseConnection()
         End If
-        DBManager.CloseConnection()
       End With
     End If
   End Sub
@@ -1134,7 +1472,7 @@ Public Class Class_CallCenter
 
         Dim sSQL As String = "SELECT * FROM vw_LocationScripts where LocationID='" & LocationID & "'"
         DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
-        Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+        Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
         If Not IsNothing(Rdr) Then
 
           If Rdr.HasRows Then
@@ -1158,7 +1496,7 @@ Public Class Class_CallCenter
     Dim sSQL As String = "SELECT * FROM tbl_Script_Part"
     DBManager = New DataManager(Connection(DB_CallCenter).connectionString)
     If IsNothing(Script_List) Then
-      Dim Rdr As SqlDataReader = DBManager.GetDataReaderFromQuery(sSQL)
+      Dim Rdr As SqlDataReader = DBManager.GetSQL(sSQL)
       If Not IsNothing(Rdr) Then
 
         Script_List = New ArrayList
@@ -1333,7 +1671,8 @@ Public Class Class_CallCenter
         .EditBookings = InputVar(Rdr("EditBookings"), False) '10
         .MultiRecordUI = InputVar(Rdr("MultiRecordUI"), False) '11
         .EditEmployees = InputVar(Rdr("EditEmployees"), False) '12
-        .SimpleUI = InputVar(Rdr("SimpleUI"), False) '12
+        .SimpleUI = InputVar(Rdr("SimpleUI"), False) '13
+        .DeleteRecords = InputVar(Rdr("DeleteRecords"), False) '14
 
       End With
     Catch
@@ -1395,6 +1734,42 @@ Public Class Class_CallCenter
     End Try
     Return Location
   End Function
+
+
+  Public Function ReadLocationStatusRdr(ByRef Rdr As SqlDataReader) As Type_LocationStatus()
+    Dim PStatus() As Type_LocationStatus : Erase PStatus
+    Try
+      If Not IsNothing(Rdr) Then
+        If Rdr.HasRows Then
+          Dim NewItem As Integer = 0
+          While Rdr.Read
+            ReDim Preserve PStatus(NewItem)
+            PStatus(NewItem) = LocationStatusFrom_DataReader(Rdr)
+            NewItem += 1
+          End While
+        End If
+      End If
+    Catch
+      log("ERROR: " & Err.Description, "ReadStatusRdr")
+    End Try
+    Return PStatus
+  End Function
+
+  Public Function LocationStatusFrom_DataReader(ByRef Rdr As SqlDataReader) As Type_LocationStatus
+    Dim Status As New Type_LocationStatus
+    Try
+      With Status
+        .CurrentID = InputVar(Rdr("CurrentID"), default_Int)
+        .AllowedID = InputVar(Rdr("AllowedID"), default_Int)
+        .AlwaysVis = InputVar(Rdr("AlwaysVis"), False)
+        .Permission = InputVar(Rdr("Permission"), True)
+        .AccessLevelID = InputVar(Rdr("AccessLevelID"), default_Int)
+      End With
+    Catch
+      log("ERROR: " & Err.Description, "LocationStatusFrom_DataReader")
+    End Try
+    Return Status
+  End Function
   Public Function StatusFrom_DataReader(ByRef Rdr As SqlDataReader) As Type_Status
     Dim Status As New Type_Status
     Try
@@ -1403,6 +1778,7 @@ Public Class Class_CallCenter
         .Name = InputVar(Rdr("Name"), "")
         .LogOnly = InputVar(Rdr("LogOnly"), False)
         .IsBooking = InputVar(Rdr("IsBooking"), False)
+        .IsConfirm = InputVar(Rdr("IsConfirm"), False)
         .Enabled = InputVar(Rdr("Enabled"), False)
         .LockBooking = InputVar(Rdr("LockBooking"), False)
       End With
@@ -1549,9 +1925,9 @@ Public Class Class_CallCenter
         .ConfirmerID = InputVar(Rdr("ConfirmerID"), default_Int)
         .StatusID = InputVar(Rdr("StatusID"), default_Int)
         .BookerID = InputVar(Rdr("BookerID"), default_Int)
-        .Conf = InputVar(Rdr("Confirmed"), default_Date)
-        .Booked = InputVar(Rdr("Booked"), default_Date)
-        .Appt = InputVar(Rdr("Appt"), New Date)
+        .Conf = InputVar(Rdr("Confirmed"), default_DateTime)
+        .Booked = InputVar(Rdr("Booked"), default_DateTime)
+        .Appt = InputVar(Rdr("Appt"), default_DateTime)
         .Notes = InputVar(Rdr("Notes"), "")
         .Gift1_ID = InputVar(Rdr("Gift1ID"), default_Int)
         .Gift2_ID = InputVar(Rdr("Gift2ID"), default_Int)
@@ -1581,7 +1957,7 @@ Public Class Class_CallCenter
         .NewVal = InputVar(Rdr("NewRaw"), "")
         .OldValStr = InputVar(Rdr("OldString"), "")
         .NewValStr = InputVar(Rdr("NewString"), "")
-        .ActionTime = InputVar(Rdr("ActionTime"), default_Date)
+        .ActionTime = InputVar(Rdr("ActionTime"), default_DateTime)
       End With
     Catch
       log("ERROR: " & Err.Description, "BookingHistFrom_DataReader")

@@ -60,13 +60,14 @@ Public Class Frm_SignIn
 
   End Sub
   Private Sub Frm_SignIn_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+    Dim TempControlsActive = ControlsActive : ControlsActive = False
     Dim regKey As New RegEdit(AppName)
     Dim LastUser As String = ""
     LastUser = regKey.GetAppValue("LastUser", "").ToString
 
 
     FillStaff(cbo_Staff, CC.StaffList, LastUser)
-
+    Me.Text = BrandName & " - v" & GetVersion()
     'Dim VDP_Array As New ArrayList, selectedIndex As Integer = 0, CurrentItem As Integer = 1
     'VDP_Array.Add(New ValueDescriptionPair(-1, "Select Your Name"))
     'For loopvar As Integer = 0 To StaffList.Length - 1
@@ -105,12 +106,15 @@ Public Class Frm_SignIn
       UpdateShado(lbl_MessageMask)
       cbo_Staff.Focus()
     End If
+    ControlsActive = TempControlsActive
   End Sub
 
 
   Private Sub Frm_SignIn_Move(sender As Object, e As EventArgs) Handles MyBase.Move, MyBase.Resize
-    Dim regKey As New RegEdit(AppName)
-    regKey.SetSavedFormLocation(Me)
-    regKey.Close()
+    If ControlsActive Then
+      Dim regKey As New RegEdit(AppName)
+      regKey.SetSavedFormLocation(Me)
+      regKey.Close()
+    End If
   End Sub
 End Class

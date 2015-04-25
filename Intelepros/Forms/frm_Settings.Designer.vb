@@ -26,9 +26,9 @@ Partial Class frm_Settings
     Me.txt_Login = New System.Windows.Forms.TextBox()
     Me.txt_Password = New System.Windows.Forms.TextBox()
     Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
-    Me.Label1 = New System.Windows.Forms.Label()
-    Me.Label2 = New System.Windows.Forms.Label()
     Me.Label3 = New System.Windows.Forms.Label()
+    Me.Label2 = New System.Windows.Forms.Label()
+    Me.Label1 = New System.Windows.Forms.Label()
     Me.cmd_Connect = New System.Windows.Forms.Button()
     Me.cmd_Cancel = New System.Windows.Forms.Button()
     Me.TableLayoutPanel1.SuspendLayout()
@@ -88,32 +88,8 @@ Partial Class frm_Settings
     Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
     Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
     Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
-    Me.TableLayoutPanel1.Size = New System.Drawing.Size(309, 121)
+    Me.TableLayoutPanel1.Size = New System.Drawing.Size(309, 140)
     Me.TableLayoutPanel1.TabIndex = 4
-    '
-    'Label1
-    '
-    Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Label1.AutoSize = True
-    Me.Label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-    Me.Label1.Location = New System.Drawing.Point(3, 8)
-    Me.Label1.Name = "Label1"
-    Me.Label1.Size = New System.Drawing.Size(71, 13)
-    Me.Label1.TabIndex = 4
-    Me.Label1.Text = "Server Name"
-    Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    '
-    'Label2
-    '
-    Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Label2.AutoSize = True
-    Me.Label2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-    Me.Label2.Location = New System.Drawing.Point(3, 38)
-    Me.Label2.Name = "Label2"
-    Me.Label2.Size = New System.Drawing.Size(71, 13)
-    Me.Label2.TabIndex = 5
-    Me.Label2.Text = "Login"
-    Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
     '
     'Label3
     '
@@ -127,6 +103,30 @@ Partial Class frm_Settings
     Me.Label3.Text = "Password"
     Me.Label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight
     '
+    'Label2
+    '
+    Me.Label2.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label2.AutoSize = True
+    Me.Label2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+    Me.Label2.Location = New System.Drawing.Point(3, 38)
+    Me.Label2.Name = "Label2"
+    Me.Label2.Size = New System.Drawing.Size(71, 13)
+    Me.Label2.TabIndex = 5
+    Me.Label2.Text = "Login"
+    Me.Label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
+    'Label1
+    '
+    Me.Label1.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label1.AutoSize = True
+    Me.Label1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+    Me.Label1.Location = New System.Drawing.Point(3, 8)
+    Me.Label1.Name = "Label1"
+    Me.Label1.Size = New System.Drawing.Size(71, 13)
+    Me.Label1.TabIndex = 4
+    Me.Label1.Text = "Server Name"
+    Me.Label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
     'cmd_Connect
     '
     Me.cmd_Connect.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -134,7 +134,7 @@ Partial Class frm_Settings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.cmd_Connect.Location = New System.Drawing.Point(196, 93)
     Me.cmd_Connect.Name = "cmd_Connect"
-    Me.cmd_Connect.Size = New System.Drawing.Size(110, 25)
+    Me.cmd_Connect.Size = New System.Drawing.Size(110, 44)
     Me.cmd_Connect.TabIndex = 7
     Me.cmd_Connect.Text = "Connect"
     Me.cmd_Connect.UseVisualStyleBackColor = True
@@ -146,7 +146,7 @@ Partial Class frm_Settings
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.cmd_Cancel.Location = New System.Drawing.Point(80, 93)
     Me.cmd_Cancel.Name = "cmd_Cancel"
-    Me.cmd_Cancel.Size = New System.Drawing.Size(110, 25)
+    Me.cmd_Cancel.Size = New System.Drawing.Size(110, 44)
     Me.cmd_Cancel.TabIndex = 8
     Me.cmd_Cancel.Text = "Cancel"
     Me.cmd_Cancel.UseVisualStyleBackColor = True
@@ -155,7 +155,7 @@ Partial Class frm_Settings
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-    Me.ClientSize = New System.Drawing.Size(309, 121)
+    Me.ClientSize = New System.Drawing.Size(309, 140)
     Me.Controls.Add(Me.TableLayoutPanel1)
     Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
     Me.Name = "frm_Settings"

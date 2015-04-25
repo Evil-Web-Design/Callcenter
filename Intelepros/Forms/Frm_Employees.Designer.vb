@@ -625,6 +625,7 @@ Partial Class Frm_Employees
     Me.MinimumSize = New System.Drawing.Size(478, 430)
     Me.Name = "Frm_Employees"
     Me.Text = "Employee Management"
+    Me.TopMost = True
     Me.TableLayoutPanel11.ResumeLayout(False)
     Me.TabControl1.ResumeLayout(False)
     Me.TabPage5.ResumeLayout(False)

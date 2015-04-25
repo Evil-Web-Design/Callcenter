@@ -10,20 +10,29 @@ Public Class Frm_Main
     End If
     MyBase.SetVisibleCore(value)
   End Sub
-  Private Sub cmd_Menu_Click(sender As Object, e As EventArgs) Handles cmd_Menu.Click
+  Private Sub mnu_HideMain_Click(sender As Object, e As EventArgs) Handles mnu_HideMain.Click, mnu_HideMain_Main.Click
     If Hidden Then
       Me.Show()
-      cmd_Menu.Text = "Hide Menu Window"
+      mnu_HideMain.Text = "Hide Menu Window"
+      mnu_HideMain_Main.Text = "Hide Menu Window"
     Else
       Me.Hide()
-      cmd_Menu.Text = "Show Menu Window"
+      mnu_HideMain.Text = "Show Menu Window"
+      mnu_HideMain_Main.Text = "Show Menu Window"
+      TrayIcon.ShowBalloonTip(5000, "Call Center minimized to the tray", "Click this Icon for all options.", ToolTipIcon.Info)
     End If
     Hidden = Not Hidden
+  End Sub
+  Private Sub mnu_ResetWindows_Click(sender As Object, e As EventArgs) Handles mnu_ResetWindows.Click, mnu_ResetWindows_Main.Click
+    Dim regKey As New RegEdit(AppName)
+    regKey.ClearallFormLocations()
+    regKey.Close()
   End Sub
   Private Sub Frm_Main_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
 
   End Sub
   Private Sub Frm_Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Dim TempControlsActive = ControlsActive : ControlsActive = False
     mnu_Main.Location = New Point(0, 0)
     With CC.CurStaff.Rights
       mnu_Main.Visible = True
@@ -46,15 +55,18 @@ Public Class Frm_Main
     Dim regKey As New RegEdit(AppName)
     regKey.GetSavedFormLocation(Me, RegEdit.Enum_FormPos.Location)
     regKey.Close()
+    ControlsActive = TempControlsActive
   End Sub
 
 
 
 
   Private Sub Frm_SignIn_Move(sender As Object, e As EventArgs) Handles MyBase.Move, MyBase.Resize
-    Dim regKey As New RegEdit(AppName)
-    regKey.SetSavedFormLocation(Me)
-    regKey.Close()
+    If ControlsActive Then
+      Dim regKey As New RegEdit(AppName)
+      regKey.SetSavedFormLocation(Me)
+      regKey.Close()
+    End If
   End Sub
 
   <DllImportAttribute("user32.dll")> _
@@ -106,7 +118,7 @@ Public Class Frm_Main
   Private Sub cmd_Search_Click(sender As Object, e As EventArgs) Handles mnu_Search.Click, cmd_Search.Click
     OpenSearch()
   End Sub
-  Private Sub cmd_OpenContact_Click(sender As Object, e As EventArgs) Handles mnu_OpenContact.Click, cmd_Contact.Click
+  Private Sub cmd_Contact_ButtonClick(sender As Object, e As EventArgs) Handles mnu_OpenContact.Click, cmd_Contact.ButtonClick
     OpenNewRecord()
   End Sub
   Private Sub mnu_Exit_Click(sender As Object, e As EventArgs) Handles mnu_Exit.Click, cmd_Exit.Click
@@ -122,13 +134,20 @@ Public Class Frm_Main
   Private Sub mnu_Log_Click(sender As Object, e As EventArgs) Handles mnu_Log.Click, cmd_Log.Click
     OpenLog()
   End Sub
-
+  Private Sub cmd_LocationSettings_Click(sender As Object, e As EventArgs) Handles cmd_LocationSettings.Click, mnu_LocationSettings.Click
+    OpenLocationSettings()
+  End Sub
 #End Region
 #Region "Functions"
 
 
 #End Region
 
+  Private Sub cmd_Simple_Click(sender As Object, e As EventArgs) Handles cmd_Simple.Click, mnu_Simple.Click
+    OpenNewRecord(True)
+  End Sub
 
-
+  Private Sub mnu_LogOut_Click(sender As Object, e As EventArgs) Handles cmd_LogOut.Click, mnu_LogOut.Click
+    InitSystem()
+  End Sub
 End Class

@@ -169,9 +169,11 @@ Public Class Frm_Employees
     ControlsActive = True
   End Sub
   Private Sub Frm_SignIn_Move(sender As Object, e As EventArgs) Handles MyBase.Move, MyBase.Resize
-    Dim regKey As New RegEdit(AppName)
-    regKey.SetSavedFormLocation(Me)
-    regKey.Close()
+    If ControlsActive Then
+      Dim regKey As New RegEdit(AppName)
+      regKey.SetSavedFormLocation(Me)
+      regKey.Close()
+    End If
   End Sub
 
   Private Sub cbo_E_Access_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbo_E_Access.SelectedIndexChanged

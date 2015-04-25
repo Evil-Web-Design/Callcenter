@@ -42,11 +42,14 @@ Partial Class Frm_NewRecord
     '
     'cmd_Search
     '
+    Me.cmd_Search.Image = Global.Intelepros.My.Resources.Resources.telephone_add
+    Me.cmd_Search.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
     Me.cmd_Search.Location = New System.Drawing.Point(215, 102)
     Me.cmd_Search.Name = "cmd_Search"
     Me.cmd_Search.Size = New System.Drawing.Size(94, 30)
     Me.cmd_Search.TabIndex = 2
-    Me.cmd_Search.Text = "Create / Open"
+    Me.cmd_Search.Text = "Create/Open"
+    Me.cmd_Search.TextAlign = System.Drawing.ContentAlignment.MiddleRight
     Me.cmd_Search.UseVisualStyleBackColor = True
     '
     'txt_Claim

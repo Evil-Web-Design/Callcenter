@@ -146,7 +146,19 @@ Public Property Value As String
     End If
     RaiseEvent KeyPress(sender, e)
   End Sub
+  Private Sub txt_Area_KeyDown(sender As Object, e As KeyEventArgs) Handles txt_Area.KeyDown, txt_Prefix.KeyDown, txt_Suffix.KeyDown
+    If e.Modifiers = Keys.Control AndAlso e.KeyCode = Keys.V Then
+      Update_ThisValue(Clipboard.GetText(TextDataFormat.Text))
+      e.Handled = True
+    Else
+      If e.Modifiers = Keys.Control AndAlso e.KeyCode = Keys.C Then
+        Clipboard.SetText(Value)
+        e.Handled = True
+      End If
+    End If
+  End Sub
   Private Sub ctl_Phone_KeyPress(sender As Object, e As KeyPressEventArgs) Handles MyBase.KeyPress
+
     RaiseEvent KeyPress(sender, e)
   End Sub
   Private Sub txt_Area_KeyUp(sender As Object, e As KeyEventArgs) Handles txt_Area.KeyUp, txt_Prefix.KeyUp, txt_Suffix.KeyUp
@@ -160,6 +172,7 @@ Public Property Value As String
     ThisValue.Area = txt_Area.Text
     ThisValue.Prefix = txt_Prefix.Text
     ThisValue.DNIS = txt_Suffix.Text
+
     RaiseEvent KeyUp(Me, e)
   End Sub
 
@@ -189,4 +202,15 @@ Public Property Value As String
     tbl_Layout.BackColor = PBackColor
   End Sub
 
+
+  Private Sub mnu_Copy_Click(sender As Object, e As EventArgs) Handles mnu_Copy.Click, mnu_Paste.Click
+    Dim mnu As ToolStripMenuItem = TryCast(sender, ToolStripMenuItem)
+    Select Case mnu.Name
+      Case "mnu_Copy"
+        Clipboard.SetText(Value)
+      Case "mnu_Paste"
+        Update_ThisValue(Clipboard.GetText(TextDataFormat.Text))
+    End Select
+
+  End Sub
 End Class

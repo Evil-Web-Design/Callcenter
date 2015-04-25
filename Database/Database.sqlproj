@@ -23,6 +23,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -58,10 +59,55 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="Security\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="app\" />
+    <Folder Include="app\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Security\InteleprosApp.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="dbo\Tables\tbl_Status.sql" />
+    <Build Include="dbo\Tables\tbl_Promo_Gift.sql" />
+    <Build Include="dbo\Tables\tbl_Promo.sql" />
+    <Build Include="dbo\Tables\tbl_Network.sql" />
+    <Build Include="dbo\Tables\tbl_MailHouse.sql" />
+    <Build Include="dbo\Tables\tbl_MailDropContact.sql" />
+    <Build Include="dbo\Tables\tbl_Location_Status.sql" />
+    <Build Include="dbo\Tables\tbl_Location_Calendar.sql" />
+    <Build Include="dbo\Tables\tbl_Location.sql" />
+    <Build Include="dbo\Tables\tbl_Gift.sql" />
+    <Build Include="dbo\Tables\tbl_Employee.sql" />
+    <Build Include="dbo\Tables\tbl_Databases.sql" />
+    <Build Include="dbo\Tables\tbl_Contact.sql" />
+    <Build Include="dbo\Tables\tbl_City.sql" />
+    <Build Include="dbo\Tables\tbl_Booking_Hist.sql" />
+    <Build Include="dbo\Tables\tbl_Booking.sql" />
+    <Build Include="dbo\Tables\tbl_AccessRights.sql" />
+    <Build Include="dbo\Tables\tbl_AccessLevelStatus.sql" />
+    <Build Include="dbo\Tables\tbl_AccessLevelRights.sql" />
+    <Build Include="dbo\Tables\tbl_AccessLevel.sql" />
+    <Build Include="dbo\Tables\tbl__GiftImportHelper.sql" />
+    <Build Include="dbo\Views\vw_ShowTimes.sql" />
+    <Build Include="dbo\Views\vw_SearchBookings.sql" />
+    <Build Include="dbo\Views\vw_MailDropContact.sql" />
+    <Build Include="dbo\Views\vw_Locations.sql" />
+    <Build Include="dbo\Views\vw_Location_Status.sql" />
+    <Build Include="dbo\Views\vw_Employee.sql" />
+    <Build Include="dbo\Views\vw_Contact.sql" />
+    <Build Include="dbo\Views\vw_Bookings_Report.sql" />
+    <Build Include="dbo\Views\vw_Booking_Hist.sql" />
+    <Build Include="dbo\Views\vw_Booking.sql" />
+    <Build Include="dbo\Views\vw_AccessRights.sql" />
+    <Build Include="dbo\Views\vw_AccessLevelList.sql" />
+    <Build Include="dbo\Views\vw__ImportGiftsHelper.sql" />
+    <Build Include="dbo\Functions\GetActionString.sql" />
+    <Build Include="dbo\Functions\GetAccessRight.sql" />
+    <Build Include="dbo\Functions\FormatDateTime.sql" />
+    <Build Include="dbo\Stored Procedures\UpdateCallcenterFromTmanagement.sql" />
+    <Build Include="app\Stored Procedures\DeleteContactRecord.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Local_Database.publish.xml" />

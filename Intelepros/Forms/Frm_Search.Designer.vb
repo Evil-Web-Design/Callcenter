@@ -395,7 +395,6 @@ Partial Class Frm_Search
     Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
     Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
     Me.Text = "Search"
-    Me.TopMost = True
     Me.TableLayoutPanel3.ResumeLayout(False)
     Me.GroupBox2.ResumeLayout(False)
     Me.GroupBox9.ResumeLayout(False)

@@ -70,26 +70,26 @@ ErrorHandler:
       RaiseEvent MsgEvent("RunSQL: " & sql)
       myCommand.ExecuteNonQuery()
       bolCompleted = True
-    Catch
-      RaiseEvent MsgEvent("ERROR: " & Err.Description)
+    Catch ex As Exception
+      RaiseEvent MsgEvent("RunSQL: " & ex.Message)
       bolCompleted = False
     End Try
     myCommand.Dispose()
     Return bolCompleted
   End Function
 #Region "DataReader"
-  Public Function GetDataReaderFromQuery(ByVal QueryText As String) As SqlDataReader
+  Public Function GetSQL(ByVal QueryText As String) As SqlDataReader
 
     Dim tempDataReader As SqlDataReader
     Try
       Dim SQLCmd As SqlClient.SqlCommand = New SqlClient.SqlCommand(QueryText, _conn)
       SQLCmd.CommandType = CommandType.Text
-      RaiseEvent MsgEvent("GetDataReaderFromQuery: " & QueryText)
+      RaiseEvent MsgEvent("GetSQL: " & QueryText)
       tempDataReader = SQLCmd.ExecuteReader()
       SQLCmd.Dispose()
     Catch ex As Exception
       'RaiseEvent MsgEvent("GetDataReaderFromQuery() : " & ex.Message, QueryText, Event_Enum.ErrorEvent)
-      RaiseEvent MsgEvent("GetDataReaderFromQuery: " & ex.Message)
+      RaiseEvent MsgEvent("GetSQL: " & ex.Message)
       tempDataReader = Nothing
     End Try
     Return tempDataReader

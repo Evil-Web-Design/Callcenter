@@ -22,14 +22,19 @@ Partial Class ctl_Phone
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+    Me.components = New System.ComponentModel.Container()
     Me.tbl_Layout = New System.Windows.Forms.TableLayoutPanel()
     Me.txt_Suffix = New System.Windows.Forms.TextBox()
+    Me.Menu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+    Me.mnu_Copy = New System.Windows.Forms.ToolStripMenuItem()
+    Me.mnu_Paste = New System.Windows.Forms.ToolStripMenuItem()
     Me.txt_Prefix = New System.Windows.Forms.TextBox()
     Me.txt_Area = New System.Windows.Forms.TextBox()
     Me.LBL_3 = New System.Windows.Forms.Label()
     Me.LBL_2 = New System.Windows.Forms.Label()
     Me.LBL_1 = New System.Windows.Forms.Label()
     Me.tbl_Layout.SuspendLayout()
+    Me.Menu.SuspendLayout()
     Me.SuspendLayout()
     '
     'tbl_Layout
@@ -60,6 +65,7 @@ Partial Class ctl_Phone
     'txt_Suffix
     '
     Me.txt_Suffix.BorderStyle = System.Windows.Forms.BorderStyle.None
+    Me.txt_Suffix.ContextMenuStrip = Me.Menu
     Me.txt_Suffix.Dock = System.Windows.Forms.DockStyle.Fill
     Me.txt_Suffix.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Me.txt_Suffix.Location = New System.Drawing.Point(150, 0)
@@ -72,9 +78,28 @@ Partial Class ctl_Phone
     Me.txt_Suffix.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
     Me.txt_Suffix.WordWrap = False
     '
+    'Menu
+    '
+    Me.Menu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_Copy, Me.mnu_Paste})
+    Me.Menu.Name = "Menu"
+    Me.Menu.Size = New System.Drawing.Size(103, 48)
+    '
+    'mnu_Copy
+    '
+    Me.mnu_Copy.Name = "mnu_Copy"
+    Me.mnu_Copy.Size = New System.Drawing.Size(102, 22)
+    Me.mnu_Copy.Text = "&Copy"
+    '
+    'mnu_Paste
+    '
+    Me.mnu_Paste.Name = "mnu_Paste"
+    Me.mnu_Paste.Size = New System.Drawing.Size(102, 22)
+    Me.mnu_Paste.Text = "&Paste"
+    '
     'txt_Prefix
     '
     Me.txt_Prefix.BorderStyle = System.Windows.Forms.BorderStyle.None
+    Me.txt_Prefix.ContextMenuStrip = Me.Menu
     Me.txt_Prefix.Dock = System.Windows.Forms.DockStyle.Fill
     Me.txt_Prefix.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Me.txt_Prefix.Location = New System.Drawing.Point(80, 0)
@@ -89,6 +114,7 @@ Partial Class ctl_Phone
     'txt_Area
     '
     Me.txt_Area.BorderStyle = System.Windows.Forms.BorderStyle.None
+    Me.txt_Area.ContextMenuStrip = Me.Menu
     Me.txt_Area.Dock = System.Windows.Forms.DockStyle.Fill
     Me.txt_Area.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Me.txt_Area.Location = New System.Drawing.Point(10, 0)
@@ -148,6 +174,7 @@ Partial Class ctl_Phone
     Me.Size = New System.Drawing.Size(230, 24)
     Me.tbl_Layout.ResumeLayout(False)
     Me.tbl_Layout.PerformLayout()
+    Me.Menu.ResumeLayout(False)
     Me.ResumeLayout(False)
 
   End Sub
@@ -158,5 +185,8 @@ Partial Class ctl_Phone
   Friend WithEvents LBL_3 As System.Windows.Forms.Label
   Friend WithEvents txt_Prefix As System.Windows.Forms.TextBox
   Friend WithEvents txt_Area As System.Windows.Forms.TextBox
+  Friend WithEvents Menu As System.Windows.Forms.ContextMenuStrip
+  Friend WithEvents mnu_Copy As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents mnu_Paste As System.Windows.Forms.ToolStripMenuItem
 
 End Class

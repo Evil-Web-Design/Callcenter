@@ -6,6 +6,7 @@
   End Sub
 
   Private Sub Frm_Search_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Dim TempControlsActive = ControlsActive : ControlsActive = False
     Dim regKey As New RegEdit(AppName)
     'FillLocations(lst_SearchLocation, CC.LocationList)
     'FillStatus(lst_SearchStatus, CC.Status)
@@ -17,11 +18,14 @@
     regKey.GetSavedFormLocation(Me)
     regKey.Close()
 
+    ControlsActive = TempControlsActive
   End Sub
   Private Sub Frm_SignIn_Move(sender As Object, e As EventArgs) Handles MyBase.Move, MyBase.Resize
-    Dim regKey As New RegEdit(AppName)
-    regKey.SetSavedFormLocation(Me)
-    regKey.Close()
+    If ControlsActive Then
+      Dim regKey As New RegEdit(AppName)
+      regKey.SetSavedFormLocation(Me)
+      regKey.Close()
+    End If
   End Sub
   Private Sub cmd_Search_Click(sender As Object, e As EventArgs) Handles cmd_Search.Click
     'ActionClick(0)
@@ -35,8 +39,8 @@
       .LocationID = GetSelected(lst_SearchLocation)
       '.DeptID = GetSelected(lst_SearchDept)
 
-      .DateStart = DateSearchStart.Value.ToString("MM/dd/yyyy")
-      .DateEnd = DateSearchEnd.Value.ToString("MM/dd/yyyy")
+      .DateStart = DateSearchStart.Value.ToString("MM/dd/yyyy") & " 12:00:00 AM"
+      .DateEnd = DateSearchEnd.Value.ToString("MM/dd/yyyy") & " 11:59:59 PM"
 
       .SearchString = txt_Search.Text
       If Not IsNothing(cbo_DateMethod.SelectedItem) Then
@@ -76,8 +80,7 @@
   Sub DrawSearch(Optional Initfields As Boolean = True)
     If Initfields Then
       cbo_DateMethod.Items.Clear()
-      cbo_DateMethod.Items.AddRange(New ValueDescriptionPair() {New ValueDescriptionPair(1, "Booking Date"),
-                                                                New ValueDescriptionPair(1, "Appointment Date")})
+      cbo_DateMethod.Items.AddRange(New ValueDescriptionPair() {New ValueDescriptionPair(2, "Appointment Date"), New ValueDescriptionPair(1, "Booking Date")})
       cbo_DateMethod.SelectedIndex = 0
       cbo_EmpAction.Items.AddRange(New ValueDescriptionPair() {New ValueDescriptionPair(1, "Booked By"),
                                                                New ValueDescriptionPair(2, "Confirmed By")})
@@ -134,4 +137,5 @@
   Private Sub lst_SearchStatus_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lst_SearchStatus.SelectedIndexChanged
 
   End Sub
+
 End Class

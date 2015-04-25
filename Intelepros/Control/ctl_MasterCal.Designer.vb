@@ -23,7 +23,6 @@ Partial Class ctl_MasterCal
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
     Me.tbl_Layout = New System.Windows.Forms.TableLayoutPanel()
-    Me.cbo_Date = New System.Windows.Forms.ComboBox()
     Me.cbo_Time = New System.Windows.Forms.ComboBox()
     Me.tbl_Layout.SuspendLayout()
     Me.SuspendLayout()
@@ -34,36 +33,23 @@ Partial Class ctl_MasterCal
     Me.tbl_Layout.ColumnCount = 2
     Me.tbl_Layout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.0!))
     Me.tbl_Layout.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.0!))
-    Me.tbl_Layout.Controls.Add(Me.cbo_Date, 0, 0)
     Me.tbl_Layout.Controls.Add(Me.cbo_Time, 1, 0)
-    Me.tbl_Layout.Dock = System.Windows.Forms.DockStyle.Fill
     Me.tbl_Layout.Location = New System.Drawing.Point(0, 0)
     Me.tbl_Layout.Name = "tbl_Layout"
     Me.tbl_Layout.RowCount = 1
     Me.tbl_Layout.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-    Me.tbl_Layout.Size = New System.Drawing.Size(1024, 25)
+    Me.tbl_Layout.Size = New System.Drawing.Size(285, 46)
     Me.tbl_Layout.TabIndex = 0
-    '
-    'cbo_Date
-    '
-    Me.cbo_Date.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.cbo_Date.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-    Me.cbo_Date.FormattingEnabled = True
-    Me.cbo_Date.Location = New System.Drawing.Point(3, 2)
-    Me.cbo_Date.Margin = New System.Windows.Forms.Padding(3, 0, 0, 0)
-    Me.cbo_Date.Name = "cbo_Date"
-    Me.cbo_Date.Size = New System.Drawing.Size(560, 21)
-    Me.cbo_Date.TabIndex = 0
     '
     'cbo_Time
     '
     Me.cbo_Time.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.cbo_Time.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
     Me.cbo_Time.FormattingEnabled = True
-    Me.cbo_Time.Location = New System.Drawing.Point(563, 2)
+    Me.cbo_Time.Location = New System.Drawing.Point(156, 12)
     Me.cbo_Time.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
     Me.cbo_Time.Name = "cbo_Time"
-    Me.cbo_Time.Size = New System.Drawing.Size(458, 21)
+    Me.cbo_Time.Size = New System.Drawing.Size(126, 21)
     Me.cbo_Time.TabIndex = 1
     '
     'ctl_MasterCal
@@ -72,16 +58,14 @@ Partial Class ctl_MasterCal
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
     Me.Controls.Add(Me.tbl_Layout)
-    Me.MaximumSize = New System.Drawing.Size(1024, 25)
     Me.MinimumSize = New System.Drawing.Size(90, 20)
     Me.Name = "ctl_MasterCal"
-    Me.Size = New System.Drawing.Size(1024, 25)
+    Me.Size = New System.Drawing.Size(295, 66)
     Me.tbl_Layout.ResumeLayout(False)
     Me.ResumeLayout(False)
 
   End Sub
   Friend WithEvents tbl_Layout As System.Windows.Forms.TableLayoutPanel
-  Friend WithEvents cbo_Date As System.Windows.Forms.ComboBox
   Friend WithEvents cbo_Time As System.Windows.Forms.ComboBox
 
 End Class

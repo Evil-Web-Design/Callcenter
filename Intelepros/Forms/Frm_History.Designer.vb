@@ -99,7 +99,6 @@ Partial Class Frm_History
     Me.Name = "Frm_History"
     Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
     Me.Text = "Booking History"
-    Me.TopMost = True
     CType(Me.Grid_Results, System.ComponentModel.ISupportInitialize).EndInit()
     Me.ResumeLayout(False)
 

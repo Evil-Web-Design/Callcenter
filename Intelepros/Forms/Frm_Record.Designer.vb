@@ -48,29 +48,35 @@ Partial Class Frm_Record
     Me.Label7 = New System.Windows.Forms.Label()
     Me.Label8 = New System.Windows.Forms.Label()
     Me.Label9 = New System.Windows.Forms.Label()
+    Me.tel_Phone = New Intelepros.ctl_Phone()
+    Me.tel_AltPhone = New Intelepros.ctl_Phone()
     Me.Table_Booking = New System.Windows.Forms.TableLayoutPanel()
-    Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-    Me.txt_BookNotes = New System.Windows.Forms.TextBox()
-    Me.cbo_Gift1 = New System.Windows.Forms.ComboBox()
-    Me.cbo_Gift2 = New System.Windows.Forms.ComboBox()
-    Me.cbo_Gift3 = New System.Windows.Forms.ComboBox()
-    Me.Label17 = New System.Windows.Forms.Label()
-    Me.Label18 = New System.Windows.Forms.Label()
-    Me.Label19 = New System.Windows.Forms.Label()
-    Me.date_Conf = New System.Windows.Forms.DateTimePicker()
-    Me.cbo_Confirmer = New System.Windows.Forms.ComboBox()
-    Me.date_Booked = New System.Windows.Forms.DateTimePicker()
-    Me.cbo_Booker = New System.Windows.Forms.ComboBox()
-    Me.cbo_Status = New System.Windows.Forms.ComboBox()
-    Me.cbo_Location = New System.Windows.Forms.ComboBox()
-    Me.lbl_ClaimLbl = New System.Windows.Forms.Label()
-    Me.Label16 = New System.Windows.Forms.Label()
-    Me.Label13 = New System.Windows.Forms.Label()
-    Me.Label15 = New System.Windows.Forms.Label()
-    Me.Label10 = New System.Windows.Forms.Label()
-    Me.Label14 = New System.Windows.Forms.Label()
+    Me.cmd_NewBooking = New System.Windows.Forms.Button()
     Me.Label12 = New System.Windows.Forms.Label()
     Me.Label11 = New System.Windows.Forms.Label()
+    Me.lbl_ClaimLbl = New System.Windows.Forms.Label()
+    Me.Label14 = New System.Windows.Forms.Label()
+    Me.TableLayoutPanel1 = New System.Windows.Forms.TableLayoutPanel()
+    Me.cmd_ApptDate = New System.Windows.Forms.Button()
+    Me.txt_Appt = New System.Windows.Forms.TextBox()
+    Me.cbo_Location = New System.Windows.Forms.ComboBox()
+    Me.Label10 = New System.Windows.Forms.Label()
+    Me.cbo_Booker = New System.Windows.Forms.ComboBox()
+    Me.Label15 = New System.Windows.Forms.Label()
+    Me.lbl_Booked = New System.Windows.Forms.Label()
+    Me.Label13 = New System.Windows.Forms.Label()
+    Me.cbo_Confirmer = New System.Windows.Forms.ComboBox()
+    Me.Label16 = New System.Windows.Forms.Label()
+    Me.lbl_ConfDate = New System.Windows.Forms.Label()
+    Me.Label17 = New System.Windows.Forms.Label()
+    Me.cbo_Gift1 = New System.Windows.Forms.ComboBox()
+    Me.Label18 = New System.Windows.Forms.Label()
+    Me.cbo_Gift2 = New System.Windows.Forms.ComboBox()
+    Me.Label19 = New System.Windows.Forms.Label()
+    Me.cbo_Gift3 = New System.Windows.Forms.ComboBox()
+    Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+    Me.txt_BookNotes = New System.Windows.Forms.TextBox()
+    Me.cbo_Status = New System.Windows.Forms.ComboBox()
     Me.mnu_ToolStrip = New System.Windows.Forms.ToolStrip()
     Me.mnu_Contact = New System.Windows.Forms.ToolStripSplitButton()
     Me.mnu_Search = New System.Windows.Forms.ToolStripMenuItem()
@@ -78,7 +84,7 @@ Partial Class Frm_Record
     Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
     Me.cmd_Close = New System.Windows.Forms.ToolStripMenuItem()
     Me.mnu_Booking = New System.Windows.Forms.ToolStripSplitButton()
-    Me.cmd_NewBooking = New System.Windows.Forms.ToolStripMenuItem()
+    Me.mnu_NewBooking = New System.Windows.Forms.ToolStripMenuItem()
     Me.cmd_History = New System.Windows.Forms.ToolStripMenuItem()
     Me.ToolStripSeparator4 = New System.Windows.Forms.ToolStripSeparator()
     Me.cmd_ShowAllGifts = New System.Windows.Forms.ToolStripMenuItem()
@@ -86,21 +92,29 @@ Partial Class Frm_Record
     Me.cbo_NavLocation = New System.Windows.Forms.ToolStripComboBox()
     Me.cmd_NavBack = New System.Windows.Forms.ToolStripButton()
     Me.mnu_Separator = New System.Windows.Forms.ToolStripSeparator()
+    Me.mnu_Admin = New System.Windows.Forms.ToolStripMenuItem()
+    Me.cmd_DisableLock = New System.Windows.Forms.ToolStripMenuItem()
+    Me.cmd_ClearConfirmer = New System.Windows.Forms.ToolStripMenuItem()
+    Me.cmd_OpView = New System.Windows.Forms.ToolStripMenuItem()
+    Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+    Me.mnu_DeleteContact = New System.Windows.Forms.ToolStripMenuItem()
+    Me.cmd_DeleteContact = New System.Windows.Forms.ToolStripMenuItem()
+    Me.mnu_DeleteBooking = New System.Windows.Forms.ToolStripMenuItem()
+    Me.cmd_DeleteBooking = New System.Windows.Forms.ToolStripMenuItem()
     Me.ToolStripOuterContainer = New System.Windows.Forms.ToolStripContainer()
     Me.StatusStrip = New System.Windows.Forms.StatusStrip()
     Me.lbl_Status = New System.Windows.Forms.ToolStripStatusLabel()
     Me.cmd_NextCall = New System.Windows.Forms.ToolStripButton()
     Me.cmd_Save = New System.Windows.Forms.ToolStripButton()
     Me.FocusIt = New System.Windows.Forms.Button()
-    Me.Ctl_Appt = New Intelepros.ctl_MasterCal()
-    Me.tel_Phone = New Intelepros.ctl_Phone()
-    Me.tel_AltPhone = New Intelepros.ctl_Phone()
+    Me.Label21 = New System.Windows.Forms.Label()
     Me.Table_Contact.SuspendLayout()
     Me.Table_Primary.SuspendLayout()
     Me.GroupBox1.SuspendLayout()
     Me.Table_Secondary.SuspendLayout()
     Me.Table_StateZip.SuspendLayout()
     Me.Table_Booking.SuspendLayout()
+    Me.TableLayoutPanel1.SuspendLayout()
     Me.GroupBox2.SuspendLayout()
     Me.mnu_ToolStrip.SuspendLayout()
     Me.ToolStripOuterContainer.BottomToolStripPanel.SuspendLayout()
@@ -116,8 +130,6 @@ Partial Class Frm_Record
     Me.Table_Contact.ColumnCount = 2
     Me.Table_Contact.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
     Me.Table_Contact.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-    Me.Table_Contact.Controls.Add(Me.tel_Phone, 1, 0)
-    Me.Table_Contact.Controls.Add(Me.tel_AltPhone, 1, 1)
     Me.Table_Contact.Controls.Add(Me.Table_Primary, 1, 2)
     Me.Table_Contact.Controls.Add(Me.GroupBox1, 0, 9)
     Me.Table_Contact.Controls.Add(Me.Table_Secondary, 1, 3)
@@ -135,6 +147,8 @@ Partial Class Frm_Record
     Me.Table_Contact.Controls.Add(Me.Label7, 0, 4)
     Me.Table_Contact.Controls.Add(Me.Label8, 0, 7)
     Me.Table_Contact.Controls.Add(Me.Label9, 0, 8)
+    Me.Table_Contact.Controls.Add(Me.tel_Phone, 1, 0)
+    Me.Table_Contact.Controls.Add(Me.tel_AltPhone, 1, 1)
     Me.Table_Contact.Location = New System.Drawing.Point(285, 8)
     Me.Table_Contact.Margin = New System.Windows.Forms.Padding(0)
     Me.Table_Contact.Name = "Table_Contact"
@@ -452,37 +466,65 @@ Partial Class Frm_Record
     Me.Label9.Text = "State Zip"
     Me.Label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight
     '
+    'tel_Phone
+    '
+    Me.tel_Phone.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.tel_Phone.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+    Me.tel_Phone.FieldType = Intelepros.ctl_Phone.Enum_FieldType.Telephone
+    Me.tel_Phone.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.tel_Phone.Location = New System.Drawing.Point(85, 0)
+    Me.tel_Phone.Margin = New System.Windows.Forms.Padding(0)
+    Me.tel_Phone.Name = "tel_Phone"
+    Me.tel_Phone.Size = New System.Drawing.Size(167, 25)
+    Me.tel_Phone.TabIndex = 31
+    Me.tel_Phone.Value = ""
+    '
+    'tel_AltPhone
+    '
+    Me.tel_AltPhone.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.tel_AltPhone.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+    Me.tel_AltPhone.FieldType = Intelepros.ctl_Phone.Enum_FieldType.Telephone
+    Me.tel_AltPhone.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.tel_AltPhone.Location = New System.Drawing.Point(85, 25)
+    Me.tel_AltPhone.Margin = New System.Windows.Forms.Padding(0)
+    Me.tel_AltPhone.Name = "tel_AltPhone"
+    Me.tel_AltPhone.Size = New System.Drawing.Size(167, 25)
+    Me.tel_AltPhone.TabIndex = 32
+    Me.tel_AltPhone.Value = ""
+    '
     'Table_Booking
     '
     Me.Table_Booking.BackColor = System.Drawing.SystemColors.ButtonFace
     Me.Table_Booking.ColumnCount = 2
     Me.Table_Booking.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
     Me.Table_Booking.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-    Me.Table_Booking.Controls.Add(Me.Ctl_Appt, 1, 2)
-    Me.Table_Booking.Controls.Add(Me.GroupBox2, 0, 11)
-    Me.Table_Booking.Controls.Add(Me.cbo_Gift1, 1, 8)
-    Me.Table_Booking.Controls.Add(Me.cbo_Gift2, 1, 9)
-    Me.Table_Booking.Controls.Add(Me.cbo_Gift3, 1, 10)
-    Me.Table_Booking.Controls.Add(Me.Label17, 0, 8)
-    Me.Table_Booking.Controls.Add(Me.Label18, 0, 9)
-    Me.Table_Booking.Controls.Add(Me.Label19, 0, 10)
-    Me.Table_Booking.Controls.Add(Me.date_Conf, 1, 7)
-    Me.Table_Booking.Controls.Add(Me.cbo_Confirmer, 1, 6)
-    Me.Table_Booking.Controls.Add(Me.date_Booked, 1, 5)
-    Me.Table_Booking.Controls.Add(Me.cbo_Booker, 1, 4)
-    Me.Table_Booking.Controls.Add(Me.cbo_Status, 1, 3)
-    Me.Table_Booking.Controls.Add(Me.cbo_Location, 1, 1)
-    Me.Table_Booking.Controls.Add(Me.lbl_ClaimLbl, 0, 0)
-    Me.Table_Booking.Controls.Add(Me.Label16, 0, 7)
-    Me.Table_Booking.Controls.Add(Me.Label13, 0, 6)
-    Me.Table_Booking.Controls.Add(Me.Label15, 0, 5)
+    Me.Table_Booking.Controls.Add(Me.cmd_NewBooking, 0, 0)
+    Me.Table_Booking.Controls.Add(Me.Label12, 0, 3)
+    Me.Table_Booking.Controls.Add(Me.Label11, 0, 2)
+    Me.Table_Booking.Controls.Add(Me.lbl_ClaimLbl, 0, 1)
+    Me.Table_Booking.Controls.Add(Me.Label14, 0, 12)
+    Me.Table_Booking.Controls.Add(Me.TableLayoutPanel1, 1, 3)
+    Me.Table_Booking.Controls.Add(Me.cbo_Location, 1, 2)
     Me.Table_Booking.Controls.Add(Me.Label10, 0, 4)
-    Me.Table_Booking.Controls.Add(Me.Label14, 0, 3)
-    Me.Table_Booking.Controls.Add(Me.Label12, 0, 2)
-    Me.Table_Booking.Controls.Add(Me.Label11, 0, 1)
+    Me.Table_Booking.Controls.Add(Me.cbo_Booker, 1, 4)
+    Me.Table_Booking.Controls.Add(Me.Label15, 0, 5)
+    Me.Table_Booking.Controls.Add(Me.lbl_Booked, 1, 5)
+    Me.Table_Booking.Controls.Add(Me.Label13, 0, 6)
+    Me.Table_Booking.Controls.Add(Me.cbo_Confirmer, 1, 6)
+    Me.Table_Booking.Controls.Add(Me.Label16, 0, 7)
+    Me.Table_Booking.Controls.Add(Me.lbl_ConfDate, 1, 7)
+    Me.Table_Booking.Controls.Add(Me.Label17, 0, 8)
+    Me.Table_Booking.Controls.Add(Me.cbo_Gift1, 1, 8)
+    Me.Table_Booking.Controls.Add(Me.Label18, 0, 9)
+    Me.Table_Booking.Controls.Add(Me.cbo_Gift2, 1, 9)
+    Me.Table_Booking.Controls.Add(Me.Label19, 0, 10)
+    Me.Table_Booking.Controls.Add(Me.cbo_Gift3, 1, 10)
+    Me.Table_Booking.Controls.Add(Me.GroupBox2, 0, 11)
+    Me.Table_Booking.Controls.Add(Me.cbo_Status, 1, 12)
     Me.Table_Booking.Location = New System.Drawing.Point(3, 3)
     Me.Table_Booking.Name = "Table_Booking"
-    Me.Table_Booking.RowCount = 12
+    Me.Table_Booking.RowCount = 13
+    Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
@@ -493,237 +535,35 @@ Partial Class Frm_Record
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-    Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-    Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8.0!))
-    Me.Table_Booking.Size = New System.Drawing.Size(279, 378)
+    Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+    Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
+    Me.Table_Booking.Size = New System.Drawing.Size(279, 399)
     Me.Table_Booking.TabIndex = 16
     '
-    'GroupBox2
+    'cmd_NewBooking
     '
-    Me.GroupBox2.BackColor = System.Drawing.SystemColors.ButtonFace
-    Me.Table_Booking.SetColumnSpan(Me.GroupBox2, 2)
-    Me.GroupBox2.Controls.Add(Me.txt_BookNotes)
-    Me.GroupBox2.Dock = System.Windows.Forms.DockStyle.Fill
-    Me.GroupBox2.Location = New System.Drawing.Point(3, 278)
-    Me.GroupBox2.Name = "GroupBox2"
-    Me.GroupBox2.Size = New System.Drawing.Size(273, 97)
-    Me.GroupBox2.TabIndex = 28
-    Me.GroupBox2.TabStop = False
-    Me.GroupBox2.Text = "Booking Notes"
-    '
-    'txt_BookNotes
-    '
-    Me.txt_BookNotes.Dock = System.Windows.Forms.DockStyle.Fill
-    Me.txt_BookNotes.Location = New System.Drawing.Point(3, 16)
-    Me.txt_BookNotes.Multiline = True
-    Me.txt_BookNotes.Name = "txt_BookNotes"
-    Me.txt_BookNotes.Size = New System.Drawing.Size(267, 78)
-    Me.txt_BookNotes.TabIndex = 29
-    '
-    'cbo_Gift1
-    '
-    Me.cbo_Gift1.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.cbo_Gift1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-    Me.cbo_Gift1.FormattingEnabled = True
-    Me.cbo_Gift1.Location = New System.Drawing.Point(88, 203)
-    Me.cbo_Gift1.Name = "cbo_Gift1"
-    Me.cbo_Gift1.Size = New System.Drawing.Size(188, 21)
-    Me.cbo_Gift1.TabIndex = 25
-    '
-    'cbo_Gift2
-    '
-    Me.cbo_Gift2.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.cbo_Gift2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-    Me.cbo_Gift2.FormattingEnabled = True
-    Me.cbo_Gift2.Location = New System.Drawing.Point(88, 228)
-    Me.cbo_Gift2.Name = "cbo_Gift2"
-    Me.cbo_Gift2.Size = New System.Drawing.Size(188, 21)
-    Me.cbo_Gift2.TabIndex = 26
-    '
-    'cbo_Gift3
-    '
-    Me.cbo_Gift3.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.cbo_Gift3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-    Me.cbo_Gift3.FormattingEnabled = True
-    Me.cbo_Gift3.Location = New System.Drawing.Point(88, 253)
-    Me.cbo_Gift3.Name = "cbo_Gift3"
-    Me.cbo_Gift3.Size = New System.Drawing.Size(188, 21)
-    Me.cbo_Gift3.TabIndex = 27
-    '
-    'Label17
-    '
-    Me.Label17.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Label17.AutoSize = True
-    Me.Label17.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label17.Location = New System.Drawing.Point(3, 205)
-    Me.Label17.Name = "Label17"
-    Me.Label17.Size = New System.Drawing.Size(79, 15)
-    Me.Label17.TabIndex = 32
-    Me.Label17.Text = "Gift One"
-    Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    '
-    'Label18
-    '
-    Me.Label18.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Label18.AutoSize = True
-    Me.Label18.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label18.Location = New System.Drawing.Point(3, 230)
-    Me.Label18.Name = "Label18"
-    Me.Label18.Size = New System.Drawing.Size(79, 15)
-    Me.Label18.TabIndex = 33
-    Me.Label18.Text = "Gift Two"
-    Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    '
-    'Label19
-    '
-    Me.Label19.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Label19.AutoSize = True
-    Me.Label19.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label19.Location = New System.Drawing.Point(3, 255)
-    Me.Label19.Name = "Label19"
-    Me.Label19.Size = New System.Drawing.Size(79, 15)
-    Me.Label19.TabIndex = 34
-    Me.Label19.Text = "Gift Three"
-    Me.Label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    '
-    'date_Conf
-    '
-    Me.date_Conf.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.date_Conf.CustomFormat = "dddd,MMM dd, yyyy hh:mm tt"
-    Me.date_Conf.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-    Me.date_Conf.Location = New System.Drawing.Point(88, 178)
-    Me.date_Conf.Name = "date_Conf"
-    Me.date_Conf.Size = New System.Drawing.Size(188, 20)
-    Me.date_Conf.TabIndex = 23
-    '
-    'cbo_Confirmer
-    '
-    Me.cbo_Confirmer.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.cbo_Confirmer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-    Me.cbo_Confirmer.FormattingEnabled = True
-    Me.cbo_Confirmer.Location = New System.Drawing.Point(88, 153)
-    Me.cbo_Confirmer.Name = "cbo_Confirmer"
-    Me.cbo_Confirmer.Size = New System.Drawing.Size(188, 21)
-    Me.cbo_Confirmer.TabIndex = 22
-    '
-    'date_Booked
-    '
-    Me.date_Booked.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.date_Booked.CustomFormat = "dddd,MMM dd, yyyy hh:mm tt"
-    Me.date_Booked.Format = System.Windows.Forms.DateTimePickerFormat.Custom
-    Me.date_Booked.Location = New System.Drawing.Point(88, 128)
-    Me.date_Booked.Name = "date_Booked"
-    Me.date_Booked.Size = New System.Drawing.Size(188, 20)
-    Me.date_Booked.TabIndex = 21
-    '
-    'cbo_Booker
-    '
-    Me.cbo_Booker.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.cbo_Booker.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-    Me.cbo_Booker.FormattingEnabled = True
-    Me.cbo_Booker.Location = New System.Drawing.Point(88, 103)
-    Me.cbo_Booker.Name = "cbo_Booker"
-    Me.cbo_Booker.Size = New System.Drawing.Size(188, 21)
-    Me.cbo_Booker.TabIndex = 20
-    '
-    'cbo_Status
-    '
-    Me.cbo_Status.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.cbo_Status.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-    Me.cbo_Status.FormattingEnabled = True
-    Me.cbo_Status.Location = New System.Drawing.Point(88, 78)
-    Me.cbo_Status.Name = "cbo_Status"
-    Me.cbo_Status.Size = New System.Drawing.Size(188, 21)
-    Me.cbo_Status.TabIndex = 19
-    '
-    'cbo_Location
-    '
-    Me.cbo_Location.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.cbo_Location.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-    Me.cbo_Location.FormattingEnabled = True
-    Me.cbo_Location.Location = New System.Drawing.Point(88, 28)
-    Me.cbo_Location.Name = "cbo_Location"
-    Me.cbo_Location.Size = New System.Drawing.Size(188, 21)
-    Me.cbo_Location.TabIndex = 17
-    '
-    'lbl_ClaimLbl
-    '
-    Me.lbl_ClaimLbl.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.lbl_ClaimLbl.AutoSize = True
-    Me.lbl_ClaimLbl.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.lbl_ClaimLbl.Location = New System.Drawing.Point(3, 5)
-    Me.lbl_ClaimLbl.Name = "lbl_ClaimLbl"
-    Me.lbl_ClaimLbl.Size = New System.Drawing.Size(79, 15)
-    Me.lbl_ClaimLbl.TabIndex = 28
-    Me.lbl_ClaimLbl.Text = "Claim Number"
-    Me.lbl_ClaimLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    '
-    'Label16
-    '
-    Me.Label16.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Label16.AutoSize = True
-    Me.Label16.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label16.Location = New System.Drawing.Point(3, 180)
-    Me.Label16.Name = "Label16"
-    Me.Label16.Size = New System.Drawing.Size(79, 15)
-    Me.Label16.TabIndex = 31
-    Me.Label16.Text = "Confirmed"
-    Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    '
-    'Label13
-    '
-    Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Label13.AutoSize = True
-    Me.Label13.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label13.Location = New System.Drawing.Point(3, 155)
-    Me.Label13.Name = "Label13"
-    Me.Label13.Size = New System.Drawing.Size(79, 15)
-    Me.Label13.TabIndex = 22
-    Me.Label13.Text = "Confirmer"
-    Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    '
-    'Label15
-    '
-    Me.Label15.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Label15.AutoSize = True
-    Me.Label15.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label15.Location = New System.Drawing.Point(3, 130)
-    Me.Label15.Name = "Label15"
-    Me.Label15.Size = New System.Drawing.Size(79, 15)
-    Me.Label15.TabIndex = 27
-    Me.Label15.Text = "Booked"
-    Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    '
-    'Label10
-    '
-    Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Label10.AutoSize = True
-    Me.Label10.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label10.Location = New System.Drawing.Point(3, 105)
-    Me.Label10.Name = "Label10"
-    Me.Label10.Size = New System.Drawing.Size(79, 15)
-    Me.Label10.TabIndex = 18
-    Me.Label10.Text = "Booker"
-    Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-    '
-    'Label14
-    '
-    Me.Label14.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Label14.AutoSize = True
-    Me.Label14.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label14.Location = New System.Drawing.Point(3, 80)
-    Me.Label14.Name = "Label14"
-    Me.Label14.Size = New System.Drawing.Size(79, 15)
-    Me.Label14.TabIndex = 23
-    Me.Label14.Text = "Status"
-    Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    Me.cmd_NewBooking.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cmd_NewBooking.BackColor = System.Drawing.SystemColors.Info
+    Me.Table_Booking.SetColumnSpan(Me.cmd_NewBooking, 2)
+    Me.cmd_NewBooking.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+    Me.cmd_NewBooking.Image = Global.Intelepros.My.Resources.Resources.lock
+    Me.cmd_NewBooking.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+    Me.cmd_NewBooking.Location = New System.Drawing.Point(3, 0)
+    Me.cmd_NewBooking.Margin = New System.Windows.Forms.Padding(3, 0, 3, 0)
+    Me.cmd_NewBooking.Name = "cmd_NewBooking"
+    Me.cmd_NewBooking.Size = New System.Drawing.Size(273, 50)
+    Me.cmd_NewBooking.TabIndex = 38
+    Me.cmd_NewBooking.Text = "This Booking is Closed.  " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "Click here to edit the active booking."
+    Me.cmd_NewBooking.UseVisualStyleBackColor = False
     '
     'Label12
     '
     Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.Label12.AutoSize = True
     Me.Label12.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label12.Location = New System.Drawing.Point(3, 55)
+    Me.Label12.Location = New System.Drawing.Point(3, 105)
     Me.Label12.Name = "Label12"
     Me.Label12.Size = New System.Drawing.Size(79, 15)
     Me.Label12.TabIndex = 21
@@ -735,25 +575,313 @@ Partial Class Frm_Record
     Me.Label11.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.Label11.AutoSize = True
     Me.Label11.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label11.Location = New System.Drawing.Point(3, 30)
+    Me.Label11.Location = New System.Drawing.Point(3, 80)
     Me.Label11.Name = "Label11"
     Me.Label11.Size = New System.Drawing.Size(79, 15)
     Me.Label11.TabIndex = 20
     Me.Label11.Text = "Location"
     Me.Label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight
     '
+    'lbl_ClaimLbl
+    '
+    Me.lbl_ClaimLbl.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.lbl_ClaimLbl.AutoSize = True
+    Me.lbl_ClaimLbl.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.lbl_ClaimLbl.Location = New System.Drawing.Point(3, 55)
+    Me.lbl_ClaimLbl.Name = "lbl_ClaimLbl"
+    Me.lbl_ClaimLbl.Size = New System.Drawing.Size(79, 15)
+    Me.lbl_ClaimLbl.TabIndex = 28
+    Me.lbl_ClaimLbl.Text = "Claim Number"
+    Me.lbl_ClaimLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
+    'Label14
+    '
+    Me.Label14.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label14.AutoSize = True
+    Me.Label14.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label14.Location = New System.Drawing.Point(3, 369)
+    Me.Label14.Name = "Label14"
+    Me.Label14.Size = New System.Drawing.Size(79, 19)
+    Me.Label14.TabIndex = 23
+    Me.Label14.Text = "Status"
+    Me.Label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
+    'TableLayoutPanel1
+    '
+    Me.TableLayoutPanel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.TableLayoutPanel1.ColumnCount = 2
+    Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+    Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 17.0!))
+    Me.TableLayoutPanel1.Controls.Add(Me.cmd_ApptDate, 1, 0)
+    Me.TableLayoutPanel1.Controls.Add(Me.txt_Appt, 0, 0)
+    Me.TableLayoutPanel1.Location = New System.Drawing.Point(88, 103)
+    Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
+    Me.TableLayoutPanel1.RowCount = 1
+    Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+    Me.TableLayoutPanel1.Size = New System.Drawing.Size(188, 19)
+    Me.TableLayoutPanel1.TabIndex = 35
+    '
+    'cmd_ApptDate
+    '
+    Me.cmd_ApptDate.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
+    Me.cmd_ApptDate.BackgroundImage = Global.Intelepros.My.Resources.Resources.calendar
+    Me.cmd_ApptDate.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center
+    Me.cmd_ApptDate.Dock = System.Windows.Forms.DockStyle.Fill
+    Me.cmd_ApptDate.FlatAppearance.BorderSize = 0
+    Me.cmd_ApptDate.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+    Me.cmd_ApptDate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+    Me.cmd_ApptDate.Location = New System.Drawing.Point(171, 0)
+    Me.cmd_ApptDate.Margin = New System.Windows.Forms.Padding(0)
+    Me.cmd_ApptDate.Name = "cmd_ApptDate"
+    Me.cmd_ApptDate.Size = New System.Drawing.Size(17, 19)
+    Me.cmd_ApptDate.TabIndex = 35
+    Me.cmd_ApptDate.Tag = "Set Appt Date and Time"
+    Me.cmd_ApptDate.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    Me.cmd_ApptDate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText
+    Me.cmd_ApptDate.UseCompatibleTextRendering = True
+    Me.cmd_ApptDate.UseVisualStyleBackColor = False
+    '
+    'txt_Appt
+    '
+    Me.txt_Appt.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.txt_Appt.Location = New System.Drawing.Point(3, 0)
+    Me.txt_Appt.Margin = New System.Windows.Forms.Padding(3, 0, 3, 0)
+    Me.txt_Appt.Name = "txt_Appt"
+    Me.txt_Appt.ReadOnly = True
+    Me.txt_Appt.Size = New System.Drawing.Size(165, 20)
+    Me.txt_Appt.TabIndex = 36
+    Me.txt_Appt.Text = "No Appt Date"
+    '
+    'cbo_Location
+    '
+    Me.cbo_Location.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbo_Location.CausesValidation = False
+    Me.cbo_Location.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_Location.IntegralHeight = False
+    Me.cbo_Location.Location = New System.Drawing.Point(88, 78)
+    Me.cbo_Location.Name = "cbo_Location"
+    Me.cbo_Location.Size = New System.Drawing.Size(188, 21)
+    Me.cbo_Location.TabIndex = 17
+    '
+    'Label10
+    '
+    Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label10.AutoSize = True
+    Me.Label10.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label10.Location = New System.Drawing.Point(3, 130)
+    Me.Label10.Name = "Label10"
+    Me.Label10.Size = New System.Drawing.Size(79, 15)
+    Me.Label10.TabIndex = 18
+    Me.Label10.Text = "Booker"
+    Me.Label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
+    'cbo_Booker
+    '
+    Me.cbo_Booker.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbo_Booker.CausesValidation = False
+    Me.cbo_Booker.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_Booker.FormattingEnabled = True
+    Me.cbo_Booker.Location = New System.Drawing.Point(88, 128)
+    Me.cbo_Booker.Name = "cbo_Booker"
+    Me.cbo_Booker.Size = New System.Drawing.Size(188, 21)
+    Me.cbo_Booker.TabIndex = 20
+    '
+    'Label15
+    '
+    Me.Label15.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label15.AutoSize = True
+    Me.Label15.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label15.Location = New System.Drawing.Point(3, 155)
+    Me.Label15.Name = "Label15"
+    Me.Label15.Size = New System.Drawing.Size(79, 15)
+    Me.Label15.TabIndex = 27
+    Me.Label15.Text = "Booked"
+    Me.Label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
+    'lbl_Booked
+    '
+    Me.lbl_Booked.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.lbl_Booked.AutoEllipsis = True
+    Me.lbl_Booked.BackColor = System.Drawing.SystemColors.Control
+    Me.lbl_Booked.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+    Me.lbl_Booked.Location = New System.Drawing.Point(85, 150)
+    Me.lbl_Booked.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
+    Me.lbl_Booked.Name = "lbl_Booked"
+    Me.lbl_Booked.Size = New System.Drawing.Size(191, 24)
+    Me.lbl_Booked.TabIndex = 37
+    Me.lbl_Booked.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+    '
+    'Label13
+    '
+    Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label13.AutoSize = True
+    Me.Label13.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label13.Location = New System.Drawing.Point(3, 180)
+    Me.Label13.Name = "Label13"
+    Me.Label13.Size = New System.Drawing.Size(79, 15)
+    Me.Label13.TabIndex = 22
+    Me.Label13.Text = "Confirmer"
+    Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
+    'cbo_Confirmer
+    '
+    Me.cbo_Confirmer.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbo_Confirmer.CausesValidation = False
+    Me.cbo_Confirmer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_Confirmer.FormattingEnabled = True
+    Me.cbo_Confirmer.Location = New System.Drawing.Point(88, 178)
+    Me.cbo_Confirmer.Name = "cbo_Confirmer"
+    Me.cbo_Confirmer.Size = New System.Drawing.Size(188, 21)
+    Me.cbo_Confirmer.TabIndex = 22
+    '
+    'Label16
+    '
+    Me.Label16.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label16.AutoSize = True
+    Me.Label16.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label16.Location = New System.Drawing.Point(3, 205)
+    Me.Label16.Name = "Label16"
+    Me.Label16.Size = New System.Drawing.Size(79, 15)
+    Me.Label16.TabIndex = 31
+    Me.Label16.Text = "Confirmed"
+    Me.Label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
+    'lbl_ConfDate
+    '
+    Me.lbl_ConfDate.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.lbl_ConfDate.AutoEllipsis = True
+    Me.lbl_ConfDate.BackColor = System.Drawing.SystemColors.Control
+    Me.lbl_ConfDate.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+    Me.lbl_ConfDate.Location = New System.Drawing.Point(85, 200)
+    Me.lbl_ConfDate.Margin = New System.Windows.Forms.Padding(0, 0, 3, 0)
+    Me.lbl_ConfDate.Name = "lbl_ConfDate"
+    Me.lbl_ConfDate.Size = New System.Drawing.Size(191, 24)
+    Me.lbl_ConfDate.TabIndex = 36
+    Me.lbl_ConfDate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft
+    '
+    'Label17
+    '
+    Me.Label17.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label17.AutoSize = True
+    Me.Label17.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label17.Location = New System.Drawing.Point(3, 230)
+    Me.Label17.Name = "Label17"
+    Me.Label17.Size = New System.Drawing.Size(79, 15)
+    Me.Label17.TabIndex = 32
+    Me.Label17.Text = "Gift One"
+    Me.Label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
+    'cbo_Gift1
+    '
+    Me.cbo_Gift1.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbo_Gift1.CausesValidation = False
+    Me.cbo_Gift1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_Gift1.FormattingEnabled = True
+    Me.cbo_Gift1.Location = New System.Drawing.Point(88, 228)
+    Me.cbo_Gift1.Name = "cbo_Gift1"
+    Me.cbo_Gift1.Size = New System.Drawing.Size(188, 21)
+    Me.cbo_Gift1.TabIndex = 25
+    '
+    'Label18
+    '
+    Me.Label18.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label18.AutoSize = True
+    Me.Label18.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label18.Location = New System.Drawing.Point(3, 255)
+    Me.Label18.Name = "Label18"
+    Me.Label18.Size = New System.Drawing.Size(79, 15)
+    Me.Label18.TabIndex = 33
+    Me.Label18.Text = "Gift Two"
+    Me.Label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
+    'cbo_Gift2
+    '
+    Me.cbo_Gift2.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbo_Gift2.CausesValidation = False
+    Me.cbo_Gift2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_Gift2.FormattingEnabled = True
+    Me.cbo_Gift2.Location = New System.Drawing.Point(88, 253)
+    Me.cbo_Gift2.Name = "cbo_Gift2"
+    Me.cbo_Gift2.Size = New System.Drawing.Size(188, 21)
+    Me.cbo_Gift2.TabIndex = 26
+    '
+    'Label19
+    '
+    Me.Label19.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label19.AutoSize = True
+    Me.Label19.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label19.Location = New System.Drawing.Point(3, 280)
+    Me.Label19.Name = "Label19"
+    Me.Label19.Size = New System.Drawing.Size(79, 15)
+    Me.Label19.TabIndex = 34
+    Me.Label19.Text = "Gift Three"
+    Me.Label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
+    'cbo_Gift3
+    '
+    Me.cbo_Gift3.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbo_Gift3.CausesValidation = False
+    Me.cbo_Gift3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_Gift3.FormattingEnabled = True
+    Me.cbo_Gift3.Location = New System.Drawing.Point(88, 278)
+    Me.cbo_Gift3.Name = "cbo_Gift3"
+    Me.cbo_Gift3.Size = New System.Drawing.Size(188, 21)
+    Me.cbo_Gift3.TabIndex = 27
+    '
+    'GroupBox2
+    '
+    Me.GroupBox2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.GroupBox2.BackColor = System.Drawing.SystemColors.ButtonFace
+    Me.Table_Booking.SetColumnSpan(Me.GroupBox2, 2)
+    Me.GroupBox2.Controls.Add(Me.txt_BookNotes)
+    Me.GroupBox2.Location = New System.Drawing.Point(3, 303)
+    Me.GroupBox2.Name = "GroupBox2"
+    Me.GroupBox2.Size = New System.Drawing.Size(273, 53)
+    Me.GroupBox2.TabIndex = 28
+    Me.GroupBox2.TabStop = False
+    Me.GroupBox2.Text = "Booking Notes"
+    '
+    'txt_BookNotes
+    '
+    Me.txt_BookNotes.Dock = System.Windows.Forms.DockStyle.Fill
+    Me.txt_BookNotes.Location = New System.Drawing.Point(3, 16)
+    Me.txt_BookNotes.Multiline = True
+    Me.txt_BookNotes.Name = "txt_BookNotes"
+    Me.txt_BookNotes.Size = New System.Drawing.Size(267, 34)
+    Me.txt_BookNotes.TabIndex = 29
+    '
+    'cbo_Status
+    '
+    Me.cbo_Status.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbo_Status.CausesValidation = False
+    Me.cbo_Status.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_Status.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.cbo_Status.FormattingEnabled = True
+    Me.cbo_Status.Location = New System.Drawing.Point(88, 362)
+    Me.cbo_Status.Name = "cbo_Status"
+    Me.cbo_Status.Size = New System.Drawing.Size(188, 28)
+    Me.cbo_Status.TabIndex = 19
+    '
     'mnu_ToolStrip
     '
     Me.mnu_ToolStrip.BackColor = System.Drawing.SystemColors.ButtonFace
     Me.mnu_ToolStrip.Dock = System.Windows.Forms.DockStyle.None
     Me.mnu_ToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-    Me.mnu_ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_Contact, Me.mnu_Booking, Me.cmd_NavNext, Me.cbo_NavLocation, Me.cmd_NavBack, Me.mnu_Separator})
+    Me.mnu_ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_Contact, Me.mnu_Booking, Me.cmd_NavNext, Me.cbo_NavLocation, Me.cmd_NavBack, Me.mnu_Separator, Me.mnu_Admin})
     Me.mnu_ToolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
     Me.mnu_ToolStrip.Location = New System.Drawing.Point(0, 0)
     Me.mnu_ToolStrip.Name = "mnu_ToolStrip"
     Me.mnu_ToolStrip.Padding = New System.Windows.Forms.Padding(0)
     Me.mnu_ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-    Me.mnu_ToolStrip.Size = New System.Drawing.Size(557, 25)
+    Me.mnu_ToolStrip.Size = New System.Drawing.Size(536, 25)
     Me.mnu_ToolStrip.Stretch = True
     Me.mnu_ToolStrip.TabIndex = 0
     Me.mnu_ToolStrip.Text = "ToolStrip1"
@@ -796,19 +924,20 @@ Partial Class Frm_Record
     'mnu_Booking
     '
     Me.mnu_Booking.BackColor = System.Drawing.Color.Transparent
-    Me.mnu_Booking.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmd_NewBooking, Me.cmd_History, Me.ToolStripSeparator4, Me.cmd_ShowAllGifts})
+    Me.mnu_Booking.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_NewBooking, Me.cmd_History, Me.ToolStripSeparator4, Me.cmd_ShowAllGifts})
     Me.mnu_Booking.Image = Global.Intelepros.My.Resources.Resources.book
     Me.mnu_Booking.ImageTransparentColor = System.Drawing.Color.Magenta
     Me.mnu_Booking.Name = "mnu_Booking"
     Me.mnu_Booking.Size = New System.Drawing.Size(83, 22)
     Me.mnu_Booking.Text = "&Booking"
     '
-    'cmd_NewBooking
+    'mnu_NewBooking
     '
-    Me.cmd_NewBooking.Image = Global.Intelepros.My.Resources.Resources.book_add
-    Me.cmd_NewBooking.Name = "cmd_NewBooking"
-    Me.cmd_NewBooking.Size = New System.Drawing.Size(147, 22)
-    Me.cmd_NewBooking.Text = "&New Booking"
+    Me.mnu_NewBooking.Image = Global.Intelepros.My.Resources.Resources.book_add
+    Me.mnu_NewBooking.Name = "mnu_NewBooking"
+    Me.mnu_NewBooking.Size = New System.Drawing.Size(147, 22)
+    Me.mnu_NewBooking.Text = "&New Booking"
+    Me.mnu_NewBooking.Visible = False
     '
     'cmd_History
     '
@@ -861,6 +990,69 @@ Partial Class Frm_Record
     Me.mnu_Separator.Name = "mnu_Separator"
     Me.mnu_Separator.Size = New System.Drawing.Size(6, 25)
     '
+    'mnu_Admin
+    '
+    Me.mnu_Admin.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmd_DisableLock, Me.cmd_ClearConfirmer, Me.cmd_OpView, Me.ToolStripSeparator2, Me.mnu_DeleteContact, Me.mnu_DeleteBooking})
+    Me.mnu_Admin.Image = Global.Intelepros.My.Resources.Resources.key
+    Me.mnu_Admin.Name = "mnu_Admin"
+    Me.mnu_Admin.Size = New System.Drawing.Size(28, 25)
+    '
+    'cmd_DisableLock
+    '
+    Me.cmd_DisableLock.Image = Global.Intelepros.My.Resources.Resources.lock_break
+    Me.cmd_DisableLock.Name = "cmd_DisableLock"
+    Me.cmd_DisableLock.Size = New System.Drawing.Size(196, 22)
+    Me.cmd_DisableLock.Text = "Override Record Lock"
+    '
+    'cmd_ClearConfirmer
+    '
+    Me.cmd_ClearConfirmer.Image = Global.Intelepros.My.Resources.Resources.user_delete
+    Me.cmd_ClearConfirmer.Name = "cmd_ClearConfirmer"
+    Me.cmd_ClearConfirmer.Size = New System.Drawing.Size(196, 22)
+    Me.cmd_ClearConfirmer.Text = "Clear Confirmer"
+    '
+    'cmd_OpView
+    '
+    Me.cmd_OpView.Image = Global.Intelepros.My.Resources.Resources.telephone
+    Me.cmd_OpView.Name = "cmd_OpView"
+    Me.cmd_OpView.Size = New System.Drawing.Size(196, 22)
+    Me.cmd_OpView.Text = "View in Operator Mode"
+    '
+    'ToolStripSeparator2
+    '
+    Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
+    Me.ToolStripSeparator2.Size = New System.Drawing.Size(193, 6)
+    '
+    'mnu_DeleteContact
+    '
+    Me.mnu_DeleteContact.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmd_DeleteContact})
+    Me.mnu_DeleteContact.Image = Global.Intelepros.My.Resources.Resources.cross
+    Me.mnu_DeleteContact.Name = "mnu_DeleteContact"
+    Me.mnu_DeleteContact.Size = New System.Drawing.Size(196, 22)
+    Me.mnu_DeleteContact.Text = "Delete This Contact"
+    '
+    'cmd_DeleteContact
+    '
+    Me.cmd_DeleteContact.Image = Global.Intelepros.My.Resources.Resources.cross
+    Me.cmd_DeleteContact.Name = "cmd_DeleteContact"
+    Me.cmd_DeleteContact.Size = New System.Drawing.Size(257, 22)
+    Me.cmd_DeleteContact.Text = "Yes, I'm Sure! Just Delete it already!"
+    '
+    'mnu_DeleteBooking
+    '
+    Me.mnu_DeleteBooking.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmd_DeleteBooking})
+    Me.mnu_DeleteBooking.Image = Global.Intelepros.My.Resources.Resources.cross
+    Me.mnu_DeleteBooking.Name = "mnu_DeleteBooking"
+    Me.mnu_DeleteBooking.Size = New System.Drawing.Size(196, 22)
+    Me.mnu_DeleteBooking.Text = "Delete This Booking"
+    '
+    'cmd_DeleteBooking
+    '
+    Me.cmd_DeleteBooking.Image = Global.Intelepros.My.Resources.Resources.cross
+    Me.cmd_DeleteBooking.Name = "cmd_DeleteBooking"
+    Me.cmd_DeleteBooking.Size = New System.Drawing.Size(313, 22)
+    Me.cmd_DeleteBooking.Text = "Yes, Really I don't know why it's here anyway!"
+    '
     'ToolStripOuterContainer
     '
     '
@@ -870,16 +1062,17 @@ Partial Class Frm_Record
     '
     'ToolStripOuterContainer.ContentPanel
     '
+    Me.ToolStripOuterContainer.ContentPanel.BackColor = System.Drawing.SystemColors.AppWorkspace
     Me.ToolStripOuterContainer.ContentPanel.Controls.Add(Me.FocusIt)
     Me.ToolStripOuterContainer.ContentPanel.Controls.Add(Me.Table_Booking)
     Me.ToolStripOuterContainer.ContentPanel.Controls.Add(Me.Table_Contact)
-    Me.ToolStripOuterContainer.ContentPanel.Size = New System.Drawing.Size(557, 399)
+    Me.ToolStripOuterContainer.ContentPanel.Size = New System.Drawing.Size(536, 429)
     Me.ToolStripOuterContainer.Dock = System.Windows.Forms.DockStyle.Fill
     Me.ToolStripOuterContainer.LeftToolStripPanelVisible = False
     Me.ToolStripOuterContainer.Location = New System.Drawing.Point(0, 0)
     Me.ToolStripOuterContainer.Name = "ToolStripOuterContainer"
     Me.ToolStripOuterContainer.RightToolStripPanelVisible = False
-    Me.ToolStripOuterContainer.Size = New System.Drawing.Size(557, 446)
+    Me.ToolStripOuterContainer.Size = New System.Drawing.Size(536, 476)
     Me.ToolStripOuterContainer.TabIndex = 5
     Me.ToolStripOuterContainer.Text = "ToolStripContainer1"
     '
@@ -899,7 +1092,7 @@ Partial Class Frm_Record
     Me.StatusStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
     Me.StatusStrip.Location = New System.Drawing.Point(0, 0)
     Me.StatusStrip.Name = "StatusStrip"
-    Me.StatusStrip.Size = New System.Drawing.Size(557, 22)
+    Me.StatusStrip.Size = New System.Drawing.Size(536, 22)
     Me.StatusStrip.TabIndex = 0
     '
     'lbl_Status
@@ -936,63 +1129,29 @@ Partial Class Frm_Record
     Me.FocusIt.Text = "Bam! FocusIt!"
     Me.FocusIt.UseVisualStyleBackColor = True
     '
-    'Ctl_Appt
+    'Label21
     '
-    Me.Ctl_Appt.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.Ctl_Appt.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-    Me.Ctl_Appt.autoUpdate = False
-    Me.Ctl_Appt.AvailDates = New Date() {New Date(2015, 1, 1, 0, 0, 0, 0)}
-    Me.Ctl_Appt.BackColor = System.Drawing.SystemColors.ButtonFace
-    Me.Ctl_Appt.DateFormat = "dddd MMM-dd-yyyy"
-    Me.Ctl_Appt.Location = New System.Drawing.Point(85, 50)
-    Me.Ctl_Appt.Margin = New System.Windows.Forms.Padding(0)
-    Me.Ctl_Appt.MaximumSize = New System.Drawing.Size(1024, 25)
-    Me.Ctl_Appt.MinimumSize = New System.Drawing.Size(90, 25)
-    Me.Ctl_Appt.Name = "Ctl_Appt"
-    Me.Ctl_Appt.Size = New System.Drawing.Size(194, 25)
-    Me.Ctl_Appt.TabIndex = 36
-    Me.Ctl_Appt.TimeFormat = "hh:mm tt"
-    Me.Ctl_Appt.Value = New Date(2015, 1, 1, 0, 0, 0, 0)
-    '
-    'tel_Phone
-    '
-    Me.tel_Phone.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.tel_Phone.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-    Me.tel_Phone.FieldType = Intelepros.ctl_Phone.Enum_FieldType.Telephone
-    Me.tel_Phone.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.tel_Phone.Location = New System.Drawing.Point(85, 0)
-    Me.tel_Phone.Margin = New System.Windows.Forms.Padding(0)
-    Me.tel_Phone.Name = "tel_Phone"
-    Me.tel_Phone.Size = New System.Drawing.Size(167, 25)
-    Me.tel_Phone.TabIndex = 1
-    Me.tel_Phone.Value = ""
-    '
-    'tel_AltPhone
-    '
-    Me.tel_AltPhone.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-    Me.tel_AltPhone.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-    Me.tel_AltPhone.FieldType = Intelepros.ctl_Phone.Enum_FieldType.Telephone
-    Me.tel_AltPhone.Font = New System.Drawing.Font("Microsoft Sans Serif", 11.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.tel_AltPhone.Location = New System.Drawing.Point(85, 25)
-    Me.tel_AltPhone.Margin = New System.Windows.Forms.Padding(0)
-    Me.tel_AltPhone.Name = "tel_AltPhone"
-    Me.tel_AltPhone.Size = New System.Drawing.Size(167, 25)
-    Me.tel_AltPhone.TabIndex = 2
-    Me.tel_AltPhone.Value = ""
+    Me.Label21.Dock = System.Windows.Forms.DockStyle.Fill
+    Me.Label21.Location = New System.Drawing.Point(85, 125)
+    Me.Label21.Margin = New System.Windows.Forms.Padding(0)
+    Me.Label21.Name = "Label21"
+    Me.Label21.Size = New System.Drawing.Size(194, 25)
+    Me.Label21.TabIndex = 37
+    Me.Label21.Text = "Label21"
     '
     'Frm_Record
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.BackColor = System.Drawing.Color.Gray
-    Me.ClientSize = New System.Drawing.Size(557, 446)
+    Me.ClientSize = New System.Drawing.Size(536, 476)
     Me.Controls.Add(Me.ToolStripOuterContainer)
     Me.HelpButton = True
     Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
     Me.MaximizeBox = False
     Me.MaximumSize = New System.Drawing.Size(573, 688)
     Me.MinimizeBox = False
-    Me.MinimumSize = New System.Drawing.Size(380, 450)
+    Me.MinimumSize = New System.Drawing.Size(400, 500)
     Me.Name = "Frm_Record"
     Me.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show
     Me.Text = "Call Center"
@@ -1008,6 +1167,8 @@ Partial Class Frm_Record
     Me.Table_StateZip.PerformLayout()
     Me.Table_Booking.ResumeLayout(False)
     Me.Table_Booking.PerformLayout()
+    Me.TableLayoutPanel1.ResumeLayout(False)
+    Me.TableLayoutPanel1.PerformLayout()
     Me.GroupBox2.ResumeLayout(False)
     Me.GroupBox2.PerformLayout()
     Me.mnu_ToolStrip.ResumeLayout(False)
@@ -1033,8 +1194,6 @@ Partial Class Frm_Record
   Friend WithEvents txt_AddressExtra As System.Windows.Forms.TextBox
   Friend WithEvents txt_Address As System.Windows.Forms.TextBox
   Friend WithEvents txt_Email As System.Windows.Forms.TextBox
-  Friend WithEvents tel_Phone As Intelepros.ctl_Phone
-  Friend WithEvents tel_AltPhone As Intelepros.ctl_Phone
   Friend WithEvents Label7 As System.Windows.Forms.Label
   Friend WithEvents Table_Secondary As System.Windows.Forms.TableLayoutPanel
   Friend WithEvents txt_SLast As System.Windows.Forms.TextBox
@@ -1058,7 +1217,6 @@ Partial Class Frm_Record
   Friend WithEvents cbo_Booker As System.Windows.Forms.ComboBox
   Friend WithEvents cbo_Confirmer As System.Windows.Forms.ComboBox
   Friend WithEvents Label15 As System.Windows.Forms.Label
-  Friend WithEvents date_Booked As System.Windows.Forms.DateTimePicker
   Friend WithEvents cbo_Status As System.Windows.Forms.ComboBox
   Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
   Friend WithEvents txt_Notes As System.Windows.Forms.TextBox
@@ -1069,7 +1227,6 @@ Partial Class Frm_Record
   Friend WithEvents lbl_ClaimLbl As System.Windows.Forms.Label
   Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
   Friend WithEvents txt_BookNotes As System.Windows.Forms.TextBox
-  Friend WithEvents date_Conf As System.Windows.Forms.DateTimePicker
   Friend WithEvents Label16 As System.Windows.Forms.Label
   Friend WithEvents Label17 As System.Windows.Forms.Label
   Friend WithEvents Label18 As System.Windows.Forms.Label
@@ -1082,7 +1239,7 @@ Partial Class Frm_Record
   Friend WithEvents mnu_Search As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents mnu_NewRecord As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents mnu_Booking As System.Windows.Forms.ToolStripSplitButton
-  Friend WithEvents cmd_NewBooking As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents mnu_NewBooking As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents cmd_History As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents ToolStripSeparator4 As System.Windows.Forms.ToolStripSeparator
   Friend WithEvents cmd_ShowAllGifts As System.Windows.Forms.ToolStripMenuItem
@@ -1094,5 +1251,22 @@ Partial Class Frm_Record
   Friend WithEvents cmd_NavBack As System.Windows.Forms.ToolStripButton
   Friend WithEvents cmd_NextCall As System.Windows.Forms.ToolStripButton
   Friend WithEvents cmd_Save As System.Windows.Forms.ToolStripButton
-  Friend WithEvents Ctl_Appt As Intelepros.ctl_MasterCal
+  Friend WithEvents cmd_ApptDate As System.Windows.Forms.Button
+  Friend WithEvents TableLayoutPanel1 As System.Windows.Forms.TableLayoutPanel
+  Private WithEvents lbl_ConfDate As System.Windows.Forms.Label
+  Private WithEvents lbl_Booked As System.Windows.Forms.Label
+  Private WithEvents Label21 As System.Windows.Forms.Label
+  Friend WithEvents tel_Phone As Intelepros.ctl_Phone
+  Friend WithEvents tel_AltPhone As Intelepros.ctl_Phone
+  Friend WithEvents cmd_NewBooking As System.Windows.Forms.Button
+  Friend WithEvents txt_Appt As System.Windows.Forms.TextBox
+  Friend WithEvents mnu_Admin As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents cmd_ClearConfirmer As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents cmd_OpView As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents ToolStripSeparator2 As System.Windows.Forms.ToolStripSeparator
+  Friend WithEvents mnu_DeleteContact As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents cmd_DeleteContact As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents mnu_DeleteBooking As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents cmd_DeleteBooking As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents cmd_DisableLock As System.Windows.Forms.ToolStripMenuItem
 End Class

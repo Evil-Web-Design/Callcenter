@@ -23,10 +23,10 @@ Partial Class Frm_Log
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
     Me.mnu_ToolStrip = New System.Windows.Forms.ToolStrip()
-    Me.ToolStripContainer1 = New System.Windows.Forms.ToolStripContainer()
-    Me.List = New System.Windows.Forms.ListBox()
     Me.ToolStripDropDownButton1 = New System.Windows.Forms.ToolStripDropDownButton()
     Me.mnu_ToggleAutoLaunch = New System.Windows.Forms.ToolStripMenuItem()
+    Me.ToolStripContainer1 = New System.Windows.Forms.ToolStripContainer()
+    Me.List = New System.Windows.Forms.ListBox()
     Me.mnu_ToolStrip.SuspendLayout()
     Me.ToolStripContainer1.ContentPanel.SuspendLayout()
     Me.ToolStripContainer1.TopToolStripPanel.SuspendLayout()
@@ -44,37 +44,10 @@ Partial Class Frm_Log
     Me.mnu_ToolStrip.Name = "mnu_ToolStrip"
     Me.mnu_ToolStrip.Padding = New System.Windows.Forms.Padding(0)
     Me.mnu_ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-    Me.mnu_ToolStrip.Size = New System.Drawing.Size(755, 25)
+    Me.mnu_ToolStrip.Size = New System.Drawing.Size(220, 25)
     Me.mnu_ToolStrip.Stretch = True
     Me.mnu_ToolStrip.TabIndex = 1
     Me.mnu_ToolStrip.Text = "ToolStrip1"
-    '
-    'ToolStripContainer1
-    '
-    '
-    'ToolStripContainer1.ContentPanel
-    '
-    Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.List)
-    Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(755, 386)
-    Me.ToolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-    Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 0)
-    Me.ToolStripContainer1.Name = "ToolStripContainer1"
-    Me.ToolStripContainer1.Size = New System.Drawing.Size(755, 411)
-    Me.ToolStripContainer1.TabIndex = 2
-    Me.ToolStripContainer1.Text = "ToolStripContainer1"
-    '
-    'ToolStripContainer1.TopToolStripPanel
-    '
-    Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.mnu_ToolStrip)
-    '
-    'List
-    '
-    Me.List.Dock = System.Windows.Forms.DockStyle.Fill
-    Me.List.FormattingEnabled = True
-    Me.List.Location = New System.Drawing.Point(0, 0)
-    Me.List.Name = "List"
-    Me.List.Size = New System.Drawing.Size(755, 386)
-    Me.List.TabIndex = 0
     '
     'ToolStripDropDownButton1
     '
@@ -91,14 +64,41 @@ Partial Class Frm_Log
     Me.mnu_ToggleAutoLaunch.Size = New System.Drawing.Size(282, 22)
     Me.mnu_ToggleAutoLaunch.Text = "Open Log when starting on next launch"
     '
+    'ToolStripContainer1
+    '
+    '
+    'ToolStripContainer1.ContentPanel
+    '
+    Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.List)
+    Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(220, 95)
+    Me.ToolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+    Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 0)
+    Me.ToolStripContainer1.Name = "ToolStripContainer1"
+    Me.ToolStripContainer1.Size = New System.Drawing.Size(220, 120)
+    Me.ToolStripContainer1.TabIndex = 2
+    Me.ToolStripContainer1.Text = "ToolStripContainer1"
+    '
+    'ToolStripContainer1.TopToolStripPanel
+    '
+    Me.ToolStripContainer1.TopToolStripPanel.Controls.Add(Me.mnu_ToolStrip)
+    '
+    'List
+    '
+    Me.List.Dock = System.Windows.Forms.DockStyle.Fill
+    Me.List.FormattingEnabled = True
+    Me.List.Location = New System.Drawing.Point(0, 0)
+    Me.List.Name = "List"
+    Me.List.Size = New System.Drawing.Size(220, 95)
+    Me.List.TabIndex = 0
+    '
     'Frm_Log
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-    Me.ClientSize = New System.Drawing.Size(755, 411)
+    Me.ClientSize = New System.Drawing.Size(220, 120)
     Me.Controls.Add(Me.ToolStripContainer1)
     Me.Name = "Frm_Log"
-    Me.Text = "Frm_Log"
+    Me.Text = "Log"
     Me.mnu_ToolStrip.ResumeLayout(False)
     Me.mnu_ToolStrip.PerformLayout()
     Me.ToolStripContainer1.ContentPanel.ResumeLayout(False)

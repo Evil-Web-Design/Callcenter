@@ -28,11 +28,11 @@
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Intelepros</ProductName>
     <PublisherName>Call Center</PublisherName>
-    <MinimumRequiredVersion>1.0.1.13</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.2.42</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>14</ApplicationRevision>
-    <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
+    <ApplicationRevision>43</ApplicationRevision>
+    <ApplicationVersion>1.0.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -91,8 +91,30 @@
   <PropertyGroup>
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DocumentationFile>Intelepros.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DocumentationFile>Intelepros.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -143,6 +165,9 @@
     <Compile Include="Control\ExtendedDateTimePicker.vb">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Control\Popup.vb">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Forms\Frm_Employees.Designer.vb">
       <DependentUpon>Frm_Employees.vb</DependentUpon>
     </Compile>
@@ -153,6 +178,12 @@
       <DependentUpon>Frm_History.vb</DependentUpon>
     </Compile>
     <Compile Include="Forms\Frm_History.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_Locations.Designer.vb">
+      <DependentUpon>Frm_Locations.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_Locations.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Frm_Log.Designer.vb">
@@ -204,10 +235,10 @@
     <Compile Include="Forms\Frm_Search.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\frm_Settings.Designer.vb">
-      <DependentUpon>frm_Settings.vb</DependentUpon>
+    <Compile Include="Forms\Frm_Settings.Designer.vb">
+      <DependentUpon>Frm_Settings.vb</DependentUpon>
     </Compile>
-    <Compile Include="Forms\frm_Settings.vb">
+    <Compile Include="Forms\Frm_Settings.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Frm_SignIn.designer.vb">
@@ -244,11 +275,17 @@
       <DependentUpon>ctl_Phone.vb</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Control\Popup.resx">
+      <DependentUpon>Popup.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Frm_Employees.resx">
       <DependentUpon>Frm_Employees.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Frm_History.resx">
       <DependentUpon>Frm_History.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_Locations.resx">
+      <DependentUpon>Frm_Locations.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Frm_Log.resx">
       <DependentUpon>Frm_Log.vb</DependentUpon>
@@ -276,8 +313,8 @@
     <EmbeddedResource Include="Forms\Frm_Search.resx">
       <DependentUpon>Frm_Search.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\frm_Settings.resx">
-      <DependentUpon>frm_Settings.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\Frm_Settings.resx">
+      <DependentUpon>Frm_Settings.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Frm_SignIn.resx">
       <DependentUpon>Frm_SignIn.vb</DependentUpon>
@@ -311,9 +348,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -400,6 +437,23 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
+    <None Include="Resources\arrow_refresh.png" />
+    <None Include="Resources\lock.png" />
+    <None Include="Resources\lock_break.png" />
+    <None Include="Resources\user_delete1.png" />
+    <None Include="Resources\tick.png" />
+    <None Include="Resources\bug.png" />
+    <None Include="Resources\dialog-question-th.png" />
+    <None Include="Resources\email.png" />
+    <None Include="Resources\map_add.png" />
+    <None Include="Resources\map.png" />
+    <None Include="Resources\key.png" />
+    <None Include="Resources\cross.png" />
+    <None Include="Resources\application.png" />
+    <None Include="Resources\bullet_arrow_down.png" />
+    <None Include="Resources\calendar.png" />
+    <None Include="Resources\control_fastforward_blue.png" />
+    <None Include="Resources\control_rewind_blue.png" />
     <None Include="Resources\wrench.png" />
     <None Include="Resources\arrow_down.png" />
     <None Include="Resources\disk.png" />
@@ -423,6 +477,9 @@
     <None Include="Resources\Menu.bmp" />
     <None Include="Resources\menu.png" />
     <None Include="Resources\cog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

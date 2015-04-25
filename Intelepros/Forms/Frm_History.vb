@@ -9,9 +9,11 @@ Public Class Frm_History
     regKey.Close()
   End Sub
   Private Sub Frm_SignIn_Move(sender As Object, e As EventArgs) Handles MyBase.Move, MyBase.Resize
-    Dim regKey As New RegEdit(AppName)
-    regKey.SetSavedFormLocation(Me)
-    regKey.Close()
+    If ControlsActive Then
+      Dim regKey As New RegEdit(AppName)
+      regKey.SetSavedFormLocation(Me)
+      regKey.Close()
+    End If
   End Sub
   Public Sub ShowHistory(Booking As Type_ContactBooking)
     History.Show()
@@ -24,22 +26,23 @@ Public Class Frm_History
     'Beep()
   End Sub
   Private Sub gridd_MouseDown(sender As Object, e As System.Windows.Forms.MouseEventArgs) Handles Grid_Results.MouseUp
-
-    Grid_Results.Tag = Grid_Results.CurrentRow.Index
-    Dim Telephone As String = InputVar(Grid_Results.CurrentRow.Tag, "")
-    If Telephone.Length > 0 Then
-      ' With CC.SearchResult(Index)
-      'FormMain.logText("Telephone:" & Telephone)
-      'FormMain.takeFocus()
-
-
+    If Not IsNothing(Grid_Results.Tag) Then
+      Grid_Results.Tag = Grid_Results.CurrentRow.Index
+      Dim Telephone As String = InputVar(Grid_Results.CurrentRow.Tag, "")
+      If Telephone.Length > 0 Then
+        ' With CC.SearchResult(Index)
+        'FormMain.logText("Telephone:" & Telephone)
+        'FormMain.takeFocus()
 
 
 
-      'FormMain.ActionClick(Frm_Main.EnumActionID.Record)
-      'End With
-    Else
-      'FormMain.logText("NONE")
+
+
+        'FormMain.ActionClick(Frm_Main.EnumActionID.Record)
+        'End With
+      Else
+        'FormMain.logText("NONE")
+      End If
     End If
   End Sub
 

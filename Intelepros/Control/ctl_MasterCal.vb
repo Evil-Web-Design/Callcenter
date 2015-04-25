@@ -15,11 +15,29 @@ Public Class ctl_MasterCal
 
   Private PBackColor As Color
   Private PIsValid As Boolean = False
+  Private PDateIsValid As Boolean = False
+  Private PTimeIsValid As Boolean = False
+  ' Dim datePickerWithBlackoutDates As New System.Windows.Controls.DatePicker()
   Public Shadows Event SelectedIndexChanged(sender As Object, e As EventArgs)
+  Friend WithEvents cbo_Date As System.Windows.Forms.ComboBox
+
   Sub New()
 
     ' This call is required by the designer.
     InitializeComponent()
+    tbl_Layout.Dock = DockStyle.Fill
+
+    cbo_Date = New System.Windows.Forms.ComboBox()
+    Me.tbl_Layout.Controls.Add(Me.cbo_Date, 0, 0)
+
+    Me.cbo_Date.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbo_Date.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_Date.FormattingEnabled = True
+    Me.cbo_Date.Location = New System.Drawing.Point(3, 20)
+    Me.cbo_Date.Margin = New System.Windows.Forms.Padding(3, 0, 0, 0)
+    Me.cbo_Date.Name = "cbo_Date"
+    Me.cbo_Date.Size = New System.Drawing.Size(153, 21)
+    Me.cbo_Date.TabIndex = 0
 
     ' Add any initialization after the InitializeComponent() call.
     ThisValue = New Date
@@ -31,14 +49,14 @@ Public Class ctl_MasterCal
 
   Property autoUpdate As Boolean
 
-  Private Sub cbo_Date_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbo_Date.SelectedIndexChanged
+  Private Sub cbo_Date_SelectedIndexChanged(sender As Object, e As EventArgs)
     If Ctl_Active Then
       Dim Date_Value As String = CType(cbo_Date.SelectedItem, ValueDescriptionPair).m_Description
       Dim Time_Value As String = CType(cbo_Time.SelectedItem, ValueDescriptionPair).m_Description
       'Console.Write("cbo_Date_SelectedIndexChanged:" & Date_Value & vbCrLf)
       ThisValue = CDate(Date_Value & " " & Time_Value)
-      ParseDates(Date_Value, True)
       PIsValid = ItemExists(AvailDates, ThisValue)
+      ParseDates(Date_Value, True)
       SetDisplay()
       RaiseEvent SelectedIndexChanged(Me, e)
     End If
@@ -49,8 +67,8 @@ Public Class ctl_MasterCal
       Dim Time_Value As String = CType(cbo_Time.SelectedItem, ValueDescriptionPair).m_Description
       'Console.Write("cbo_Time_SelectedIndexChanged:" & Time_Value & vbCrLf)
       ThisValue = CDate(Date_Value & " " & Time_Value)
-      ParseDates(Date_Value)
       PIsValid = ItemExists(AvailDates, ThisValue)
+      ParseDates(Date_Value)
       SetDisplay()
       RaiseEvent SelectedIndexChanged(Me, e)
     End If
@@ -138,6 +156,7 @@ Public Class ctl_MasterCal
   End Sub
   'Ctl_Appt.AddMonth(New Field With {.FieldName = "hi"})
   Sub ParseDates()
+    PDateIsValid = False
     'Console.Write("------ParseDates()" & ThisValue & vbCrLf)
     Dim Dates As String()
     Erase Dates
@@ -148,8 +167,9 @@ Public Class ctl_MasterCal
           'Console.Write("ParseDates Add:" & Item.ToString(DateFormat) & vbCrLf)
         End If
       Next
+      PDateIsValid = ItemExists(Dates, ThisValue.ToString(DateFormat))
       If Not ThisValue.ToString(DateFormat) = New Date().ToString(DateFormat) Then
-        If Not ItemExists(Dates, ThisValue.ToString(DateFormat)) Then
+        If Not PDateIsValid Then
           Add(Dates, ThisValue.ToString(DateFormat))
           Console.Write("ParseDates AddMissing Date:" & ThisValue.ToString(DateFormat) & vbCrLf)
         End If
@@ -180,9 +200,10 @@ Public Class ctl_MasterCal
         End If
       Next
       ' If Not ThisValue.ToString(TimeFormat) = New Date().ToString(TimeFormat) Then
-      If Not ItemExists(Times, ThisValue.ToString(TimeFormat)) Then
+      PTimeIsValid = ItemExists(Times, ThisValue.ToString(TimeFormat))
+      If Not PTimeIsValid And Not ResetTime Then
         Add(Times, ThisValue.ToString(TimeFormat))
-        Console.Write("ParseDates AddMissing Time:" & ThisValue.ToString(TimeFormat) & vbCrLf)
+        'Console.Write("ParseDates AddMissing Time:" & ThisValue.ToString(TimeFormat) & vbCrLf)
       End If
       'Else
       'Console.Write(" Time is new:" & ThisValue.ToString(TimeFormat) & vbCrLf)
@@ -255,6 +276,13 @@ Public Class ctl_MasterCal
     Return index
   End Function
 
+  Private Sub ctl_MasterCal_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+  End Sub
+
+  Private Sub tbl_Layout_Paint(sender As Object, e As PaintEventArgs) Handles tbl_Layout.Paint
+
+  End Sub
 End Class
 #Region " Collection Experiment"
 

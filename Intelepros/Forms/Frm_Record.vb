@@ -1,6 +1,11 @@
 ﻿'Imports System.Windows.Forms
 Imports UniBase
+'Imports Intelepros.IntegerExtensions
+
 Public Class Frm_Record
+  WithEvents popup As Popup
+  WithEvents MasterDates As New ctl_DateTime
+
   Private DataRecord As Class_CallCenter.Type_ContactRecord
 
   Private Sub Frm_Record_DragDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
@@ -27,7 +32,8 @@ Public Class Frm_Record
   Private Sub mnu_Booking_ButtonClick(sender As Object, e As EventArgs) Handles mnu_Booking.ButtonClick
     Dim HasBooking As Boolean = Not IsNothing(DataRecord.Booking)
     If Not HasBooking Then
-      NewBooking(DataRecord)
+      CC.InitNewBooking(DataRecord, CC.CurStaff.ID, True)
+      SetControlsBG(Me, System.Drawing.SystemColors.Window)
       FillBooking()
     End If
     ViewTab(Tabs.Location)
@@ -40,7 +46,7 @@ Public Class Frm_Record
       Dim Obj_Combo As ToolStripComboBox = CType(sender, ToolStripComboBox)
       Dim Obj_Value As Integer = CInt(CType(Obj_Combo.SelectedItem, ValueDescriptionPair).Value)
       DataRecord.BookingIndex = Obj_Value
-      Console.Write("cbo_NavLocation_SelectedIndexChanged " & Obj_Value & vbCrLf)
+      SetControlsBG(Me, System.Drawing.SystemColors.Window)
       FillBooking()
       ViewTab(Tabs.Location)
       FocusIt.Select()
@@ -49,22 +55,26 @@ Public Class Frm_Record
   End Sub
   Private Sub cmd_NavBack_Click(sender As Object, e As EventArgs) Handles cmd_NavBack.Click
     DataRecord.BookingIndex -= 1
+    SetControlsBG(Me, System.Drawing.SystemColors.Window)
     FillBooking()
     ViewTab(Tabs.Location)
     DrawHist()
   End Sub
   Private Sub cmd_NavNext_Click(sender As Object, e As EventArgs) Handles cmd_NavNext.Click
     DataRecord.BookingIndex += 1
+    SetControlsBG(Me, System.Drawing.SystemColors.Window)
     FillBooking()
     ViewTab(Tabs.Location)
-    DrawHist
+    DrawHist()
   End Sub
   Sub DrawHist()
     If Not IsNothing(History) Then
-      If IsNothing(DataRecord.Booking(DataRecord.BookingIndex).Hist) Then
-        CC.LoadBookingHistory(DataRecord, DataRecord.BookingIndex)
+      If Not History.IsDisposed Then
+        If IsNothing(DataRecord.Booking(DataRecord.BookingIndex).Hist) Then
+          CC.LoadBookingHistory(DataRecord, DataRecord.BookingIndex)
+        End If
+        History.ShowHistory(DataRecord.Booking(DataRecord.BookingIndex))
       End If
-      History.ShowHistory(DataRecord.Booking(DataRecord.BookingIndex))
     End If
   End Sub
 
@@ -81,8 +91,8 @@ Public Class Frm_Record
     FillGifts(DataRecord.BookingIndex)
   End Sub
 
-  Private Sub cmd_NewBooking_Click(sender As Object, e As EventArgs) Handles cmd_NewBooking.Click
-    NewBooking(DataRecord)
+  Private Sub cmd_NewBooking_Click(sender As Object, e As EventArgs) Handles cmd_NewBooking.Click, mnu_NewBooking.Click
+    CC.InitNewBooking(DataRecord, CC.CurStaff.ID, True)
     FillBooking()
     ViewTab(Tabs.Location)
   End Sub
@@ -90,8 +100,13 @@ Public Class Frm_Record
     OpenSearch()
   End Sub
   Private Sub mnu_NewRecord_Click(sender As Object, e As EventArgs) Handles mnu_NewRecord.Click, cmd_NextCall.Click
-    OpenNewRecord()
-    NextCall()
+    Dim BookingOK As Boolean = OkToLeaveBooking(Me, DataRecord)
+
+      FocusIt.Focus()
+      Application.DoEvents()
+
+      OpenNewRecord()
+      NextCall()
   End Sub
   Private Sub cmd_Close_Click(sender As Object, e As EventArgs) Handles cmd_Close.Click
     NextCall()
@@ -129,7 +144,7 @@ Public Class Frm_Record
 
       mnu_Booking.Visible = RecordLoaded
       cmd_History.Visible = HasBookings
-      cmd_NewBooking.Visible = RecordLoaded And .EditBookings
+      mnu_NewBooking.Visible = RecordLoaded And .DeleteRecords
       cmd_ShowAllGifts.Enabled = RecordLoaded
       cmd_NavNext.Visible = RecordLoaded
       cmd_NavBack.Visible = RecordLoaded
@@ -159,10 +174,9 @@ Public Class Frm_Record
       txt_Zip.Text = .Contact.Zip
       txt_Notes.Text = .Contact.Notes
 
-      Me.Text = FormatPhoneNumber(.Contact.Telephone) & " " & .Contact.PL_Name & ", " & .Contact.PF_Name
       Me.Tag = .Contact.ID
-
-      FillBooking()
+      SetControlsBG(Me, System.Drawing.SystemColors.Window)
+      FillBooking(True)
     End With
     ViewTab(Tabs.Contact)
 
@@ -178,10 +192,11 @@ Public Class Frm_Record
   Private WithEvents txt_ClaimNumber As New TextBox With {.Name = "txt_ClaimNumber",
     .Anchor = AnchorStyles.Left Or AnchorStyles.Right}
 
-  Private Sub FillBooking()
+  Private Sub FillBooking(Optional Refresh As Boolean = False)
     Dim TempControlsActive = ControlsActive : ControlsActive = False
 
     With DataRecord
+      Dim CanEdit As Boolean = True
       If Not IsNothing(.Booking) Then
 
 
@@ -189,36 +204,51 @@ Public Class Frm_Record
 
 
         With .Booking(DataRecord.BookingIndex).Booking
+          Dim Statusindex = CC.GetStatuslistIndex(.StatusID)
           FillLocations(cbo_Location, CC.LocationList, .LocationID)
-          CC.GetLocationStatus(.LocationID, .StatusID)
           CC.initShowTimes(.LocationID)
-          FillStatus(cbo_Status, CC.Status, .StatusID)
+
           FillStaff(cbo_Booker, CC.StaffList, .BookerID, "Select Bookers's Name")
           FillStaff(cbo_Confirmer, CC.StaffList, .ConfirmerID, "Select Confirmer's Name")
-          Console.Write("Form Appt.Value:" & .Appt.ToString("MM/dd/yyyy hh:mm tt") & vbCrLf)
-          Ctl_Appt.Value = InputVar(.Appt, New Date)
-          Console.Write("------------------------: " & vbCrLf)
-          Console.Write("------FillDate START: " & (.LocationID > default_Int).ToString & vbCrLf)
+
+
+          CC.initStatus(Refresh)
           If .LocationID > default_Int Then
-            FillDate(Ctl_Appt, CC.LocationList(CC.GetLocationlistIndex(.LocationID)).ShowTimes)
+            CC.initStatusSP(.LocationID, Refresh)
+            FillDate(MasterDates, CC.LocationList(CC.GetLocationlistIndex(.LocationID)).ShowTimes)
+            Dim Index As Integer = CC.GetLocationlistIndex(.LocationID)
+            FillStatus(cbo_Status, CC.Status, .StatusID, CC.LocationList(Index).Status)
+
           Else
-            FillDate(Ctl_Appt, Nothing)
+            FillDate(MasterDates, Nothing)
+            FillStatus(cbo_Status, CC.Status, .StatusID)
           End If
-          Console.Write("------FillDate END: " & (.LocationID > default_Int).ToString & vbCrLf)
-          Console.Write("------------------------: " & vbCrLf)
+
+          If .Appt = default_DateTime Then
+            MasterDates.SelectedDate = Now
+            txt_Appt.Text = "No Appt Date - Click Here to Set->"
+          Else
+            Dim Dstr As String = "On " & .Appt.ToString("dddd, MMMM ") & _
+              .Appt.Day.DisplayWithSuffix & "," & .Appt.ToString("yyyy")
+            Dim Tstr As String = " at " & .Appt.ToString("hh:mm tt")
+            txt_Appt.Text = Dstr & Tstr
+            MasterDates.SelectedDate = .Appt
+          End If
+          popup = New Popup(MasterDates, cmd_ApptDate)
+
           'date_Appt.Value = InputVar(.Appt, date_Appt.MinDate)
           'Ctl_Appt.Value = InputVar(.Appt, New Date)
 
-          date_Booked.Value = InputVar(.Booked, date_Booked.MinDate)
-          date_Conf.Value = InputVar(.Conf, date_Conf.MinDate)
+          lbl_Booked.Text = InputVar(.Booked, "")
+          lbl_ConfDate.Text = InputVar(.Conf, "")
           lbl_ClaimNumber.Text = .ClaimNumber
           txt_ClaimNumber.Text = .ClaimNumber
           If .ClaimNumber.Length > 0 And .ClaimNumberValid Then
             Table_Booking.Controls.Remove(txt_ClaimNumber)
-            Table_Booking.Controls.Add(lbl_ClaimNumber, 1, 0)
+            Table_Booking.Controls.Add(lbl_ClaimNumber, 1, 1)
           Else
             Table_Booking.Controls.Remove(lbl_ClaimNumber)
-            Table_Booking.Controls.Add(txt_ClaimNumber, 1, 0)
+            Table_Booking.Controls.Add(txt_ClaimNumber, 1, 1)
           End If
 
 
@@ -230,26 +260,47 @@ Public Class Frm_Record
           Dim HasStat As Boolean = .StatusID > default_Int
           Dim HasConf As Boolean = .ConfirmerID > default_Int
 
+          If Statusindex > default_Int Then CanEdit = Not CC.Status(Statusindex).LockBooking
+
           With CC.CurStaff.Rights
-            cbo_Location.Enabled = .EditBookings
-            Ctl_Appt.Enabled = HasLocation And .EditBookings
-            cbo_Status.Enabled = HasLocation And .EditBookings
+            'If .EditLockedBooking Then CanEdit = True
 
-            cbo_Booker.Enabled = HasLocation And HasStat And .EditBookings And .EditBookings
-            date_Booked.Enabled = HasLocation And HasStat And .ChangeBookDate And .EditBookings
+            txt_ClaimNumber.Enabled = .EditBookings And CanEdit
+            cbo_Location.Enabled = .EditBookings And CanEdit And Not HasConf
+            'Ctl_Appt.Enabled = HasLocation And .EditBookings
+            cmd_ApptDate.Enabled = HasLocation And .EditBookings And CanEdit
+            cbo_Status.Enabled = HasLocation And .EditBookings And CanEdit
 
-            cbo_Confirmer.Enabled = HasLocation And HasStat And .EditBookings
-            date_Conf.Enabled = HasLocation And HasStat And HasConf And .EditBookings
+            cbo_Booker.Enabled = HasLocation And HasStat And .EditBookings And CanEdit
+            lbl_Booked.Enabled = HasLocation And HasStat And .ChangeBookDate And .EditBookings
 
+            cbo_Confirmer.Enabled = HasLocation And HasStat And HasLocation And .EditBookings And CanEdit
+            lbl_ConfDate.Enabled = HasLocation And HasStat And HasLocation And HasConf And .EditBookings And CanEdit
 
+            cbo_Gift1.Enabled = HasLocation And .EditBookings And CanEdit
+            cbo_Gift2.Enabled = HasLocation And .EditBookings And CanEdit
+            cbo_Gift3.Enabled = HasLocation And .EditBookings And CanEdit
 
-            cbo_Gift1.Enabled = HasLocation And HasStat And .EditBookings
-            cbo_Gift2.Enabled = HasLocation And HasStat And .EditBookings
-            cbo_Gift3.Enabled = HasLocation And HasStat And .EditBookings
-
-            txt_BookNotes.Enabled = HasLocation And .EditBookings
+            txt_BookNotes.Enabled = HasLocation And CanEdit
           End With
         End With
+        Dim LockedText As String = ""
+        cmd_NewBooking.Visible = Not CanEdit
+        If CanEdit Then
+          Table_Booking.RowStyles(0).Height = 1
+        Else
+          Table_Booking.RowStyles(0).Height = 50
+          LockedText = "(Closed) - "
+          If CC.isNewBookingNeeded(DataRecord) Then
+            cmd_NewBooking.Text = "This Booking is Closed.  " & vbCrLf & "Click here to create a new booking."
+          Else
+            cmd_NewBooking.Text = "This Booking is Closed.  " & vbCrLf & "Click here to edit the active booking."
+          End If
+        End If
+        Me.Text = LockedText & FormatPhoneNumber(.Contact.Telephone) & " " & .Contact.PL_Name & ", " & .Contact.PF_Name
+
+
+
 
         cbo_NavLocation.Items.Clear()
         Dim selectedIndex As Integer = default_Int, CurrentItem As Integer = 0
@@ -288,7 +339,6 @@ Public Class Frm_Record
   Private Sub Field_HelpRequest(ByVal sender As Object, ByVal hlpevent As System.Windows.Forms.HelpEventArgs) Handles tel_Phone.HelpRequested, tel_AltPhone.HelpRequested,
     txt_PFirst.HelpRequested, txt_PLast.HelpRequested, txt_SFirst.HelpRequested, txt_SLast.HelpRequested, txt_Email.HelpRequested,
     txt_Address.HelpRequested, txt_AddressExtra.HelpRequested, txt_City.HelpRequested, txt_State.HelpRequested, txt_Zip.HelpRequested,
-     date_Booked.HelpRequested, date_Conf.HelpRequested,
     cbo_Location.HelpRequested, cbo_Status.HelpRequested,
       cbo_Booker.HelpRequested, cbo_Confirmer.HelpRequested,
       cbo_Gift1.HelpRequested, cbo_Gift2.HelpRequested, cbo_Gift3.HelpRequested
@@ -336,10 +386,13 @@ Public Class Frm_Record
 
 #Region "Form Control Events"
   Private Sub Frm_Record_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Dim TempControlsActive = ControlsActive : ControlsActive = False
+
     FocusIt.Location = New Drawing.Point(-FocusIt.Size.Width, -FocusIt.Size.Height)
     'ClearDataRecord()
     Table_Booking.Dock = DockStyle.Fill
     Table_Contact.Dock = DockStyle.Fill
+    Me.Size = Me.MinimumSize
     'ViewTab(Tabs.None)
     'Table_MainLayoutPanel.Location = New Point(0, 0)
     'Table_MainLayoutPanel.Width = Split.Width - 10
@@ -357,16 +410,27 @@ Public Class Frm_Record
       regKey.GetSavedFormLocation(Me, RegEdit.Enum_FormPos.Size)
     End If
 
+    mnu_Admin.Visible = CC.CurStaff.AccessLevel = Class_CallCenter.enum_AccessLevel.Admin
+    mnu_DeleteContact.Visible = CC.CurStaff.Rights.DeleteRecords
+    mnu_DeleteBooking.Visible = CC.CurStaff.Rights.DeleteRecords
     regKey.Close()
 
     'AddHandler Date_Appt.DropDown, AddressOf Field_DropDown
-
+    ControlsActive = TempControlsActive
   End Sub
   Private Sub Frm_Record_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-    If Not OkToClose() Then
-      NextCall()
+    Dim BookingOK As Boolean = OkToLeaveBooking(Me, DataRecord)
+    If Not BookingOK Then
+      ViewTab(Tabs.Location)
       e.Cancel = True
+    Else
+      If Not OkToClose() Then
+        NextCall()
+        e.Cancel = True
+      End If
     End If
+    FocusIt.Focus()
+    Application.DoEvents()
   End Sub
   Sub NextCall()
     Dim RecordLoaded As Boolean = DataRecord.Contact.ID > default_Int
@@ -378,20 +442,21 @@ Public Class Frm_Record
     ' OpenNewRecord()
   End Sub
   Private Sub Frm_SignIn_Move(sender As Object, e As EventArgs) Handles MyBase.Move, MyBase.Resize
-    Dim regKey As New RegEdit(AppName)
-    regKey.SetSavedFormLocation(Me)
-    regKey.Close()
+    If ControlsActive Then
+      Dim regKey As New RegEdit(AppName)
+      regKey.SetSavedFormLocation(Me)
+      regKey.Close()
+    End If
   End Sub
   Private Sub Field_TextChanged(sender As Object, e As EventArgs) Handles tel_Phone.TextChanged, tel_AltPhone.TextChanged,
     txt_PFirst.TextChanged, txt_PLast.TextChanged, txt_SFirst.TextChanged, txt_SLast.TextChanged, txt_Email.TextChanged,
     txt_Address.TextChanged, txt_AddressExtra.TextChanged, txt_City.TextChanged, txt_State.TextChanged, txt_Zip.TextChanged,
-     date_Booked.ValueChanged, date_Conf.ValueChanged, txt_BookNotes.TextChanged, txt_Notes.TextChanged
+      txt_BookNotes.TextChanged, txt_Notes.TextChanged
   End Sub
   Public Keyboard As New Microsoft.VisualBasic.Devices.Keyboard
   Private Sub Field_KeyPress(sender As Object, e As KeyPressEventArgs) Handles tel_Phone.KeyPress, tel_AltPhone.KeyPress,
     txt_PFirst.KeyPress, txt_PLast.KeyPress, txt_SFirst.KeyPress, txt_SLast.KeyPress, txt_Email.KeyPress,
-    txt_Address.KeyPress, txt_AddressExtra.KeyPress, txt_City.KeyPress, txt_State.KeyPress, txt_Zip.KeyPress,
-     date_Booked.KeyPress, date_Conf.KeyPress
+    txt_Address.KeyPress, txt_AddressExtra.KeyPress, txt_City.KeyPress, txt_State.KeyPress, txt_Zip.KeyPress
     If e.KeyChar = Microsoft.VisualBasic.ChrW(Keys.Return) Then
       Keyboard.SendKeys("{tab}")
       'ctl_Phone.Focus()
@@ -424,20 +489,16 @@ Public Class Frm_Record
     If ControlsActive Then
       Dim Obj_Combo As ComboBox = CType(sender, ComboBox)
       Dim Obj_Value As Integer = CInt(CType(Obj_Combo.SelectedItem, ValueDescriptionPair).Value)
-      If Obj_Value > default_Int Then
-        Dim FormField As New TypeFormField With {.ControlName = Obj_Combo.Name,
-                                            .NewValue = Obj_Value,
-                                            .FieldName = "NA"}
-        UpdateBooking(DataRecord, Me, FormField)
-        FillBooking()
-      Else
-        Obj_Combo.BackColor = Color.Red
-      End If
+      Dim FormField As New TypeFormField With {.ControlName = Obj_Combo.Name,
+                                          .NewValue = Obj_Value,
+                                          .FieldName = "NA"}
+      UpdateBooking(DataRecord, Me, FormField)
+      FillBooking()
       FocusIt.TabIndex = Obj_Combo.TabIndex
       FocusIt.Select()
     End If
   End Sub
-  Private Sub Ctl_Appt_SelectedIndexChanged(sender As Object, e As EventArgs) Handles Ctl_Appt.SelectedIndexChanged
+  Private Sub Ctl_Appt_SelectedIndexChanged(sender As Object, e As EventArgs)
     If ControlsActive Then
       Dim Obj_Date As ctl_MasterCal = CType(sender, ctl_MasterCal)
       If Not Obj_Date.Value = New Date And Obj_Date.IsValid Then
@@ -453,7 +514,7 @@ Public Class Frm_Record
       FocusIt.Select()
     End If
   End Sub
-  Private Sub Date_ValueChanged(sender As Object, e As EventArgs) Handles date_Booked.LostFocus, date_Conf.LostFocus
+  Private Sub Date_ValueChanged(sender As Object, e As EventArgs)
     If ControlsActive Then
       Dim Obj_Date As DateTimePicker = CType(sender, DateTimePicker)
       Dim FormField As New TypeFormField With {.ControlName = Obj_Date.Name,
@@ -481,4 +542,82 @@ Public Class Frm_Record
 #End Region
 
 
+  Private Sub cmd_ApptDate_Click(sender As Object, e As EventArgs) Handles cmd_ApptDate.Click
+    If Not IsNothing(popup) Then
+      With popup
+        .HorizontalPlacement = Intelepros.Popup.ePlacement.Top
+        .Show()
+        MasterDates.Update()
+      End With
+    End If
+  End Sub
+  Private Sub MasterDates_SetDate(NewDate As Date) Handles MasterDates.SetDate
+    If ControlsActive Then
+      HidePopup()
+      If Not NewDate = default_DateTime Then
+        Dim FormField As New TypeFormField With {.ControlName = txt_Appt.Name,
+                                     .NewValue = NewDate.ToString("MM/dd/yyyy HH:mm:00"),
+                                     .FieldName = "NA"}
+        UpdateBooking(DataRecord, Me, FormField)
+        FillBooking()
+      Else
+        txt_Appt.BackColor = Color.Red
+      End If
+      'FocusIt.TabIndex = Obj_Date.TabIndex
+      FocusIt.Select()
+    End If
+  End Sub
+  Private Sub MasterDates_Cancel() Handles MasterDates.Cancel
+    HidePopup()
+  End Sub
+  Sub HidePopup()
+    If Not IsNothing(popup) Then
+      popup.Hide()
+    End If
+  End Sub
+  Private Sub cmd_BookingDelete_Click(sender As Object, e As EventArgs) Handles cmd_DeleteBooking.Click
+    If CC.CurStaff.Rights.DeleteRecords And DataRecord.BookingIndex > default_Int Then
+      If CC.DeleteBookingQuestion(DataRecord) Then
+        If CC.DeleteBooking(DataRecord.Booking(DataRecord.BookingIndex).Booking.ID) Then
+          RemoveBookingItem(DataRecord.Booking, DataRecord.BookingIndex)
+          'System.Array.Clear(DataRecord.Booking, DataRecord.BookingIndex, 1)
+          DataRecord.BookingIndex = DataRecord.Booking.Length - 1
+          If DataRecord.BookingIndex = default_Int Then
+            DataRecord.Booking = Nothing
+            ViewTab(Tabs.Contact)
+          Else
+            FillBooking(True)
+          End If
+        End If
+      End If
+    End If
+  End Sub
+  Public Sub RemoveBookingItem(ByRef Items() As Class_CallCenter.Type_ContactBooking, Indextoremove As Integer)
+    If Indextoremove <= UBound(Items) Then
+      For i = (Indextoremove + 1) To UBound(Items)
+        Items(i - 1) = Items(i)
+      Next i
+      ReDim Preserve Items(UBound(Items) - 1)
+    End If
+  End Sub
+  Private Sub cmd_ContactDelete_Click(sender As Object, e As EventArgs) Handles cmd_DeleteContact.Click
+    If CC.CurStaff.Rights.DeleteRecords Then
+      If CC.DeleteContactQuestion(DataRecord) Then
+        If CC.DeleteContact(DataRecord.Contact.ID) Then
+          Me.Dispose()
+        End If
+      End If
+    End If
+  End Sub
+  Private Sub cmd_OpView_Click(sender As Object, e As EventArgs)
+
+  End Sub
+
+  Private Sub cmd_ClearConfirmer_Click(sender As Object, e As EventArgs)
+
+  End Sub
+
+  Private Sub cmd_DisableLock_Click(sender As Object, e As EventArgs) Handles cmd_DisableLock.Click
+
+  End Sub
 End Class
