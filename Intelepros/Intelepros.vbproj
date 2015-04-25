@@ -28,10 +28,10 @@
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Intelepros</ProductName>
     <PublisherName>Call Center</PublisherName>
-    <MinimumRequiredVersion>1.0.2.42</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.2.43</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>43</ApplicationRevision>
+    <ApplicationRevision>44</ApplicationRevision>
     <ApplicationVersion>1.0.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

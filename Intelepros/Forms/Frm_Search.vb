@@ -88,6 +88,7 @@
       FillStatus(lst_SearchStatus, CC.Status)
       FillLocations(lst_SearchLocation, CC.LocationList)
       'FillDept(lst_SearchDept, CC.Dept)
+      CC.initStaff(False)
       FillStaff(cbo_EmpSearch, CC.StaffList, default_Int, "Select Employee")
     End If
     With CC.SearchCry
