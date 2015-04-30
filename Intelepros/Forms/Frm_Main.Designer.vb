@@ -37,6 +37,7 @@ Partial Class Frm_Main
     Me.mnu_Log = New System.Windows.Forms.ToolStripMenuItem()
     Me.mnu_HideMain = New System.Windows.Forms.ToolStripMenuItem()
     Me.mnu_ResetWindows = New System.Windows.Forms.ToolStripMenuItem()
+    Me.mnu_LogOut = New System.Windows.Forms.ToolStripMenuItem()
     Me.mnu_Exit = New System.Windows.Forms.ToolStripMenuItem()
     Me.Tip = New System.Windows.Forms.ToolTip(Me.components)
     Me.mnu_Main = New System.Windows.Forms.ToolStrip()
@@ -51,9 +52,10 @@ Partial Class Frm_Main
     Me.cmd_Log = New System.Windows.Forms.ToolStripMenuItem()
     Me.mnu_ResetWindows_Main = New System.Windows.Forms.ToolStripMenuItem()
     Me.mnu_HideMain_Main = New System.Windows.Forms.ToolStripMenuItem()
-    Me.cmd_Exit = New System.Windows.Forms.ToolStripMenuItem()
     Me.cmd_LogOut = New System.Windows.Forms.ToolStripMenuItem()
-    Me.mnu_LogOut = New System.Windows.Forms.ToolStripMenuItem()
+    Me.cmd_Exit = New System.Windows.Forms.ToolStripMenuItem()
+    Me.cmd_SnoopMySQL = New System.Windows.Forms.ToolStripMenuItem()
+    Me.mnu_SnoopMySQL = New System.Windows.Forms.ToolStripMenuItem()
     Me.TrayMenu.SuspendLayout()
     Me.mnu_Main.SuspendLayout()
     Me.SuspendLayout()
@@ -100,7 +102,7 @@ Partial Class Frm_Main
     '
     'mnu_Settings
     '
-    Me.mnu_Settings.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_Database, Me.mnu_LocationSettings, Me.mnu_Employees, Me.mnu_Log, Me.mnu_HideMain, Me.mnu_ResetWindows, Me.mnu_LogOut})
+    Me.mnu_Settings.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_Database, Me.mnu_LocationSettings, Me.mnu_Employees, Me.mnu_Log, Me.mnu_HideMain, Me.mnu_ResetWindows, Me.mnu_LogOut, Me.mnu_SnoopMySQL})
     Me.mnu_Settings.Image = Global.Intelepros.My.Resources.Resources.cog
     Me.mnu_Settings.Name = "mnu_Settings"
     Me.mnu_Settings.Size = New System.Drawing.Size(153, 22)
@@ -147,6 +149,12 @@ Partial Class Frm_Main
     Me.mnu_ResetWindows.Name = "mnu_ResetWindows"
     Me.mnu_ResetWindows.Size = New System.Drawing.Size(200, 22)
     Me.mnu_ResetWindows.Text = "Reset Window Positions"
+    '
+    'mnu_LogOut
+    '
+    Me.mnu_LogOut.Name = "mnu_LogOut"
+    Me.mnu_LogOut.Size = New System.Drawing.Size(200, 22)
+    Me.mnu_LogOut.Text = "Log Out"
     '
     'mnu_Exit
     '
@@ -204,7 +212,7 @@ Partial Class Frm_Main
     '
     'cmd_Settings
     '
-    Me.cmd_Settings.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmd_Database, Me.cmd_Employees, Me.cmd_LocationSettings, Me.cmd_Log, Me.mnu_ResetWindows_Main, Me.mnu_HideMain_Main, Me.cmd_LogOut})
+    Me.cmd_Settings.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.cmd_Database, Me.cmd_Employees, Me.cmd_LocationSettings, Me.cmd_Log, Me.mnu_ResetWindows_Main, Me.mnu_HideMain_Main, Me.cmd_LogOut, Me.cmd_SnoopMySQL})
     Me.cmd_Settings.Image = Global.Intelepros.My.Resources.Resources.cog
     Me.cmd_Settings.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
     Me.cmd_Settings.Name = "cmd_Settings"
@@ -253,6 +261,12 @@ Partial Class Frm_Main
     Me.mnu_HideMain_Main.Size = New System.Drawing.Size(200, 22)
     Me.mnu_HideMain_Main.Text = "Hide Menu Window"
     '
+    'cmd_LogOut
+    '
+    Me.cmd_LogOut.Name = "cmd_LogOut"
+    Me.cmd_LogOut.Size = New System.Drawing.Size(200, 22)
+    Me.cmd_LogOut.Text = "Log Out"
+    '
     'cmd_Exit
     '
     Me.cmd_Exit.Image = Global.Intelepros.My.Resources.Resources.Redstop
@@ -261,17 +275,18 @@ Partial Class Frm_Main
     Me.cmd_Exit.Size = New System.Drawing.Size(113, 20)
     Me.cmd_Exit.Text = "Exit Call Center"
     '
-    'cmd_LogOut
+    'cmd_SnoopMySQL
     '
-    Me.cmd_LogOut.Name = "cmd_LogOut"
-    Me.cmd_LogOut.Size = New System.Drawing.Size(200, 22)
-    Me.cmd_LogOut.Text = "Log Out"
+    Me.cmd_SnoopMySQL.Name = "cmd_SnoopMySQL"
+    Me.cmd_SnoopMySQL.Size = New System.Drawing.Size(200, 22)
+    Me.cmd_SnoopMySQL.Text = "Snoop MySQL"
+    Me.cmd_SnoopMySQL.Visible = False
     '
-    'mnu_LogOut
+    'mnu_SnoopMySQL
     '
-    Me.mnu_LogOut.Name = "mnu_LogOut"
-    Me.mnu_LogOut.Size = New System.Drawing.Size(200, 22)
-    Me.mnu_LogOut.Text = "Log Out"
+    Me.mnu_SnoopMySQL.Name = "mnu_SnoopMySQL"
+    Me.mnu_SnoopMySQL.Size = New System.Drawing.Size(200, 22)
+    Me.mnu_SnoopMySQL.Text = "Snoop MySQL"
     '
     'Frm_Main
     '
@@ -323,5 +338,7 @@ Partial Class Frm_Main
   Friend WithEvents mnu_Simple As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents mnu_LogOut As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents cmd_LogOut As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents mnu_SnoopMySQL As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents cmd_SnoopMySQL As System.Windows.Forms.ToolStripMenuItem
 
 End Class

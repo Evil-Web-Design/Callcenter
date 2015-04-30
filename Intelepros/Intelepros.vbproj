@@ -25,13 +25,14 @@
     <UpdateRequired>true</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>http://intelepros.com/publish/</InstallUrl>
+    <UpdateUrl>http://intelepros.com/publish/</UpdateUrl>
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Intelepros</ProductName>
     <PublisherName>Call Center</PublisherName>
-    <MinimumRequiredVersion>1.0.2.43</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.2.50</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>44</ApplicationRevision>
+    <ApplicationRevision>51</ApplicationRevision>
     <ApplicationVersion>1.0.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -113,6 +114,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data, Version=6.9.6.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ex_bin\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -197,6 +202,12 @@
     </Compile>
     <Compile Include="Forms\Frm_Main.Designer.vb">
       <DependentUpon>Frm_Main.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Frm_MySQL.Designer.vb">
+      <DependentUpon>Frm_MySQL.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Frm_MySQL.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\Frm_NewRecord.Designer.vb">
@@ -293,6 +304,9 @@
     <EmbeddedResource Include="Forms\Frm_Main.resx">
       <DependentUpon>Frm_Main.vb</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Frm_MySQL.resx">
+      <DependentUpon>Frm_MySQL.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Frm_NewRecord.resx">
       <DependentUpon>Frm_NewRecord.vb</DependentUpon>
@@ -480,6 +494,18 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PublishFile Include="MySql.Data">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Include</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Assembly</FileType>
+    </PublishFile>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

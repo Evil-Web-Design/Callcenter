@@ -153,6 +153,56 @@ Public Class Frm_Record
     End With
     Application.DoEvents()
   End Sub
+  Public Sub BookingEnabled(Booking As Class_CallCenter.Type_Booking)
+    Dim CanEdit As Boolean = True, IsNQ As Boolean = False
+    With Booking
+      Dim Statusindex = CC.GetStatuslistIndex(.StatusID)
+      If Statusindex > default_Int Then IsNQ = CC.Status(Statusindex).IsNQ
+
+      Dim HasLocation As Boolean = .LocationID > default_Int
+      Dim HasAppt As Boolean = .Appt <> New Date
+      Dim HasStat As Boolean = .StatusID > default_Int
+      Dim HasConf As Boolean = .ConfirmerID > default_Int
+      CanEdit = Not .RecordLocked
+      With CC.CurStaff.Rights
+        'If .EditLockedBooking Then CanEdit = True
+
+        txt_ClaimNumber.Enabled = .EditBookings And CanEdit
+        cbo_Location.Enabled = .EditBookings And CanEdit And Not HasConf
+        'Ctl_Appt.Enabled = HasLocation And .EditBookings
+        cmd_ApptDate.Enabled = HasLocation And .EditBookings And CanEdit
+        cbo_Status.Enabled = HasLocation And .EditBookings And CanEdit
+
+        cbo_NQReason.Enabled = HasLocation And IsNQ And .EditBookings And CanEdit
+
+        cbo_Booker.Enabled = HasLocation And HasStat And .EditBookings And CanEdit
+        lbl_Booked.Enabled = HasLocation And HasStat And .ChangeBookDate And .EditBookings
+
+        cbo_Confirmer.Enabled = HasLocation And HasStat And HasLocation And .EditBookings And CanEdit
+        lbl_ConfDate.Enabled = HasLocation And HasStat And HasLocation And HasConf And .EditBookings And CanEdit
+
+        cbo_Gift1.Enabled = HasLocation And .EditBookings And CanEdit
+        cbo_Gift2.Enabled = HasLocation And .EditBookings And CanEdit
+        cbo_Gift3.Enabled = HasLocation And .EditBookings And CanEdit
+
+        txt_BookNotes.Enabled = HasLocation And CanEdit
+      End With
+    End With
+    Dim LockedText As String = ""
+    cmd_NewBooking.Visible = Not CanEdit
+    If CanEdit Then
+      Table_Booking.RowStyles(0).Height = 1
+    Else
+      Table_Booking.RowStyles(0).Height = 50
+      LockedText = "(Closed) - "
+      If CC.isNewBookingNeeded(DataRecord) Then
+        cmd_NewBooking.Text = "This Booking is Closed.  " & vbCrLf & "Click here to create a new booking."
+      Else
+        cmd_NewBooking.Text = "This Booking is Closed.  " & vbCrLf & "Click here to edit the active booking."
+      End If
+    End If
+    Me.Text = LockedText & FormatPhoneNumber(DataRecord.Contact.Telephone) & " " & DataRecord.Contact.PL_Name & ", " & DataRecord.Contact.PF_Name
+  End Sub
   Public Sub LoadRecord(Record As Class_CallCenter.Type_ContactRecord)
     ControlsActive = False
     'ViewTab(Tabs.None)
@@ -196,15 +246,8 @@ Public Class Frm_Record
     Dim TempControlsActive = ControlsActive : ControlsActive = False
 
     With DataRecord
-      Dim CanEdit As Boolean = True
       If Not IsNothing(.Booking) Then
-
-
-
-
-
         With .Booking(DataRecord.BookingIndex).Booking
-          Dim Statusindex = CC.GetStatuslistIndex(.StatusID)
           FillLocations(cbo_Location, CC.LocationList, .LocationID)
           CC.initShowTimes(.LocationID)
 
@@ -213,16 +256,17 @@ Public Class Frm_Record
 
 
           CC.initStatus(Refresh)
+          CC.initNQReason(Refresh)
           If .LocationID > default_Int Then
             CC.initStatusSP(.LocationID, Refresh)
             FillDate(MasterDates, CC.LocationList(CC.GetLocationlistIndex(.LocationID)).ShowTimes)
             Dim Index As Integer = CC.GetLocationlistIndex(.LocationID)
             FillStatus(cbo_Status, CC.Status, .StatusID, CC.LocationList(Index).Status)
-
           Else
             FillDate(MasterDates, Nothing)
             FillStatus(cbo_Status, CC.Status, .StatusID)
           End If
+          FillNQ(cbo_NQReason, CC.NQReason, .NQReasonID)
 
           If .Appt = default_DateTime Then
             MasterDates.SelectedDate = Now
@@ -239,8 +283,9 @@ Public Class Frm_Record
           'date_Appt.Value = InputVar(.Appt, date_Appt.MinDate)
           'Ctl_Appt.Value = InputVar(.Appt, New Date)
 
-          lbl_Booked.Text = InputVar(.Booked, "")
-          lbl_ConfDate.Text = InputVar(.Conf, "")
+          lbl_Booked.Text = InputVar(.Booked, "- Not Booked -")
+          lbl_ConfDate.Text = InputVar(.Conf, "- Not Confirmed -")
+
           lbl_ClaimNumber.Text = .ClaimNumber
           txt_ClaimNumber.Text = .ClaimNumber
           If .ClaimNumber.Length > 0 And .ClaimNumberValid Then
@@ -255,52 +300,9 @@ Public Class Frm_Record
           FillGifts(DataRecord.BookingIndex)
 
           txt_BookNotes.Text = .Notes
-          Dim HasLocation As Boolean = .LocationID > default_Int
-          Dim HasAppt As Boolean = .Appt <> New Date
-          Dim HasStat As Boolean = .StatusID > default_Int
-          Dim HasConf As Boolean = .ConfirmerID > default_Int
 
-          If Statusindex > default_Int Then CanEdit = Not CC.Status(Statusindex).LockBooking
-
-          With CC.CurStaff.Rights
-            'If .EditLockedBooking Then CanEdit = True
-
-            txt_ClaimNumber.Enabled = .EditBookings And CanEdit
-            cbo_Location.Enabled = .EditBookings And CanEdit And Not HasConf
-            'Ctl_Appt.Enabled = HasLocation And .EditBookings
-            cmd_ApptDate.Enabled = HasLocation And .EditBookings And CanEdit
-            cbo_Status.Enabled = HasLocation And .EditBookings And CanEdit
-
-            cbo_Booker.Enabled = HasLocation And HasStat And .EditBookings And CanEdit
-            lbl_Booked.Enabled = HasLocation And HasStat And .ChangeBookDate And .EditBookings
-
-            cbo_Confirmer.Enabled = HasLocation And HasStat And HasLocation And .EditBookings And CanEdit
-            lbl_ConfDate.Enabled = HasLocation And HasStat And HasLocation And HasConf And .EditBookings And CanEdit
-
-            cbo_Gift1.Enabled = HasLocation And .EditBookings And CanEdit
-            cbo_Gift2.Enabled = HasLocation And .EditBookings And CanEdit
-            cbo_Gift3.Enabled = HasLocation And .EditBookings And CanEdit
-
-            txt_BookNotes.Enabled = HasLocation And CanEdit
-          End With
         End With
-        Dim LockedText As String = ""
-        cmd_NewBooking.Visible = Not CanEdit
-        If CanEdit Then
-          Table_Booking.RowStyles(0).Height = 1
-        Else
-          Table_Booking.RowStyles(0).Height = 50
-          LockedText = "(Closed) - "
-          If CC.isNewBookingNeeded(DataRecord) Then
-            cmd_NewBooking.Text = "This Booking is Closed.  " & vbCrLf & "Click here to create a new booking."
-          Else
-            cmd_NewBooking.Text = "This Booking is Closed.  " & vbCrLf & "Click here to edit the active booking."
-          End If
-        End If
-        Me.Text = LockedText & FormatPhoneNumber(.Contact.Telephone) & " " & .Contact.PL_Name & ", " & .Contact.PF_Name
-
-
-
+        BookingEnabled(.Booking(DataRecord.BookingIndex).Booking)
 
         cbo_NavLocation.Items.Clear()
         Dim selectedIndex As Integer = default_Int, CurrentItem As Integer = 0
@@ -485,7 +487,7 @@ Public Class Frm_Record
   End Sub
   Private Sub cbo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbo_Location.SelectedIndexChanged, cbo_Status.SelectedIndexChanged,
       cbo_Booker.SelectedIndexChanged, cbo_Confirmer.SelectedIndexChanged,
-      cbo_Gift1.SelectedIndexChanged, cbo_Gift2.SelectedIndexChanged, cbo_Gift3.SelectedIndexChanged
+      cbo_Gift1.SelectedIndexChanged, cbo_Gift2.SelectedIndexChanged, cbo_Gift3.SelectedIndexChanged, cbo_NQReason.SelectedIndexChanged
     If ControlsActive Then
       Dim Obj_Combo As ComboBox = CType(sender, ComboBox)
       Dim Obj_Value As Integer = CInt(CType(Obj_Combo.SelectedItem, ValueDescriptionPair).Value)
@@ -608,16 +610,5 @@ Public Class Frm_Record
         End If
       End If
     End If
-  End Sub
-  Private Sub cmd_OpView_Click(sender As Object, e As EventArgs)
-
-  End Sub
-
-  Private Sub cmd_ClearConfirmer_Click(sender As Object, e As EventArgs)
-
-  End Sub
-
-  Private Sub cmd_DisableLock_Click(sender As Object, e As EventArgs) Handles cmd_DisableLock.Click
-
   End Sub
 End Class

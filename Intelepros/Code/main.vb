@@ -8,18 +8,7 @@ Imports UniBase.Class_CallCenter
 Imports UniBase.Class_CDO
 Imports System.Data
 Imports System.Text
-Public Enum EnumFieldType
-  Contact
-  Booking
-End Enum
-Public Structure TypeFormField
-  Dim ControlName As String
-  Dim FieldName As String
-  Dim NewValue As String
-  Dim OldValue As String
-  Dim FieldMessage As String
-  Dim FieldType As EnumFieldType
-End Structure
+
 Public Enum enum_EmpAction
   Booked = 1
   Confirmed = 2
@@ -249,9 +238,9 @@ Start:
       FormProgress.ShowProgress(7, "Loading Locations List")
       CC.initLocations()
 
-      FormProgress.ShowProgress(8, "Loading Status List")
+      FormProgress.ShowProgress(8, "Loading Status & NQ Reason Lists")
       CC.initStatus()
-
+      CC.initNQReason()
       'FormProgress.ShowProgress(8, "Loading Dept List")
       'CC.initDept()
 
@@ -519,6 +508,12 @@ Start:
     SearchWindow = New Frm_Search
     SearchWindow.Show()
   End Sub
+
+  Public Sub OpenMySQL()
+    Dim MySql As Form = New Frm_MySQL
+    MySql.Show()
+  End Sub
+
   Private P_SimpleUI As Boolean = False
   Public Sub OpenNewRecord(Optional SimpleUI As Boolean = False)
     P_SimpleUI = SimpleUI
@@ -643,36 +638,49 @@ Start:
           Dim StatIndex As Integer = CC.GetStatuslistIndex(FormField.NewValue)
           If StatIndex > default_Int Then
             FormField.OldValue = .StatusID : .StatusID = FormField.NewValue : FormField.FieldName = "StatusID" ': .Status = CC.StatusList(ProjIndex)
-
+            Dim FirstStat As Boolean = (FormField.OldValue = default_Int)
             'DO STATUS UPDATES IE Confirmer/Booker/ Ask if ok to LOCK record...  
             Dim OkToWrite As Boolean = (FormField.OldValue <> FormField.NewValue) And (FormField.FieldMessage.Length = 0)
 
-            If OkToWrite Then
-              If CC.Status(StatIndex).LockBooking Then
-                Dim msgboxres As MsgBoxResult = MsgBox("This will Lock this booking and NO further edits will be possible. " & vbCrLf & _
-                                                       "Do you want to continue with marking this booking to '" & CC.Status(StatIndex).Name & "'?", MsgBoxStyle.OkCancel, "This Will Lock Booking!")
-                OkToWrite = msgboxres = MsgBoxResult.Ok
-              End If
-            End If
+            'If OkToWrite Then
+            'If CC.Status(StatIndex).LockBooking Then
+            'Dim msgboxres As MsgBoxResult = MsgBox("This will Lock this booking and NO further edits will be possible after you close this record. " & vbCrLf & _
+            '                                       "Do you want to continue with marking this booking to '" & CC.Status(StatIndex).Name & "'?", MsgBoxStyle.OkCancel, "This Will Lock Booking!")
+            'OkToWrite = msgboxres = MsgBoxResult.Ok
+            'End If
+            'End If
 
 
             If OkToWrite Then
 
               If CC.Status(StatIndex).IsBooking Then
-                Dim OldID As Integer = .BookerID
-                Dim OldDate As Date = .Booked
-                If WriteUpdate(DataRecord, New TypeFormField With {.FieldType = EnumFieldType.Booking, .OldValue = OldID, .FieldName = "BookerID", .NewValue = CC.CurStaff.ID}) Then
-                  If WriteUpdate(DataRecord, New TypeFormField With {.FieldType = EnumFieldType.Booking, .OldValue = OldDate, .FieldName = "Booked", .NewValue = Now}) Then
-
+                If FirstStat Then
+                  Dim OldID As Integer = .BookerID
+                  Dim OldDate As Date = .Booked
+                  If WriteUpdate(DataRecord, New TypeFormField With {.FieldType = EnumFieldType.Booking, .OldValue = OldID, .FieldName = "BookerID", .NewValue = CC.CurStaff.ID}) Then
+                    If WriteUpdate(DataRecord, New TypeFormField With {.FieldType = EnumFieldType.Booking, .OldValue = OldDate, .FieldName = "Booked", .NewValue = Now}) Then
+                      .BookerID = CC.CurStaff.ID
+                      .Booked = Now
+                    End If
+                  End If
+                Else
+                  If .ConfirmerID > default_Int Then
+                    If CC.ClearConf(.ID, .ConfirmerID, .Conf.ToString) Then
+                      .ConfirmerID = default_Int
+                      .Conf = default_DateTime
+                    End If
                   End If
                 End If
+
+
               End If
               If CC.Status(StatIndex).IsConfirm Then
                 Dim OldID As Integer = .ConfirmerID
                 Dim OldDate As Date = .Conf
                 If WriteUpdate(DataRecord, New TypeFormField With {.FieldType = EnumFieldType.Booking, .OldValue = OldID, .FieldName = "ConfirmerID", .NewValue = CC.CurStaff.ID}) Then
                   If WriteUpdate(DataRecord, New TypeFormField With {.FieldType = EnumFieldType.Booking, .OldValue = OldDate, .FieldName = "Confirmed", .NewValue = Now}) Then
-
+                    .ConfirmerID = CC.CurStaff.ID
+                    .Conf = Now
                   End If
                 End If
               End If
@@ -690,6 +698,7 @@ Start:
         Case "cbo_Gift1" : FormField.OldValue = .Gift1_ID : .Gift1_ID = FormField.NewValue : FormField.FieldName = "Gift1"
         Case "cbo_Gift2" : FormField.OldValue = .Gift2_ID : .Gift2_ID = FormField.NewValue : FormField.FieldName = "Gift2"
         Case "cbo_Gift3" : FormField.OldValue = .Gift3_ID : .Gift3_ID = FormField.NewValue : FormField.FieldName = "Gift3"
+        Case "cbo_NQReason" : FormField.OldValue = .NQReasonID : .NQReasonID = FormField.NewValue : FormField.FieldName = "NQReasonID"
           'Case "date_Appt" : FormField.OldValue = .Appt : .Appt = FormField.NewValue : FormField.FieldName = "Appt"
         Case "txt_Appt"
           If .Appt = default_DateTime Then FormField.OldValue = "" Else FormField.OldValue = .Appt
@@ -712,7 +721,6 @@ Start:
       End If
     End With
   End Sub
-
   ''' <summary>
   ''' Will only save if No Message and New Val is different than Old Val
   ''' </summary>
@@ -753,23 +761,24 @@ Start:
     Dim result As Boolean = False
     Select Case FormField.FieldType
       Case EnumFieldType.Contact
-        result = CC.UpdateContactField(DataRecord, FormField.FieldName, FormField.NewValue)
+        result = CC.UpdateContactField(DataRecord, FormField)
       Case EnumFieldType.Booking
         With DataRecord
-          If .Booking(.BookingIndex).Exists Then
-            result = CC.UpdateContactBooking(.Booking(.BookingIndex), FormField.FieldName, FormField.NewValue, FormField.OldValue)
-          Else
-            result = CC.CreateBooking(.Booking(.BookingIndex))
-
-            If result = True Then result = CC.UpdateContactBooking(.Booking(.BookingIndex), FormField.FieldName, FormField.NewValue, FormField.OldValue)
-          End If
+          With .Booking(.BookingIndex)
+            If .Exists Then
+              result = CC.UpdateContactBooking(.Booking.ID, FormField)
+            Else
+              result = CC.CreateBooking(DataRecord.Booking(DataRecord.BookingIndex))
+              If result = True Then result = CC.UpdateContactBooking(.Booking.ID, FormField)
+            End If
+          End With
         End With
     End Select
     Return result
   End Function
   Function colorField(ByRef ThisForm As Form, FormField As TypeFormField, NewColor As Color) As Object
     Dim Obj As Object = getControlFromName(ThisForm, FormField.ControlName)
-    SetControlBG(Obj, NewColor)
+    If Not IsNothing(Obj) Then SetControlBG(Obj, NewColor)
     'Try
     '  Select Case FormField.ControlName.Substring(0, 3)
     '    Case "tel"
@@ -1393,6 +1402,7 @@ Public Module FillControls
     If Not IsNothing(SearchResult) Then
       For Each Item As Type_SearchResult In SearchResult
         Dim ThisLoc As String = Item.Booking.Location.Name
+
         ExistsInArray(LocCT, ThisLoc)
       Next
       For Each Item As Type_SearchResult In SearchResult
@@ -1992,6 +2002,29 @@ Public Module FillControls
     Dim selectedIndex As Integer = FillStatus_ReturnselectedIndex(VDP_Array, Status, StatusID, _
                                                                   LocationStatus, AllLocationStatus, _
                                                                   AlwaysDisplayCurrentStatusID, LocStatInverse)
+    With Combo
+      .DisplayMember = "Description"
+      .ValueMember = "Value"
+      .DataSource = VDP_Array
+      .SelectedIndex = selectedIndex
+    End With
+  End Sub
+  Public Sub FillNQ(Combo As ComboBox, NQ() As Type_NQ, Optional NQID As Integer = default_Int, Optional SelectText As String = "Select NQ Reason")
+    Combo.DataSource = Nothing
+    Combo.Items.Clear()
+    Dim VDP_Array As New ArrayList, selectedIndex As Integer = default_Int, CurrentItem As Integer = 1
+    VDP_Array.Add(New ValueDescriptionPair(default_Int, SelectText))
+    selectedIndex = 0
+    If Not IsNothing(NQ) Then
+      For Each item In NQ
+
+          VDP_Array.Add(New ValueDescriptionPair(item.ID, item.Name))
+        If item.ID = NQID Then selectedIndex = CurrentItem
+          CurrentItem += 1
+
+        'Combo.Items.Add(item.Name)
+      Next
+    End If
     With Combo
       .DisplayMember = "Description"
       .ValueMember = "Value"

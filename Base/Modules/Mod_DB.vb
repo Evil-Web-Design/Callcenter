@@ -259,6 +259,13 @@ Public Module VarManagement
       Return CBool(Value)
     End If
   End Function
+  Public Function InputVar(ByVal Value As Date, ByVal DefaultValue As String) As String
+    If Value = default_Date Or Value = default_DateTime Then
+      Return DefaultValue
+    Else
+      Return Value.ToString
+    End If
+  End Function
   Public Function InputVar(ByVal Value As Object, ByVal DefaultValue As DateTime, Optional ByVal nullable As Boolean = False) As DateTime 'needs convert to date.parse
     If Value Is Nothing OrElse IsDBNull(Value) OrElse Value Is "" Then
       If nullable Then

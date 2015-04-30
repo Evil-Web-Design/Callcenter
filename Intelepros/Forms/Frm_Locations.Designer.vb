@@ -47,6 +47,7 @@ Partial Class Frm_Locations
     Me.tbl_LocationSettings = New System.Windows.Forms.TableLayoutPanel()
     Me.Panel1 = New System.Windows.Forms.Panel()
     Me.tbl_StatusEdit = New System.Windows.Forms.TableLayoutPanel()
+    Me.Label12 = New System.Windows.Forms.Label()
     Me.Label10 = New System.Windows.Forms.Label()
     Me.ComboBox1 = New System.Windows.Forms.ComboBox()
     Me.lst_AccessLevel = New System.Windows.Forms.ListBox()
@@ -222,7 +223,7 @@ Partial Class Frm_Locations
     Me.mnu_ToolStrip.Name = "mnu_ToolStrip"
     Me.mnu_ToolStrip.Padding = New System.Windows.Forms.Padding(0)
     Me.mnu_ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-    Me.mnu_ToolStrip.Size = New System.Drawing.Size(534, 25)
+    Me.mnu_ToolStrip.Size = New System.Drawing.Size(1160, 25)
     Me.mnu_ToolStrip.Stretch = True
     Me.mnu_ToolStrip.TabIndex = 21
     Me.mnu_ToolStrip.Text = "ToolStrip1"
@@ -270,11 +271,11 @@ Partial Class Frm_Locations
     Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.tbl_PromoSettings)
     Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.FocusIt)
     Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.tbl_LocationSettings)
-    Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(534, 365)
+    Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1160, 568)
     Me.ToolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill
     Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 0)
     Me.ToolStripContainer1.Name = "ToolStripContainer1"
-    Me.ToolStripContainer1.Size = New System.Drawing.Size(534, 412)
+    Me.ToolStripContainer1.Size = New System.Drawing.Size(1160, 615)
     Me.ToolStripContainer1.TabIndex = 22
     Me.ToolStripContainer1.Text = "ToolStripContainer1"
     '
@@ -291,7 +292,7 @@ Partial Class Frm_Locations
     Me.StatusStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
     Me.StatusStrip.Location = New System.Drawing.Point(0, 0)
     Me.StatusStrip.Name = "StatusStrip"
-    Me.StatusStrip.Size = New System.Drawing.Size(534, 22)
+    Me.StatusStrip.Size = New System.Drawing.Size(1160, 22)
     Me.StatusStrip.TabIndex = 23
     '
     'lbl_Status
@@ -306,11 +307,11 @@ Partial Class Frm_Locations
     Me.tbl_PromoSettings.BackColor = System.Drawing.SystemColors.Control
     Me.tbl_PromoSettings.ColumnCount = 1
     Me.tbl_PromoSettings.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-    Me.tbl_PromoSettings.Location = New System.Drawing.Point(21, 497)
+    Me.tbl_PromoSettings.Location = New System.Drawing.Point(559, 39)
     Me.tbl_PromoSettings.Name = "tbl_PromoSettings"
     Me.tbl_PromoSettings.RowCount = 1
     Me.tbl_PromoSettings.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-    Me.tbl_PromoSettings.Size = New System.Drawing.Size(238, 166)
+    Me.tbl_PromoSettings.Size = New System.Drawing.Size(458, 415)
     Me.tbl_PromoSettings.TabIndex = 23
     '
     'FocusIt
@@ -354,6 +355,7 @@ Partial Class Frm_Locations
     Me.tbl_StatusEdit.ColumnCount = 2
     Me.tbl_StatusEdit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 57.0!))
     Me.tbl_StatusEdit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+    Me.tbl_StatusEdit.Controls.Add(Me.Label12, 0, 5)
     Me.tbl_StatusEdit.Controls.Add(Me.Label10, 0, 4)
     Me.tbl_StatusEdit.Controls.Add(Me.ComboBox1, 1, 0)
     Me.tbl_StatusEdit.Controls.Add(Me.lst_AccessLevel, 1, 1)
@@ -361,23 +363,36 @@ Partial Class Frm_Locations
     Me.tbl_StatusEdit.Controls.Add(Me.Label8, 0, 2)
     Me.tbl_StatusEdit.Controls.Add(Me.Label9, 0, 3)
     Me.tbl_StatusEdit.Controls.Add(Me.Label6, 0, 1)
-    Me.tbl_StatusEdit.Location = New System.Drawing.Point(3, 156)
+    Me.tbl_StatusEdit.Location = New System.Drawing.Point(17, 156)
     Me.tbl_StatusEdit.Name = "tbl_StatusEdit"
-    Me.tbl_StatusEdit.RowCount = 5
+    Me.tbl_StatusEdit.RowCount = 6
     Me.tbl_StatusEdit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.tbl_StatusEdit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+    Me.tbl_StatusEdit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.tbl_StatusEdit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.tbl_StatusEdit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.tbl_StatusEdit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.tbl_StatusEdit.Size = New System.Drawing.Size(245, 177)
     Me.tbl_StatusEdit.TabIndex = 38
     '
+    'Label12
+    '
+    Me.Label12.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label12.AutoSize = True
+    Me.Label12.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label12.Location = New System.Drawing.Point(3, 157)
+    Me.Label12.Name = "Label12"
+    Me.Label12.Size = New System.Drawing.Size(51, 15)
+    Me.Label12.TabIndex = 33
+    Me.Label12.Text = "NQ"
+    Me.Label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    '
     'Label10
     '
     Me.Label10.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.Label10.AutoSize = True
     Me.Label10.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label10.Location = New System.Drawing.Point(3, 157)
+    Me.Label10.Location = New System.Drawing.Point(3, 132)
     Me.Label10.Name = "Label10"
     Me.Label10.Size = New System.Drawing.Size(51, 15)
     Me.Label10.TabIndex = 32
@@ -408,7 +423,7 @@ Partial Class Frm_Locations
     Me.lst_AccessLevel.Location = New System.Drawing.Point(60, 28)
     Me.lst_AccessLevel.Name = "lst_AccessLevel"
     Me.lst_AccessLevel.ScrollAlwaysVisible = True
-    Me.lst_AccessLevel.Size = New System.Drawing.Size(182, 71)
+    Me.lst_AccessLevel.Size = New System.Drawing.Size(182, 46)
     Me.lst_AccessLevel.TabIndex = 26
     '
     'Label5
@@ -428,7 +443,7 @@ Partial Class Frm_Locations
     Me.Label8.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.Label8.AutoSize = True
     Me.Label8.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label8.Location = New System.Drawing.Point(3, 107)
+    Me.Label8.Location = New System.Drawing.Point(3, 82)
     Me.Label8.Name = "Label8"
     Me.Label8.Size = New System.Drawing.Size(51, 15)
     Me.Label8.TabIndex = 30
@@ -440,7 +455,7 @@ Partial Class Frm_Locations
     Me.Label9.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.Label9.AutoSize = True
     Me.Label9.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label9.Location = New System.Drawing.Point(3, 132)
+    Me.Label9.Location = New System.Drawing.Point(3, 107)
     Me.Label9.Name = "Label9"
     Me.Label9.Size = New System.Drawing.Size(51, 15)
     Me.Label9.TabIndex = 31
@@ -468,7 +483,7 @@ Partial Class Frm_Locations
     Me.tbl_Calendar.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
     Me.tbl_Calendar.Controls.Add(Me.cmd_EditOpenDates, 0, 0)
     Me.tbl_Calendar.Controls.Add(Me.Grid_Results, 0, 1)
-    Me.tbl_Calendar.Location = New System.Drawing.Point(3, 7)
+    Me.tbl_Calendar.Location = New System.Drawing.Point(11, 7)
     Me.tbl_Calendar.Name = "tbl_Calendar"
     Me.tbl_Calendar.RowCount = 2
     Me.tbl_Calendar.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28.0!))
@@ -682,7 +697,7 @@ Partial Class Frm_Locations
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-    Me.ClientSize = New System.Drawing.Size(534, 412)
+    Me.ClientSize = New System.Drawing.Size(1160, 615)
     Me.Controls.Add(Me.ToolStripContainer1)
     Me.HelpButton = True
     Me.MaximizeBox = False
@@ -763,4 +778,5 @@ Partial Class Frm_Locations
   Friend WithEvents HelpMenu As System.Windows.Forms.ContextMenuStrip
   Friend WithEvents WhatsThisToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents ReportAnIssueToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents Label12 As System.Windows.Forms.Label
 End Class

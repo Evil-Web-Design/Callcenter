@@ -35,6 +35,7 @@ Public Class Frm_Main
     Dim TempControlsActive = ControlsActive : ControlsActive = False
     mnu_Main.Location = New Point(0, 0)
     With CC.CurStaff.Rights
+
       mnu_Main.Visible = True
 
       mnu_Search.Visible = .SearchBookings
@@ -49,6 +50,9 @@ Public Class Frm_Main
       cmd_Database.Visible = .EditSettings
       cmd_Log.Visible = .EditSettings
 
+
+      mnu_SnoopMySQL.Visible = CC.CurStaff.AccessLevel = UniBase.Class_CallCenter.enum_AccessLevel.Admin
+      cmd_SnoopMySQL.Visible = CC.CurStaff.AccessLevel = UniBase.Class_CallCenter.enum_AccessLevel.Admin
     End With
     If Not CC.CurStaff.Rights.SimpleUI Then Me.Show()
     TrayIcon.ShowBalloonTip(5000, "Call Center Loaded", "Right Click this Icon to get started", ToolTipIcon.Info)
@@ -149,5 +153,9 @@ Public Class Frm_Main
 
   Private Sub mnu_LogOut_Click(sender As Object, e As EventArgs) Handles cmd_LogOut.Click, mnu_LogOut.Click
     InitSystem()
+  End Sub
+
+  Private Sub mnu_SnoopMySQL_Click(sender As Object, e As EventArgs) Handles mnu_SnoopMySQL.Click, cmd_SnoopMySQL.Click
+    OpenMySQL()
   End Sub
 End Class

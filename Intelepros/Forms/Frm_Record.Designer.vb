@@ -51,6 +51,8 @@ Partial Class Frm_Record
     Me.tel_Phone = New Intelepros.ctl_Phone()
     Me.tel_AltPhone = New Intelepros.ctl_Phone()
     Me.Table_Booking = New System.Windows.Forms.TableLayoutPanel()
+    Me.cbo_NQReason = New System.Windows.Forms.ComboBox()
+    Me.Label20 = New System.Windows.Forms.Label()
     Me.cmd_NewBooking = New System.Windows.Forms.Button()
     Me.Label12 = New System.Windows.Forms.Label()
     Me.Label11 = New System.Windows.Forms.Label()
@@ -498,6 +500,8 @@ Partial Class Frm_Record
     Me.Table_Booking.ColumnCount = 2
     Me.Table_Booking.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85.0!))
     Me.Table_Booking.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+    Me.Table_Booking.Controls.Add(Me.cbo_NQReason, 1, 13)
+    Me.Table_Booking.Controls.Add(Me.Label20, 0, 13)
     Me.Table_Booking.Controls.Add(Me.cmd_NewBooking, 0, 0)
     Me.Table_Booking.Controls.Add(Me.Label12, 0, 3)
     Me.Table_Booking.Controls.Add(Me.Label11, 0, 2)
@@ -523,7 +527,7 @@ Partial Class Frm_Record
     Me.Table_Booking.Controls.Add(Me.cbo_Status, 1, 12)
     Me.Table_Booking.Location = New System.Drawing.Point(3, 3)
     Me.Table_Booking.Name = "Table_Booking"
-    Me.Table_Booking.RowCount = 13
+    Me.Table_Booking.RowCount = 14
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50.0!))
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
@@ -536,9 +540,33 @@ Partial Class Frm_Record
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
-    Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40.0!))
-    Me.Table_Booking.Size = New System.Drawing.Size(279, 399)
+    Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33.0!))
+    Me.Table_Booking.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27.0!))
+    Me.Table_Booking.Size = New System.Drawing.Size(279, 420)
     Me.Table_Booking.TabIndex = 16
+    '
+    'cbo_NQReason
+    '
+    Me.cbo_NQReason.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbo_NQReason.CausesValidation = False
+    Me.cbo_NQReason.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_NQReason.FormattingEnabled = True
+    Me.cbo_NQReason.Location = New System.Drawing.Point(88, 396)
+    Me.cbo_NQReason.Name = "cbo_NQReason"
+    Me.cbo_NQReason.Size = New System.Drawing.Size(188, 21)
+    Me.cbo_NQReason.TabIndex = 26
+    '
+    'Label20
+    '
+    Me.Label20.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label20.AutoSize = True
+    Me.Label20.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label20.Location = New System.Drawing.Point(3, 399)
+    Me.Label20.Name = "Label20"
+    Me.Label20.Size = New System.Drawing.Size(79, 15)
+    Me.Label20.TabIndex = 21
+    Me.Label20.Text = "NQ Reason"
+    Me.Label20.TextAlign = System.Drawing.ContentAlignment.MiddleRight
     '
     'cmd_NewBooking
     '
@@ -599,7 +627,7 @@ Partial Class Frm_Record
     Me.Label14.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.Label14.AutoSize = True
     Me.Label14.Font = New System.Drawing.Font("Arial", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label14.Location = New System.Drawing.Point(3, 369)
+    Me.Label14.Location = New System.Drawing.Point(3, 367)
     Me.Label14.Name = "Label14"
     Me.Label14.Size = New System.Drawing.Size(79, 19)
     Me.Label14.TabIndex = 23
@@ -842,7 +870,7 @@ Partial Class Frm_Record
     Me.GroupBox2.Controls.Add(Me.txt_BookNotes)
     Me.GroupBox2.Location = New System.Drawing.Point(3, 303)
     Me.GroupBox2.Name = "GroupBox2"
-    Me.GroupBox2.Size = New System.Drawing.Size(273, 53)
+    Me.GroupBox2.Size = New System.Drawing.Size(273, 54)
     Me.GroupBox2.TabIndex = 28
     Me.GroupBox2.TabStop = False
     Me.GroupBox2.Text = "Booking Notes"
@@ -853,7 +881,7 @@ Partial Class Frm_Record
     Me.txt_BookNotes.Location = New System.Drawing.Point(3, 16)
     Me.txt_BookNotes.Multiline = True
     Me.txt_BookNotes.Name = "txt_BookNotes"
-    Me.txt_BookNotes.Size = New System.Drawing.Size(267, 34)
+    Me.txt_BookNotes.Size = New System.Drawing.Size(267, 35)
     Me.txt_BookNotes.TabIndex = 29
     '
     'cbo_Status
@@ -865,7 +893,7 @@ Partial Class Frm_Record
     Me.cbo_Status.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
     Me.cbo_Status.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Me.cbo_Status.FormattingEnabled = True
-    Me.cbo_Status.Location = New System.Drawing.Point(88, 362)
+    Me.cbo_Status.Location = New System.Drawing.Point(88, 363)
     Me.cbo_Status.Name = "cbo_Status"
     Me.cbo_Status.Size = New System.Drawing.Size(188, 28)
     Me.cbo_Status.TabIndex = 19
@@ -1066,13 +1094,13 @@ Partial Class Frm_Record
     Me.ToolStripOuterContainer.ContentPanel.Controls.Add(Me.FocusIt)
     Me.ToolStripOuterContainer.ContentPanel.Controls.Add(Me.Table_Booking)
     Me.ToolStripOuterContainer.ContentPanel.Controls.Add(Me.Table_Contact)
-    Me.ToolStripOuterContainer.ContentPanel.Size = New System.Drawing.Size(536, 429)
+    Me.ToolStripOuterContainer.ContentPanel.Size = New System.Drawing.Size(536, 531)
     Me.ToolStripOuterContainer.Dock = System.Windows.Forms.DockStyle.Fill
     Me.ToolStripOuterContainer.LeftToolStripPanelVisible = False
     Me.ToolStripOuterContainer.Location = New System.Drawing.Point(0, 0)
     Me.ToolStripOuterContainer.Name = "ToolStripOuterContainer"
     Me.ToolStripOuterContainer.RightToolStripPanelVisible = False
-    Me.ToolStripOuterContainer.Size = New System.Drawing.Size(536, 476)
+    Me.ToolStripOuterContainer.Size = New System.Drawing.Size(536, 578)
     Me.ToolStripOuterContainer.TabIndex = 5
     Me.ToolStripOuterContainer.Text = "ToolStripContainer1"
     '
@@ -1144,7 +1172,7 @@ Partial Class Frm_Record
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
     Me.BackColor = System.Drawing.Color.Gray
-    Me.ClientSize = New System.Drawing.Size(536, 476)
+    Me.ClientSize = New System.Drawing.Size(536, 578)
     Me.Controls.Add(Me.ToolStripOuterContainer)
     Me.HelpButton = True
     Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
@@ -1269,4 +1297,6 @@ Partial Class Frm_Record
   Friend WithEvents mnu_DeleteBooking As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents cmd_DeleteBooking As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents cmd_DisableLock As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents cbo_NQReason As System.Windows.Forms.ComboBox
+  Friend WithEvents Label20 As System.Windows.Forms.Label
 End Class

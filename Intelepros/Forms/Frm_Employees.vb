@@ -1,4 +1,5 @@
 ﻿Imports UniBase
+
 Public Class Frm_Employees
 
   Private Sub lst_Employees_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lst_Employees.SelectedIndexChanged
@@ -22,7 +23,7 @@ Public Class Frm_Employees
     End If
   End Sub
   Private Sub Field_LostFocus(sender As Object, e As EventArgs) Handles txt_E_First.LostFocus, txt_E_Last.LostFocus,
-    txt_E_SS.LostFocus, txt_E_Add1.LostFocus, txt_E_Add2.LostFocus, txt_E_City.LostFocus,
+    txt_E_SS.LostFocus, txt_email.LostFocus, txt_E_Add1.LostFocus, txt_E_Add2.LostFocus, txt_E_City.LostFocus,
     txt_E_State.LostFocus, txt_E_Zip.LostFocus, txt_E_Econtact.LostFocus, txt_E_Password.LostFocus
 
     Dim Obj_Field As TextBox = CType(sender, TextBox)
@@ -49,6 +50,7 @@ Public Class Frm_Employees
           Case "txt_E_Last"
             FormField.OldValue = .LastName : .LastName = FormField.NewValue : FormField.FieldName = "LastName"
           Case "txt_E_SS" : FormField.OldValue = .ss : .ss = FormField.NewValue : FormField.FieldName = "ss"
+          Case "txt_email" : FormField.OldValue = .ss : .Email = FormField.NewValue : FormField.FieldName = "Email"
           Case "txt_E_Add1" : FormField.OldValue = .Address1 : .Address1 = FormField.NewValue : FormField.FieldName = "Address1"
           Case "txt_E_Add2" : FormField.OldValue = .Address2 : .Address2 = FormField.NewValue : FormField.FieldName = "Address2"
           Case "txt_E_City" : FormField.OldValue = .City : .City = FormField.NewValue : FormField.FieldName = "City"
@@ -134,7 +136,8 @@ Public Class Frm_Employees
           txt_E_First.Text = .FirstName
           txt_E_Last.Text = .LastName
           txt_E_SS.Text = .ss
-          'txt_E_Phone.Text = .Phone
+          Ctl_Phone.Text = .Phone
+          txt_email.Text = .Email
           txt_E_Add1.Text = .Address1
           txt_E_Add2.Text = .Address2
           txt_E_City.Text = .City
@@ -201,4 +204,7 @@ Public Class Frm_Employees
   End Sub
 
 
+  Private Sub txt_E_Add1_TextChanged(sender As Object, e As EventArgs) Handles txt_E_Add1.TextChanged
+
+  End Sub
 End Class
