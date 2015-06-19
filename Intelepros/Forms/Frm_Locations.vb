@@ -1,5 +1,5 @@
 ﻿Imports UniBase
-Imports UniBase.Class_CallCenter
+Imports UniBase.Class_Main
 
 Public Class Frm_Locations
   WithEvents popup As Popup
@@ -10,6 +10,8 @@ Public Class Frm_Locations
     Dim TempControlsActive = ControlsActive : ControlsActive = False
     FocusIt.Location = New Drawing.Point(-FocusIt.Size.Width, -FocusIt.Size.Height)
     tbl_LocationSettings.Dock = DockStyle.Fill
+    tbl_PromoSettings.Dock = DockStyle.Fill
+    tbl_ContentEdit.Dock = DockStyle.Fill
     tbl_StatusEdit.Dock = DockStyle.Fill
     tbl_Calendar.Dock = DockStyle.Fill
 
@@ -22,6 +24,7 @@ Public Class Frm_Locations
     regKey.GetSavedFormLocation(Me, RegEdit.Enum_FormPos.Location)
     regKey.Close()
     ControlsActive = TempControlsActive
+    Drawpage(Pages.Location)
   End Sub
   Private Sub Frm_SignIn_Move(sender As Object, e As EventArgs) Handles MyBase.Move, MyBase.Resize
     If ControlsActive Then
@@ -120,13 +123,19 @@ Public Class Frm_Locations
     End If
     ControlsActive = TempControlsActive
   End Sub
-  Sub fillLocationStatus(Optional Refresh As Boolean = False)
+  Sub fillLocation(Optional Refresh As Boolean = False)
     Dim TempControlsActive = ControlsActive : ControlsActive = False
+    Dim LocEnabled As Boolean = (LocationID > default_Int)
     Dim EnabledStat As Boolean = False
     If StatusID = default_Int Then StatusID = 0
     CC.initStatus(Refresh)
     If LocationID > default_Int Then
       Dim Index As Integer = CC.GetLocationlistIndex(LocationID)
+
+
+      FillContent(cbo_Confirm, CC.Content, CC.LocationList(Index).confirmContentID)
+
+
       CC.initStatus(LocationID, StatusID, Refresh)
       EnabledStat = Not IsNothing(CC.LocationList(Index).Status)
       'Stat
@@ -142,6 +151,10 @@ Public Class Frm_Locations
       End If
     Else
       'Stat
+      cbo_Confirm.DataSource = Nothing
+      cbo_Confirm.Items.Clear()
+      cbo_Confirm.Enabled = False
+
       cbo_NewStatus.Enabled = False
     End If
     'StatBranch
@@ -151,13 +164,8 @@ Public Class Frm_Locations
     ck_AlwaysVis.Checked = False
     ck_AlwaysVis.Enabled = False
     cmd_DeleteLocStatus.Enabled = False
-    ControlsActive = TempControlsActive
-  End Sub
 
-  Sub fillLocation(Optional Refresh As Boolean = False)
-    Dim TempControlsActive = ControlsActive : ControlsActive = False
-    Dim LocEnabled As Boolean = (LocationID > default_Int)
-    fillLocationStatus(Refresh)
+
     Dim LocationVis As Boolean = (LocationID > 0)
 
     tbl_Calendar.Visible = LocationVis
@@ -173,11 +181,9 @@ Public Class Frm_Locations
     txt_Location.Enabled = LocEnabled
     cbo_City.Enabled = LocEnabled
     ck_LocEnabled.Enabled = LocEnabled
+
     ControlsActive = TempControlsActive
   End Sub
-
-
-
 
 
   Structure ClickedItem
@@ -451,10 +457,8 @@ Public Class Frm_Locations
         LocationID = FormField.NewValue
         StatusID = default_Int
         Drawpage(Pages.Location)
-        fillLocation(True)
         'FocusIt.TabIndex = Obj_Combo.TabIndex
         FocusIt.Select()
-
       End If
     End If
   End Sub
@@ -594,19 +598,28 @@ Public Class Frm_Locations
   Private Enum Pages
     Location
     Promo
+    Content
   End Enum
   Private Sub mnu_Location_ButtonClick(sender As Object, e As EventArgs) Handles mnu_Location.ButtonClick
     Drawpage(Pages.Location)
   End Sub
-  Private Sub mnu_Promo_ButtonClick(sender As Object, e As EventArgs) Handles mnu_Promo.ButtonClick
+  Private Sub mnu_Promo_ButtonClick(sender As Object, e As EventArgs)
     Drawpage(Pages.Promo)
+  End Sub
+  Private Sub mnu_Content_Click(sender As Object, e As EventArgs) Handles mnu_Content.Click
+    Drawpage(Pages.Content)
   End Sub
   Private Sub Drawpage(Page As Pages)
     tbl_LocationSettings.Visible = (Page = Pages.Location)
     tbl_PromoSettings.Visible = (Page = Pages.Promo)
+    tbl_ContentEdit.Visible = (Page = Pages.Content)
     Select Case Page
       Case Pages.Location
+        fillLocation(True)
       Case Pages.Promo
+        Drawpromo()
+      Case Pages.Content
+        DrawContent()
     End Select
   End Sub
 
@@ -766,5 +779,113 @@ Public Class Frm_Locations
 
 
 
+  End Sub
+
+  Private Sub mnu_Promo_Click(sender As Object, e As EventArgs) Handles mnu_Promo.Click
+
+  End Sub
+
+
+
+  Private Sub mnu_RTF_Save_Click(sender As Object, e As EventArgs) Handles mnu_RTF_Save.Click
+    Dim Obj_Value As Integer = CInt(CType(cbo_ContentFiles.SelectedItem, ValueDescriptionPair).Value)
+    Dim Index As Integer = CC.GetContentlistIndex(Obj_Value)
+    Dim DocumentText As String = RichTextBox.Rtf
+    If CC.RunSQL("UPDATE dbo.tbl_Content SET Value = N'" & CC.cleanForSQL(DocumentText) & "' WHERE ID=" & CC.Content(Index).ID, DB.CallCenter) Then
+      CC.Content(Index).Value = DocumentText
+    End If
+  End Sub
+  Private Sub mnu_ImportRTF_Click(sender As Object, e As EventArgs) Handles mnu_ImportFile.Click
+    OpenRTF()
+  End Sub
+  Private Sub DeleteCurrentFileToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteCurrentFileToolStripMenuItem.Click
+    Dim Obj_Value As Integer = CInt(CType(cbo_ContentFiles.SelectedItem, ValueDescriptionPair).Value)
+    Dim Index As Integer = CC.GetContentlistIndex(Obj_Value)
+    If CC.RunSQL("DELETE FROM dbo.tbl_Content WHERE ID = " & CC.Content(Index).ID, DB.CallCenter) Then
+      'System.Array.Clear(CC.Content, Index, 1)
+      RemoveItem(CC.Content, Index)
+      DrawContent()
+    End If
+
+  End Sub
+  Sub RemoveItem(ByRef Items As Type_Content(), DelIndex As Integer)
+    If Not IsNothing(Items) Then
+      If Items.Length > 1 Then
+        For Item = DelIndex To Items.Length - 2
+          Items(Item) = Items(Item + 1)
+        Next
+        ReDim Preserve Items(Items.Length - 2)
+      Else
+        Erase Items
+      End If
+    End If
+  End Sub
+  Private Sub OpenRTF()
+    Dim FD As New OpenFileDialog()
+    FD.Filter = "Rich Text Format|*.rtf|htm Files|*.htm|html Files|*.html"
+    FD.Title = "Select a File to import"
+    If FD.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
+      Dim NewContent As New Type_Content
+      Dim FileName = FD.FileName.Substring(FD.FileName.LastIndexOf("\") + 1)
+      Dim extension = FileName.Substring(FileName.LastIndexOf("."))
+      NewContent.Name = FileName.Substring(0, FileName.LastIndexOf("."))
+      NewContent.Value = FileIO.FileSystem.ReadAllText(FD.FileName)
+      Select Case extension.ToLower
+        Case ".htm"
+          MsgBox("htm files have not been coded yet, Sorry", MsgBoxStyle.Information, "Not Coded Yet")
+        Case ".html"
+          MsgBox("html files have not been coded yet, Sorry", MsgBoxStyle.Information, "Not Coded Yet")
+        Case ".rtf"
+          Dim Newindex As Integer = 0
+          If CC.CreateContent(NewContent) Then
+            If Not IsNothing(CC.Content) Then Newindex = CC.Content.Length
+            ReDim Preserve CC.Content(Newindex)
+            CC.Content(Newindex) = NewContent
+            DrawContent(CC.Content(Newindex).ID)
+          End If
+        Case Else
+          MsgBox("Not sure how you got here but this is a invalid File Type.", MsgBoxStyle.Critical, "Invalid File Type")
+      End Select
+    End If
+  End Sub
+
+  Private Sub cbo_ContentFiles_Click(sender As Object, e As EventArgs) Handles cbo_ContentFiles.Click
+  End Sub
+  Private Sub cbo_ContentFiles_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbo_ContentFiles.SelectedIndexChanged
+    If ControlsActive Then
+      Dim Obj_Combo As ToolStripComboBox = CType(sender, ToolStripComboBox)
+      If Not IsNothing(Obj_Combo.SelectedItem) Then
+        Dim Obj_Value As Integer = CInt(CType(Obj_Combo.SelectedItem, ValueDescriptionPair).Value)
+        Dim Index As Integer = CC.GetContentlistIndex(Obj_Value)
+        If Index > default_Int Then
+          RichTextBox.Rtf = CC.Content(Index).Value
+        Else
+          RichTextBox.Text = ""
+        End If
+      End If
+    End If
+  End Sub
+  Sub Drawpromo(Optional ThisID As Integer = default_Int)
+  End Sub
+  Sub DrawContent(Optional ThisID As Integer = default_Int)
+    If Not IsNothing(CC.Content) Then ThisID = CC.Content(0).ID
+    FillContent(cbo_ContentFiles, CC.Content, ThisID)
+    FillClipList(lst_Clip)
+    RichTextBox.Enabled = ThisID <> default_Int
+    lst_Clip.Enabled = ThisID <> default_Int
+    mnu_RTF_DeleteMenu.Enabled = ThisID <> default_Int
+    mnu_RTF_Save.Enabled = ThisID <> default_Int
+    If ThisID = default_Int Then RichTextBox.Text = ""
+  End Sub
+
+  Private Sub lst_Clip_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles lst_Clip.MouseDoubleClick
+    If ControlsActive Then
+
+    End If
+  End Sub
+  Private Sub lst_Clip_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lst_Clip.SelectedIndexChanged
+    If ControlsActive Then
+
+    End If
   End Sub
 End Class

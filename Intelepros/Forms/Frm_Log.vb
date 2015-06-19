@@ -35,4 +35,19 @@ Public Class Frm_Log
     Dim regKey As New RegEdit(AppName)
     regKey.SetAppValue("StartLogOpen", mnu_ToggleAutoLaunch.Checked)
   End Sub
+  Dim selectedString As String = ""
+  Public WithEvents TextBox As New Frm_TextEdit
+  Private Sub List_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles List.MouseDoubleClick
+    If ControlsActive Then
+      TextBox = New Frm_TextEdit
+      TextBox.txt.Text = selectedString
+      TextBox.Show()
+    End If
+  End Sub
+
+  Private Sub List_SelectedIndexChanged(sender As Object, e As EventArgs) Handles List.SelectedIndexChanged
+    If ControlsActive Then
+      selectedString = DirectCast(sender, System.Windows.Forms.ListBox).Text
+    End If
+  End Sub
 End Class

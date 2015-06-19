@@ -1,8 +1,10 @@
 ﻿Imports UniBase
+Imports UniBase.Class_Main
+
 Public Class Frm_OpRecord
   WithEvents popup As Popup
   WithEvents MasterDates As New ctl_DateTime
-  Private DataRecord As Class_CallCenter.Type_ContactRecord
+  Private DataRecord As Type_ContactRecord
 
 
 
@@ -155,17 +157,17 @@ Public Class Frm_OpRecord
       If Not IsNothing(.Booking) Then
         With .Booking(DataRecord.BookingIndex).Booking
           Dim Statusindex = CC.GetStatuslistIndex(.StatusID)
-          FillLocations(cbo_Location, CC.LocationList, .LocationID)
-          CC.initShowTimes(.LocationID, Refresh)
+          FillLocations(cbo_Location, CC.LocationList, .Location.ID)
+          CC.initShowTimes(.Location.ID, Refresh)
 
 
 
 
           CC.initStatus(Refresh)
-          If .LocationID > default_Int Then
-            CC.initStatusSP(.LocationID, Refresh)
-            FillDate(MasterDates, CC.LocationList(CC.GetLocationlistIndex(.LocationID)).ShowTimes)
-            Dim Index As Integer = CC.GetLocationlistIndex(.LocationID)
+          If .Location.ID > default_Int Then
+            CC.initStatusSP(.Location.ID, Refresh)
+            FillDate(MasterDates, CC.LocationList(CC.GetLocationlistIndex(.Location.ID)).ShowTimes)
+            Dim Index As Integer = CC.GetLocationlistIndex(.Location.ID)
             FillStatus(cbo_Status, CC.Status, .StatusID, CC.LocationList(Index).Status)
           Else
             FillDate(MasterDates, Nothing)
@@ -187,7 +189,7 @@ Public Class Frm_OpRecord
           FillGifts(DataRecord.BookingIndex)
 
           txt_BookNotes.Text = .Notes
-          Dim HasLocation As Boolean = .LocationID > default_Int
+          Dim HasLocation As Boolean = .Location.ID > default_Int
           Dim HasAppt As Boolean = .Appt <> New Date
           Dim HasStat As Boolean = .StatusID > default_Int
           Dim HasConf As Boolean = .ConfirmerID > default_Int
@@ -229,31 +231,31 @@ Public Class Frm_OpRecord
           End If
         End If
         Me.Text = LockedText & FormatPhoneNumber(.Contact.Telephone) & " " & .Contact.PL_Name & ", " & .Contact.PF_Name
-          'Table_Contact.row()
+        'Table_Contact.row()
 
 
         'cbo_NavLocation.Items.Clear()
-          'Dim selectedIndex As Integer = default_Int, CurrentItem As Integer = 0
+        'Dim selectedIndex As Integer = default_Int, CurrentItem As Integer = 0
 
-          'For Each item As UniBase.Class_CallCenter.Type_ContactBooking In .Booking
-          '  cbo_NavLocation.Items.Add(New ValueDescriptionPair(item.Index, item.Booking.Location.Name))
-          '  If DataRecord.BookingIndex = item.Index Then selectedIndex = CurrentItem
-          '  CurrentItem += 1
-          'Next
-          'cbo_NavLocation.SelectedIndex = selectedIndex
+        'For Each item As UniBase.Class_CallCenter.Type_ContactBooking In .Booking
+        '  cbo_NavLocation.Items.Add(New ValueDescriptionPair(item.Index, item.Booking.Location.Name))
+        '  If DataRecord.BookingIndex = item.Index Then selectedIndex = CurrentItem
+        '  CurrentItem += 1
+        'Next
+        'cbo_NavLocation.SelectedIndex = selectedIndex
 
 
-          'cbo_NavLocation.SelectedIndex = DataRecord.BookingIndex
-          'cbo_NavLocation.Enabled = (.Booking.Length > 1)
-          'cmd_NavBack.Enabled = (DataRecord.BookingIndex <> 0)
-          'cmd_NavNext.Enabled = (DataRecord.BookingIndex <> (.Booking.Length - 1))
-          'tbl_Booking.Visible = True
-        Else
-          'cbo_NavLocation.Enabled = False
-          ' cmd_NavBack.Enabled = False
-          'cmd_NavNext.Enabled = False
-          'tbl_Booking.Visible = True
-        End If
+        'cbo_NavLocation.SelectedIndex = DataRecord.BookingIndex
+        'cbo_NavLocation.Enabled = (.Booking.Length > 1)
+        'cmd_NavBack.Enabled = (DataRecord.BookingIndex <> 0)
+        'cmd_NavNext.Enabled = (DataRecord.BookingIndex <> (.Booking.Length - 1))
+        'tbl_Booking.Visible = True
+      Else
+        'cbo_NavLocation.Enabled = False
+        ' cmd_NavBack.Enabled = False
+        'cmd_NavNext.Enabled = False
+        'tbl_Booking.Visible = True
+      End If
     End With
     ControlsActive = TempControlsActive
   End Sub
@@ -290,10 +292,10 @@ Public Class Frm_OpRecord
     FocusIt.Focus()
     Application.DoEvents()
   End Sub
- 
 
 
-  Public Sub LoadRecord(Record As Class_CallCenter.Type_ContactRecord)
+
+  Public Sub LoadRecord(Record As Type_ContactRecord)
     ControlsActive = False
     'ViewTab(Tabs.None)
     DataRecord = Record
@@ -313,7 +315,7 @@ Public Class Frm_OpRecord
       SetControlsBG(Me, System.Drawing.SystemColors.Window)
       FillBooking(True)
     End With
- 
+
     tel_Phone.Focus()
     ControlsActive = True
     Application.DoEvents()

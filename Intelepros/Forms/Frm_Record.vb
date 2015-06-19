@@ -1,12 +1,14 @@
 ﻿'Imports System.Windows.Forms
 Imports UniBase
+Imports UniBase.Class_Main
+
 'Imports Intelepros.IntegerExtensions
 
 Public Class Frm_Record
   WithEvents popup As Popup
   WithEvents MasterDates As New ctl_DateTime
 
-  Private DataRecord As Class_CallCenter.Type_ContactRecord
+  Private DataRecord As Type_ContactRecord
 
   Private Sub Frm_Record_DragDrop(sender As Object, e As DragEventArgs) Handles Me.DragDrop
     Beep()
@@ -102,11 +104,11 @@ Public Class Frm_Record
   Private Sub mnu_NewRecord_Click(sender As Object, e As EventArgs) Handles mnu_NewRecord.Click, cmd_NextCall.Click
     Dim BookingOK As Boolean = OkToLeaveBooking(Me, DataRecord)
 
-      FocusIt.Focus()
-      Application.DoEvents()
+    FocusIt.Focus()
+    Application.DoEvents()
 
-      OpenNewRecord()
-      NextCall()
+    OpenNewRecord()
+    NextCall()
   End Sub
   Private Sub cmd_Close_Click(sender As Object, e As EventArgs) Handles cmd_Close.Click
     NextCall()
@@ -153,13 +155,13 @@ Public Class Frm_Record
     End With
     Application.DoEvents()
   End Sub
-  Public Sub BookingEnabled(Booking As Class_CallCenter.Type_Booking)
+  Public Sub BookingEnabled(Booking As Type_Booking)
     Dim CanEdit As Boolean = True, IsNQ As Boolean = False
     With Booking
       Dim Statusindex = CC.GetStatuslistIndex(.StatusID)
       If Statusindex > default_Int Then IsNQ = CC.Status(Statusindex).IsNQ
 
-      Dim HasLocation As Boolean = .LocationID > default_Int
+      Dim HasLocation As Boolean = .Location.ID > default_Int
       Dim HasAppt As Boolean = .Appt <> New Date
       Dim HasStat As Boolean = .StatusID > default_Int
       Dim HasConf As Boolean = .ConfirmerID > default_Int
@@ -203,7 +205,7 @@ Public Class Frm_Record
     End If
     Me.Text = LockedText & FormatPhoneNumber(DataRecord.Contact.Telephone) & " " & DataRecord.Contact.PL_Name & ", " & DataRecord.Contact.PF_Name
   End Sub
-  Public Sub LoadRecord(Record As Class_CallCenter.Type_ContactRecord)
+  Public Sub LoadRecord(Record As Type_ContactRecord)
     ControlsActive = False
     'ViewTab(Tabs.None)
     DataRecord = Record
@@ -248,8 +250,8 @@ Public Class Frm_Record
     With DataRecord
       If Not IsNothing(.Booking) Then
         With .Booking(DataRecord.BookingIndex).Booking
-          FillLocations(cbo_Location, CC.LocationList, .LocationID)
-          CC.initShowTimes(.LocationID)
+          FillLocations(cbo_Location, CC.LocationList, .Location.ID)
+          CC.initShowTimes(.Location.ID)
 
           FillStaff(cbo_Booker, CC.StaffList, .BookerID, "Select Bookers's Name")
           FillStaff(cbo_Confirmer, CC.StaffList, .ConfirmerID, "Select Confirmer's Name")
@@ -257,10 +259,10 @@ Public Class Frm_Record
 
           CC.initStatus(Refresh)
           CC.initNQReason(Refresh)
-          If .LocationID > default_Int Then
-            CC.initStatusSP(.LocationID, Refresh)
-            FillDate(MasterDates, CC.LocationList(CC.GetLocationlistIndex(.LocationID)).ShowTimes)
-            Dim Index As Integer = CC.GetLocationlistIndex(.LocationID)
+          If .Location.ID > default_Int Then
+            CC.initStatusSP(.Location.ID, Refresh)
+            FillDate(MasterDates, CC.LocationList(CC.GetLocationlistIndex(.Location.ID)).ShowTimes)
+            Dim Index As Integer = CC.GetLocationlistIndex(.Location.ID)
             FillStatus(cbo_Status, CC.Status, .StatusID, CC.LocationList(Index).Status)
           Else
             FillDate(MasterDates, Nothing)
@@ -307,7 +309,7 @@ Public Class Frm_Record
         cbo_NavLocation.Items.Clear()
         Dim selectedIndex As Integer = default_Int, CurrentItem As Integer = 0
 
-        For Each item As UniBase.Class_CallCenter.Type_ContactBooking In .Booking
+        For Each item As Type_ContactBooking In .Booking
           cbo_NavLocation.Items.Add(New ValueDescriptionPair(item.Index, item.Booking.Location.Name))
           If DataRecord.BookingIndex = item.Index Then selectedIndex = CurrentItem
           CurrentItem += 1
@@ -412,7 +414,7 @@ Public Class Frm_Record
       regKey.GetSavedFormLocation(Me, RegEdit.Enum_FormPos.Size)
     End If
 
-    mnu_Admin.Visible = CC.CurStaff.AccessLevel = Class_CallCenter.enum_AccessLevel.Admin
+    mnu_Admin.Visible = CC.CurStaff.AccessLevel = enum_AccessLevel.Admin
     mnu_DeleteContact.Visible = CC.CurStaff.Rights.DeleteRecords
     mnu_DeleteBooking.Visible = CC.CurStaff.Rights.DeleteRecords
     regKey.Close()
@@ -594,7 +596,7 @@ Public Class Frm_Record
       End If
     End If
   End Sub
-  Public Sub RemoveBookingItem(ByRef Items() As Class_CallCenter.Type_ContactBooking, Indextoremove As Integer)
+  Public Sub RemoveBookingItem(ByRef Items() As Type_ContactBooking, Indextoremove As Integer)
     If Indextoremove <= UBound(Items) Then
       For i = (Indextoremove + 1) To UBound(Items)
         Items(i - 1) = Items(i)
@@ -610,5 +612,9 @@ Public Class Frm_Record
         End If
       End If
     End If
+  End Sub
+
+  Private Sub mnu_SendConfirmation_Click(sender As Object, e As EventArgs) Handles mnu_SendConfirmation.Click
+    SendContent(DataRecord)
   End Sub
 End Class

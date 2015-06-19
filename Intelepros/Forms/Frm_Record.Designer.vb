@@ -103,6 +103,8 @@ Partial Class Frm_Record
     Me.cmd_DeleteContact = New System.Windows.Forms.ToolStripMenuItem()
     Me.mnu_DeleteBooking = New System.Windows.Forms.ToolStripMenuItem()
     Me.cmd_DeleteBooking = New System.Windows.Forms.ToolStripMenuItem()
+    Me.mnu_Send = New System.Windows.Forms.ToolStripDropDownButton()
+    Me.mnu_SendConfirmation = New System.Windows.Forms.ToolStripMenuItem()
     Me.ToolStripOuterContainer = New System.Windows.Forms.ToolStripContainer()
     Me.StatusStrip = New System.Windows.Forms.StatusStrip()
     Me.lbl_Status = New System.Windows.Forms.ToolStripStatusLabel()
@@ -903,7 +905,7 @@ Partial Class Frm_Record
     Me.mnu_ToolStrip.BackColor = System.Drawing.SystemColors.ButtonFace
     Me.mnu_ToolStrip.Dock = System.Windows.Forms.DockStyle.None
     Me.mnu_ToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-    Me.mnu_ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_Contact, Me.mnu_Booking, Me.cmd_NavNext, Me.cbo_NavLocation, Me.cmd_NavBack, Me.mnu_Separator, Me.mnu_Admin})
+    Me.mnu_ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_Contact, Me.mnu_Booking, Me.cmd_NavNext, Me.cbo_NavLocation, Me.cmd_NavBack, Me.mnu_Separator, Me.mnu_Admin, Me.mnu_Send})
     Me.mnu_ToolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
     Me.mnu_ToolStrip.Location = New System.Drawing.Point(0, 0)
     Me.mnu_ToolStrip.Name = "mnu_ToolStrip"
@@ -1080,6 +1082,24 @@ Partial Class Frm_Record
     Me.cmd_DeleteBooking.Name = "cmd_DeleteBooking"
     Me.cmd_DeleteBooking.Size = New System.Drawing.Size(313, 22)
     Me.cmd_DeleteBooking.Text = "Yes, Really I don't know why it's here anyway!"
+    '
+    'mnu_Send
+    '
+    Me.mnu_Send.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+    Me.mnu_Send.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+    Me.mnu_Send.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_SendConfirmation})
+    Me.mnu_Send.Image = Global.Intelepros.My.Resources.Resources.email_go
+    Me.mnu_Send.ImageTransparentColor = System.Drawing.Color.Magenta
+    Me.mnu_Send.Name = "mnu_Send"
+    Me.mnu_Send.Size = New System.Drawing.Size(29, 22)
+    Me.mnu_Send.Text = "ToolStripButton1"
+    '
+    'mnu_SendConfirmation
+    '
+    Me.mnu_SendConfirmation.Image = Global.Intelepros.My.Resources.Resources.email
+    Me.mnu_SendConfirmation.Name = "mnu_SendConfirmation"
+    Me.mnu_SendConfirmation.Size = New System.Drawing.Size(207, 22)
+    Me.mnu_SendConfirmation.Text = "Send Confirmation Letter"
     '
     'ToolStripOuterContainer
     '
@@ -1299,4 +1319,6 @@ Partial Class Frm_Record
   Friend WithEvents cmd_DisableLock As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents cbo_NQReason As System.Windows.Forms.ComboBox
   Friend WithEvents Label20 As System.Windows.Forms.Label
+  Friend WithEvents mnu_Send As System.Windows.Forms.ToolStripDropDownButton
+  Friend WithEvents mnu_SendConfirmation As System.Windows.Forms.ToolStripMenuItem
 End Class

@@ -2,6 +2,23 @@
 
 Public Class Frm_Main
   Dim Hidden As Boolean = False
+  Protected Overrides Sub WndProc(ByRef m As Message)
+    If m.Msg = NativeMethods.WM_SHOWME Then
+      ShowMe()
+    End If
+    MyBase.WndProc(m)
+  End Sub
+  Private Sub ShowMe()
+    If WindowState = FormWindowState.Minimized Then
+      WindowState = FormWindowState.Normal
+    End If
+    ' get our current "TopMost" value (ours will always be false though)
+    Dim top As Boolean = TopMost
+    ' make our form jump to the top of everything
+    TopMost = True
+    ' set it back to whatever it was
+    TopMost = top
+  End Sub
 #Region "Events"
   Protected Overrides Sub SetVisibleCore(ByVal value As Boolean)
     If Not Me.IsHandleCreated Then
@@ -51,8 +68,8 @@ Public Class Frm_Main
       cmd_Log.Visible = .EditSettings
 
 
-      mnu_SnoopMySQL.Visible = CC.CurStaff.AccessLevel = UniBase.Class_CallCenter.enum_AccessLevel.Admin
-      cmd_SnoopMySQL.Visible = CC.CurStaff.AccessLevel = UniBase.Class_CallCenter.enum_AccessLevel.Admin
+      mnu_SnoopMySQL.Visible = CC.CurStaff.AccessLevel = enum_AccessLevel.Admin
+      cmd_SnoopMySQL.Visible = CC.CurStaff.AccessLevel = enum_AccessLevel.Admin
     End With
     If Not CC.CurStaff.Rights.SimpleUI Then Me.Show()
     TrayIcon.ShowBalloonTip(5000, "Call Center Loaded", "Right Click this Icon to get started", ToolTipIcon.Info)

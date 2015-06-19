@@ -89,11 +89,10 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Class_Background.vb" />
     <Compile Include="Classes\Class_DataManager.vb" />
+    <Compile Include="Classes\Class_Main.vb" />
     <Compile Include="Classes\Class_MySQL.vb" />
-    <Compile Include="Classes\Class_Status.vb">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Modules\Mod_DB.vb" />
     <Compile Include="Modules\Mod_Mail.vb" />
     <Compile Include="Modules\Mod_Main.vb" />

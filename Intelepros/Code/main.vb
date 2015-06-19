@@ -4,10 +4,11 @@ Imports System.Threading
 Imports System.Deployment.Application
 Imports System.Text.RegularExpressions
 Imports UniBase
-Imports UniBase.Class_CallCenter
 Imports UniBase.Class_CDO
 Imports System.Data
 Imports System.Text
+Imports UniBase.Class_Main
+Imports System.Runtime.InteropServices
 
 Public Enum enum_EmpAction
   Booked = 1
@@ -25,7 +26,19 @@ Public Enum enum_AccessLevel
   Confirmer = 4
   OP = 5
 End Enum
-
+Friend Class NativeMethods
+  Public Const HWND_BROADCAST As Integer = &HFFFF
+  Public Shared ReadOnly WM_SHOWME As Integer = RegisterWindowMessage("WM_SHOWME")
+  <DllImport("user32")> _
+  Public Shared Function PostMessage(hwnd As IntPtr, msg As Integer, wparam As IntPtr, lparam As IntPtr) As Boolean
+  End Function
+  <DllImport("user32")> _
+  Public Shared Function PostMessage(hwnd As Integer, msg As Integer, wparam As IntPtr, lparam As IntPtr) As Boolean
+  End Function
+  <DllImport("user32")> _
+  Public Shared Function RegisterWindowMessage(message As String) As Integer
+  End Function
+End Class
 Module Mod_Main
   Public WithEvents FormMain As Frm_Main
   Public WithEvents FormProgress As Frm_Progress
@@ -44,10 +57,8 @@ Module Mod_Main
   Public loggedIn As Boolean = False
   Public UserSelectedindex As Integer
   Public Debugmode As Boolean = False
-  Public LookForUpdates As Boolean = True
-  Public LookInterval As Integer = 5
   Public Const AppName As String = "CallCenter"
-  Public WithEvents CC As New Class_CallCenter
+  Public WithEvents CC As New Class_Main
 
   Public BrandName As String = "Intelepros"
   ' Public MDIStyle As Boolean = True
@@ -58,11 +69,65 @@ Module Mod_Main
   Public Const default_Int As Integer = -1
 
   Sub main()
+    If FirstApp("c0a76b5a-12ab-45c5-b9d9-d693faa6e7b9") Then
+      InitSystem()
+    Else
+      MessageBox.Show("The application is already running. Check your task-bar or system trey", "Already running!")
+
+      NativeMethods.PostMessage(NativeMethods.HWND_BROADCAST, NativeMethods.WM_SHOWME, IntPtr.Zero, IntPtr.Zero)
+
+    End If
+  End Sub
+  Function FirstApp() As Boolean
+    Application.EnableVisualStyles()
+    Application.SetCompatibleTextRenderingDefault(False)
+    Dim ok As Boolean
+    Dim m = New System.Threading.Mutex(True, "Application", ok)
+    If Not ok Then
+      'MessageBox.Show("Another instance is already running.", ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString())
+      Return False
+    Else
+      Return True
+    End If
+  End Function
+  <STAThread> _
+  Private Function FirstApp(appGuid As String)
+    Using mutex As New Mutex(False, Convert.ToString("Global\") & appGuid)
+      log("")
+      If Not mutex.WaitOne(0, False) Then
+        MessageBox.Show("Instance already running")
+        Return False
+      End If
+      Return True
+    End Using
+  End Function
+
+  Public LookForUpdates As Boolean = True
+  Public LookInterval As Integer = 5
+  Private LastLookedForUpdate As Integer = 0, LookCount As Integer = 0
+  Private WithEvents TTick As New System.Windows.Forms.Timer
+  Public AppRunning As Boolean = True
+  Public DatabaceConnected As Boolean = False
+  Private Sub Timer_Tick(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TTick.Tick
+    TTick.Stop()
+    If LookForUpdates Then DoLookForUpdates()
+
+    TTick.Start()
+  End Sub
+  Public Sub DoLookForUpdates()
+    If Now.ToString("mm") <> LastLookedForUpdate Then 'Limit to One min
+      LastLookedForUpdate = Now.ToString("mm")
+      LookCount += 1
+      If LookCount >= LookInterval Then
+        log("Looking For Update, I Will Look again in " & LookInterval & " Minutes.")
+        LookCount = 0
+        InstallUpdateSyncWithInfo()
+      End If
+    End If
+  End Sub
+  Public Sub InitSystem()
     'YesterdayDateTime = Now.AddDays(-1).ToString("MM/dd/yyyy") & " 9:00:00 am"
     FormProgress = New Frm_Progress
-
-    'Dim ini As New iniFile("c:\CallCenter.ini")
-
 
     Dim TempCon As New ConnString
     Dim regKey As New RegEdit(AppName)
@@ -78,44 +143,18 @@ Module Mod_Main
       regKey.SetAppValue("StartLogOpen", False)
       OpenLog()
     End If
-    'If Not TempCon.DataSource = "" And DBID = 0 Then ' Upgrade to new data source storage
-    '  DBID = 1
-    '  regKey.reinit() 'clear
-    '  regKey.SetAppValue("DBID", DBID)
-    '  regKey.SetAppValue("debug", Debugmode)
-    '  regKey.SetAppValue("MDIStyle", MDIStyle)
-    '  regKey.SetAppValue("MultiRecord", MultiRecord)
-    '  regKey.SetDatabase(DBID, TempCon.DataSource, TempCon.Database, TempCon.UserName, TempCon.UserPassword)
-
-    'Else
     TempCon = regKey.GetDatabase(DBID, New ConnString With {.DataSource = "intelepros.com",
                                                               .Database = "Callcenter",
                                                               .UserName = "app",
                                                               .UserPassword = "ou812app"})
-    'End If
+
     regKey.SetAppValue("AppName", Application.ProductName & " V" & GetVersion())
     SetConntoString(TempCon)
     ReDim Connection(0) : Connection(0) = TempCon
 
-
-
     regKey.SetAppValue("LookForUpdates", True)
     LookForUpdates = InputVar(regKey.GetAppValue("LookForUpdates", "true").ToString, True)
-
     LookInterval = InputVar(regKey.GetAppValue("LookUpdateInterval", "5").ToString, 5)
-
-
-
-    'With CDO
-    '  .ServerAddr = regKey.GetValue("ServerAddr", "secure.emailsrvr.com").ToString
-    '  .ServerUser = regKey.GetValue("ServerUser", "welcome@contactpros.org").ToString
-    '  .ServerPass = regKey.GetValue("ServerPass", "Harley58").ToString
-    '  .FromAddr = New MessageAddrs With {.EmailAddr = regKey.GetValue("FromEmail", "welcome@contactpros.org").ToString,
-    '                                     .UserName = regKey.GetValue("FromName", "Welcome").ToString,
-    '                                     .EmailReplyTo = regKey.GetValue("ReplyTo", "welcome@contactpros.org").ToString,
-    '                                     .NotificationTo = regKey.GetValue("NotificationTo", "welcome@contactpros.org").ToString}
-
-    'End With
 
     If AskDB Then
       regKey.SetAppValue("AskDB", False)
@@ -125,57 +164,7 @@ Module Mod_Main
     End If
     'FormProgress.ShowMessage(AppName)
     regKey.Close()
-    InitSystem()
-  End Sub
 
-
-  Public Function GetVersion() As String
-    Dim ourVersion As String = String.Empty
-    'if running the deployed application, you can get the version
-    '  from the ApplicationDeployment information. If you try
-    '  to access this when you are running in Visual Studio, it will not work.
-    If System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed Then
-      ourVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString()
-    Else
-      Dim assemblyInfo As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
-      If assemblyInfo IsNot Nothing Then
-        ourVersion = assemblyInfo.GetName().Version.ToString()
-      End If
-    End If
-    Return ourVersion
-  End Function
-
-  '=======================================================
-  'Service provided by Telerik (www.telerik.com)
-  'Conversion powered by NRefactory.
-  'Twitter: @telerik
-  'Facebook: facebook.com/telerik
-  '=======================================================
-
-
-
-
-  Public AppRunning As Boolean = True
-  Public DatabaceConnected As Boolean = False
-  Private Sub KeepAlive()
-    Dim LastLookedForUpdate As Integer = 0, LookCount As Integer = 0
-    Do While AppRunning
-      Application.DoEvents()
-      If LookForUpdates Then
-        If Now.ToString("mm") <> LastLookedForUpdate Then
-          LastLookedForUpdate = Now.ToString("mm")
-          LookCount += 1
-          If LookCount >= LookInterval Then
-            log("Looking For Update, I Will Look again in " & LookInterval & " Minutes.")
-            LookCount = 0
-            InstallUpdateSyncWithInfo()
-          End If
-        End If
-      End If
-    Loop
-  End Sub
-  Public Sub InitSystem()
-    Dim regKey As New RegEdit(AppName)
 Start:
     If Not IsNothing(FormMain) Then FormMain.Hide()
     loggedIn = False
@@ -217,8 +206,19 @@ Start:
       End If
     End If
     regKey.Close()
+    TTick.Interval = 1000
+    TTick.Enabled = True
     KeepAlive()
   End Sub
+ 
+  Private Sub KeepAlive()
+    Do While AppRunning
+      Application.DoEvents()
+      'Threading.Thread.Sleep(10000)
+      System.Threading.Thread.Sleep(50)
+    Loop
+  End Sub
+
   Public Function InitTables() As Boolean
     FormProgress.ShowProgress(1, "Loading Server List", 10)
     If CC.LoadServerList() Then
@@ -247,9 +247,10 @@ Start:
       FormProgress.ShowProgress(9, "Loading Gift List")
       CC.initGifts()
 
-      FormProgress.ShowProgress(10, "Loading Settings")
-      'CC.initIncome()
+      FormProgress.ShowProgress(10, "Loading Content")
+      CC.GetContentList()
       'CC.initMarital()
+
 
       FormProgress.Hide()
       DatabaceConnected = True
@@ -259,6 +260,21 @@ Start:
       'MessageBox.Show("Can Not Connect To Database!")
     End If
     Return DatabaceConnected
+  End Function
+  Public Function GetVersion() As String
+    Dim ourVersion As String = String.Empty
+    'if running the deployed application, you can get the version
+    '  from the ApplicationDeployment information. If you try
+    '  to access this when you are running in Visual Studio, it will not work.
+    If System.Deployment.Application.ApplicationDeployment.IsNetworkDeployed Then
+      ourVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString()
+    Else
+      Dim assemblyInfo As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+      If assemblyInfo IsNot Nothing Then
+        ourVersion = assemblyInfo.GetName().Version.ToString()
+      End If
+    End If
+    Return ourVersion
   End Function
 
 
@@ -334,13 +350,13 @@ Start:
 
 
   Sub OpenRecord()
-    Dim TempRecord As New Class_CallCenter.Type_ContactRecord
+    Dim TempRecord As New Type_ContactRecord
     With TempRecord
       .Contact.Telephone = ""
     End With
     OpenRecord(TempRecord)
   End Sub
-  Sub OpenRecord(TempRecord As Class_CallCenter.Type_ContactRecord, Optional SimpleUI As Boolean = False)
+  Sub OpenRecord(TempRecord As Type_ContactRecord, Optional SimpleUI As Boolean = False)
     CloseNewRecordTools()
 
 
@@ -348,6 +364,7 @@ Start:
       If IsNothing(OpRecord) Then
         OpRecord = New Frm_OpRecord
       Else
+        OpRecord.Dispose()
         OpRecord = Nothing
         OpRecord = New Frm_OpRecord
       End If
@@ -376,7 +393,7 @@ Start:
 
 
   Public Function OpenRecord(RecordPhone As String, Optional ClaimNumber As String = "") As Boolean
-    Dim DataRecord As New Class_CallCenter.Type_ContactRecord, RecordExists As Boolean = False
+    Dim DataRecord As New Type_ContactRecord, RecordExists As Boolean = False
     Dim ClaimUsed As Boolean = False
     FormProgress.ShowMessage("Searching For Telephone.")
     '--------------------------------------------------------
@@ -388,7 +405,7 @@ Start:
       With DataRecord
         'Check if This Contact has Claim Already
         If ClaimNumber.Length > 0 And Not IsNothing(.Booking) Then
-          For Each Booking As Class_CallCenter.Type_ContactBooking In DataRecord.Booking
+          For Each Booking As Type_ContactBooking In DataRecord.Booking
             If Booking.Booking.ClaimNumber = ClaimNumber Then
               ClaimUsed = True
               DataRecord.BookingIndex = Booking.Index
@@ -398,7 +415,7 @@ Start:
       End With
     End If
     '--------------------------------------------------------
-    Dim ClaimRecord As New Class_CallCenter.Type_ContactRecord,ClaimFoumd As Boolean = False
+    Dim ClaimRecord As New Type_ContactRecord, ClaimFoumd As Boolean = False
     ClaimRecord.Contact.Telephone = RecordPhone
     If ClaimNumber.Length > 0 Then
       FormProgress.ShowMessage("Searching For ClaimNumber.")
@@ -441,7 +458,7 @@ Start:
       '=============================================================================
       If ClaimFoumd Then
         'XXXXXX  New Record - Promo available for use XXXXXXXXXXXX
-        If CC.CreateContact(ClaimRecord) Then
+        If CC.CreateContact(ClaimRecord) Then '*********************************************************
           With ClaimRecord.Promo
             CC.InitNewBooking(ClaimRecord, CC.CurStaff.ID, False, .ClaimNumber, .Location.Name, .Location.ID)
           End With
@@ -458,7 +475,7 @@ Start:
           DoOpenRecord = CC.CreateContactQuestion(ClaimRecord)
         End If
         If DoOpenRecord Then
-          If CC.CreateContact(ClaimRecord) Then
+          If CC.CreateContact(ClaimRecord) Then '*********************************************************
             CC.InitNewBooking(ClaimRecord, CC.CurStaff.ID, False)
           Else
 
@@ -466,7 +483,7 @@ Start:
         End If
       End If
       If DoOpenRecord Then OpenRecord(ClaimRecord)
-        '=============================================================================
+      '=============================================================================
     End If
     Return DoOpenRecord
   End Function
@@ -479,7 +496,7 @@ Start:
   ''' <remarks></remarks>
   Public Function OpenRecord(ContactID As Integer, Optional BookingID As Integer = default_Int) As Boolean
     Dim RecordExists As Boolean = False
-    Dim DataRecord As New Class_CallCenter.Type_ContactRecord
+    Dim DataRecord As New Type_ContactRecord
     FormProgress.ShowMessage("Loading Contact.")
     RecordExists = CC.FindRecord(DataRecord, ContactID)
     If RecordExists Then
@@ -575,12 +592,31 @@ Start:
   Sub UpdateContact(ByRef DataRecord As Type_ContactRecord, ThisForm As Form, FormField As TypeFormField)
     With DataRecord.Contact
       FormField.FieldMessage = ""
+      FormField.MessageType = EnumMessageType.Status
       Dim obj As Object = getControlFromName(ThisForm, FormField.ControlName)
+      Dim NoChange As Boolean = True
       Select Case FormField.ControlName
         Case "tel_Phone"
           Dim ctlTel As ctl_Phone = CType(obj, ctl_Phone)
           If ctlTel.IsValid Then
-            FormField.OldValue = .Telephone : .Telephone = FormField.NewValue : FormField.FieldName = "Telephone"
+            NoChange = (.Telephone = FormField.NewValue)
+            If Not NoChange Then
+              Dim Exists As Boolean = CC.FindRecord(FormField.NewValue)
+              If Exists Then
+                FormField.MessageType = EnumMessageType.Confirm
+                FormField.FieldMessage = "That number already exists. Would you like to open that record?"
+                SetFieldText(ThisForm, FormField, .Telephone)
+              Else
+                FormField.OldValue = .Telephone : .Telephone = FormField.NewValue : FormField.FieldName = "Telephone"
+              End If
+            Else
+              FormField.OldValue = FormField.NewValue
+            End If
+
+
+
+
+
           Else
             FormField.FieldMessage = "Invalid Phone Number"
           End If
@@ -605,6 +641,7 @@ Start:
         Case Else
       End Select
     End With
+    FormField.OkToWrite = (FormField.OldValue <> FormField.NewValue) And (FormField.FieldMessage.Length = 0)
     FormField.FieldType = EnumFieldType.Contact
     SaveField(DataRecord, ThisForm, FormField)
   End Sub
@@ -629,7 +666,7 @@ Start:
         Case "cbo_Location"
           Dim ProjIndex As Integer = CC.GetLocationlistIndex(FormField.NewValue)
           If ProjIndex > default_Int Then
-            FormField.OldValue = .LocationID : .LocationID = FormField.NewValue : FormField.FieldName = "LocationID"
+            FormField.OldValue = .Location.ID : .Location.ID = FormField.NewValue : FormField.FieldName = "LocationID"
             .Location.Name = CC.LocationList(ProjIndex).Name
           Else
             FormField.FieldMessage = "Invalid Selection"
@@ -710,6 +747,7 @@ Start:
       End Select
       FormField.FieldType = EnumFieldType.Booking
       If DoSave Then
+        FormField.OkToWrite = (FormField.OldValue <> FormField.NewValue) And (FormField.FieldMessage.Length = 0)
         If SaveField(DataRecord, ThisForm, FormField) Then
           CC.LoadBookingHistory(DataRecord, DataRecord.BookingIndex)
           If Not IsNothing(History) Then
@@ -732,9 +770,8 @@ Start:
   Function SaveField(ByRef DataRecord As Type_ContactRecord, ThisForm As Form, FormField As TypeFormField) As Boolean
     Dim UpdateHist As Boolean = False
     Dim TempControlsActive = ControlsActive : ControlsActive = False
-    Dim OkToWrite As Boolean = (FormField.OldValue <> FormField.NewValue) And (FormField.FieldMessage.Length = 0)
 
-    If OkToWrite Then
+    If FormField.OkToWrite Then
       Field_Status(ThisForm, "Saving " & FormField.FieldName)
       If WriteUpdate(DataRecord, FormField) Then
         Field_Status(ThisForm, FormField.FieldName & " Saved.")
@@ -746,9 +783,15 @@ Start:
       End If
     Else
       If FormField.FieldMessage.Length > 0 Then
-        Field_Status(ThisForm, FormField.FieldMessage)
-        colorField(ThisForm, FormField, Color.FromArgb(255, 255, 128)).focus()
-
+        Select Case FormField.MessageType
+          Case EnumMessageType.Status
+            Field_Status(ThisForm, FormField.FieldMessage)
+            colorField(ThisForm, FormField, Color.FromArgb(255, 255, 128)).focus()
+          Case EnumMessageType.Confirm
+            If AskQuestion(FormField.FieldMessage) Then
+              OpenRecord(FormField.NewValue)
+            End If
+        End Select
       Else
         Field_Status(ThisForm, "No change to: " & FormField.FieldName & ".")
         colorField(ThisForm, FormField, Color.FromArgb(255, 255, 255))
@@ -779,30 +822,6 @@ Start:
   Function colorField(ByRef ThisForm As Form, FormField As TypeFormField, NewColor As Color) As Object
     Dim Obj As Object = getControlFromName(ThisForm, FormField.ControlName)
     If Not IsNothing(Obj) Then SetControlBG(Obj, NewColor)
-    'Try
-    '  Select Case FormField.ControlName.Substring(0, 3)
-    '    Case "tel"
-    '      Dim txt As ctl_Phone = CType(Obj, ctl_Phone)
-    '      txt.BackColor = NewColor
-    '    Case "lbl"
-    '      Dim lbl As Label = CType(Obj, Label)
-    '      lbl.BackColor = NewColor
-    '    Case "txt"
-    '      Dim txt As TextBox = CType(Obj, TextBox)
-    '      txt.BackColor = NewColor
-    '    Case "cbo"
-    '      Dim txt As ComboBox = CType(Obj, ComboBox)
-    '      txt.BackColor = NewColor
-    '    Case "dat"
-    '      Dim txt As DateTimePicker = CType(Obj, DateTimePicker)
-    '      txt.BackColor = NewColor
-    '    Case "Ctl"
-    '      Dim txt As ctl_MasterCal = CType(Obj, ctl_MasterCal)
-    '      txt.BackColor = NewColor
-    '  End Select
-    'Catch ex As Exception
-    '  log(ex.ToString)
-    'End Try
     Application.DoEvents()
     Return Obj
   End Function
@@ -835,6 +854,42 @@ Start:
     End Try
     Return Obj
   End Function
+  Function SetFieldText(ByRef ThisForm As Form, FormField As TypeFormField, NewText As String) As Object
+    Dim Obj As Object = getControlFromName(ThisForm, FormField.ControlName)
+    If Not IsNothing(Obj) Then SetControlText(Obj, NewText)
+    Application.DoEvents()
+    Return Obj
+  End Function
+  Function SetControlText(ByRef Obj As Object, NewText As String, Optional includeLable As Boolean = False) As Object
+    Try
+      Select Case Obj.GetType()
+        Case GetType(ctl_Phone)
+          Dim txt As ctl_Phone = CType(Obj, ctl_Phone)
+          txt.Text = NewText
+        Case GetType(Label)
+          If includeLable Then
+            Dim lbl As Label = CType(Obj, Label)
+            lbl.Text = NewText
+          End If
+        Case GetType(TextBox)
+          Dim txt As TextBox = CType(Obj, TextBox)
+          txt.Text = NewText
+        Case GetType(ComboBox)
+          Dim txt As ComboBox = CType(Obj, ComboBox)
+          txt.Text = NewText
+        Case GetType(DateTimePicker)
+          Dim txt As DateTimePicker = CType(Obj, DateTimePicker)
+          txt.Text = NewText
+        Case GetType(ctl_MasterCal)
+          Dim txt As ctl_MasterCal = CType(Obj, ctl_MasterCal)
+          txt.Value = NewText
+      End Select
+    Catch ex As Exception
+      log(ex.ToString)
+    End Try
+    Return Obj
+  End Function
+
   Function SetControlsBG(ByRef containerObj As Object, NewColor As Color) As Object
     Dim retCtl As Object = Nothing, found As Boolean = True
     Try
@@ -873,7 +928,7 @@ Start:
       With DataRecord.Booking(DataRecord.BookingIndex)
         Dim Exists As Boolean = .Exists
         Dim HasAppt As Boolean = CBool(.Booking.Appt <> default_DateTime)
-        Dim HasLoc As Boolean = CBool(.Booking.LocationID > default_Int)
+        Dim HasLoc As Boolean = CBool(.Booking.Location.ID > default_Int)
         Dim HasStat As Boolean = CBool(.Booking.StatusID > default_Int)
         If HasStat Then
         End If
@@ -906,7 +961,7 @@ Start:
 
     End If
 
-      Return Okay
+    Return Okay
   End Function
 
 
@@ -1019,10 +1074,6 @@ Start:
   End Sub
 
 
-
-
-End Module
-Module ContactManagement
 
 
 End Module
@@ -1469,7 +1520,7 @@ Public Module FillControls
     Property Notes As Boolean = False
 
   End Class
- 
+
   Public Sub FillSearch(thisGrid As DataGridView, SearchResult() As Type_SearchResult, _
                          vc As ViewColumns, Optional SelectedTelephone As String = "")
     'thisGrid.DataSource = Nothing
@@ -1751,22 +1802,80 @@ Public Module FillControls
   End Sub
 
 
+  Sub FillContent(Combo As ToolStripComboBox, ContentList() As Type_Content, Optional ContentID As Integer = default_Int)
+    Combo.Items.Clear()
+    Dim selectedIndex As Integer = default_Int, CurrentItem As Integer = 0
+    If Not IsNothing(ContentList) Then
+      For Each item In ContentList
+        Combo.Items.Add(New ValueDescriptionPair(item.ID, item.Name))
+        If ContentID = item.ID Then selectedIndex = CurrentItem
+        CurrentItem += 1
+      Next
+      Combo.SelectedIndex = selectedIndex
+      Combo.Enabled = True
+    Else
+      Combo.Enabled = False
+    End If
 
+  End Sub
+  Sub FillContent(Combo As ComboBox, ContentList() As Type_Content, Optional ContentID As Integer = default_Int,
+                     Optional SelectText As String = "Select Content")
+    Combo.DataSource = Nothing
+    Combo.Items.Clear()
+    Dim VDP_Array As New ArrayList, selectedIndex As Integer = 0, CurrentItem As Integer = 0
+    VDP_Array.Add(New ValueDescriptionPair(-1, SelectText))
+    If Not IsNothing(ContentList) Then
+      For Each item In ContentList
+        With item
+          VDP_Array.Add(New ValueDescriptionPair(.ID, .Name))
+          If ContentID = .ID Then selectedIndex = CurrentItem
+        End With
+        CurrentItem += 1
+      Next
+      Combo.Enabled = True
+    Else
+      Combo.Enabled = False
+    End If
+    With Combo
+      .DisplayMember = "Description"
+      .ValueMember = "Value"
+      .DataSource = VDP_Array
+      .SelectedIndex = selectedIndex
+    End With
+  End Sub
+  Public Sub FillClipList(ByRef VDP_Array As ArrayList, Types As Type)
+    For Each p As System.Reflection.FieldInfo In Types.GetFields()
+      Select Case p.FieldType.Name
+        Case "String"
+          VDP_Array.Add(New ValueDescriptionPair(CleanCSVString(p.Name), CleanCSVString(p.FieldType.Name) & "-" & CleanCSVString(p.Name)))
+        Case "Type_Contact", "Type_Booking", "Type_Location"
+          FillClipList(VDP_Array, p.FieldType)
+        Case Else
+          log("beep")
+      End Select
 
-  Public Sub FillClipList(List As ListBox)
-    Dim VDP_Array As New ArrayList, selectedIndex As Integer = default_Int
-    Dim heading As Type = GetType(Type_SearchResult), index As Integer = 0
-    For Each p As System.Reflection.FieldInfo In heading.GetFields()
-
-      VDP_Array.Add(New ValueDescriptionPair(CleanCSVString(p.Name), CleanCSVString(p.FieldType.Name) & "-" & CleanCSVString(p.Name)))
-      index += 1
     Next
+  End Sub
+  Public Sub FillClipList(List As ListBox, ByVal VDP_Array As ArrayList)
+    Dim selectedIndex As Integer = default_Int
     With List
       .DisplayMember = "Description"
       .ValueMember = "Value"
       .DataSource = VDP_Array
       .SelectedIndex = selectedIndex
     End With
+  End Sub
+  Public Sub FillClipList(List As ListBox, Optional UseStructure As Boolean = False)
+    Dim VDP_Array As New ArrayList
+
+    If UseStructure Then
+      Dim heading As Type = GetType(Type_SearchResult)
+      FillClipList(VDP_Array, heading)
+    Else
+
+    End If
+
+    FillClipList(List, VDP_Array)
   End Sub
   Public Sub FillLocations(Combo As ComboBox, LocationList() As Type_Location, Optional LocationID As Integer = default_Int,
                           Optional DisplaySelectRequest As Boolean = True, Optional DisplayDefault As Boolean = False)
@@ -1848,6 +1957,24 @@ Public Module FillControls
       .SelectedIndex = selectedIndex
     End With
   End Sub
+  Public Function SendContent(Record As Type_ContactRecord) As Boolean
+    Dim ContentID As Integer = Record.Booking(Record.BookingIndex).Booking.Location.confirmContentID
+    If ContentID > default_Int Then
+      Dim Content As String = CC.Content(ContentID).Value
+      Dim OutStr As String = PopContent(Record, Content)
+    Else
+      MsgBox("Letter not set for this location!", MsgBoxStyle.Information, "Not Set!")
+    End If
+
+    Return False
+  End Function
+  Public Function PopContent(Record As Type_ContactRecord, Content As String) As String
+    'For Each item In ContentClips
+
+    'Next
+    Return ""
+  End Function
+
   'Public Sub FillLocationStatus(Combo As ComboBox, Status As Type_Status, Optional LocationID As Integer = default_Int, Optional StatusID As Integer = default_Int)
   '  Dim Index As Integer = GetLocationlistIndex(LocationID)
 
@@ -2018,9 +2145,9 @@ Public Module FillControls
     If Not IsNothing(NQ) Then
       For Each item In NQ
 
-          VDP_Array.Add(New ValueDescriptionPair(item.ID, item.Name))
+        VDP_Array.Add(New ValueDescriptionPair(item.ID, item.Name))
         If item.ID = NQID Then selectedIndex = CurrentItem
-          CurrentItem += 1
+        CurrentItem += 1
 
         'Combo.Items.Add(item.Name)
       Next

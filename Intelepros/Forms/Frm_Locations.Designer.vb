@@ -28,6 +28,8 @@ Partial Class Frm_Locations
     Me.WhatsThisToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
     Me.ReportAnIssueToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
     Me.tbl_Location = New System.Windows.Forms.TableLayoutPanel()
+    Me.cbo_Confirm = New System.Windows.Forms.ComboBox()
+    Me.Label13 = New System.Windows.Forms.Label()
     Me.Label1 = New System.Windows.Forms.Label()
     Me.txt_Location = New System.Windows.Forms.TextBox()
     Me.Label7 = New System.Windows.Forms.Label()
@@ -38,10 +40,26 @@ Partial Class Frm_Locations
     Me.mnu_Location = New System.Windows.Forms.ToolStripSplitButton()
     Me.mnu_AddNewLocation = New System.Windows.Forms.ToolStripMenuItem()
     Me.EditCitysToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-    Me.mnu_Promo = New System.Windows.Forms.ToolStripSplitButton()
+    Me.mnu_Promo = New System.Windows.Forms.ToolStripButton()
+    Me.mnu_Content = New System.Windows.Forms.ToolStripButton()
     Me.ToolStripContainer1 = New System.Windows.Forms.ToolStripContainer()
     Me.StatusStrip = New System.Windows.Forms.StatusStrip()
     Me.lbl_Status = New System.Windows.Forms.ToolStripStatusLabel()
+    Me.tbl_ContentEdit = New System.Windows.Forms.TableLayoutPanel()
+    Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+    Me.mnu_RTF_Save = New System.Windows.Forms.ToolStripButton()
+    Me.cbo_ContentFiles = New System.Windows.Forms.ToolStripComboBox()
+    Me.mnu_RTF_DeleteMenu = New System.Windows.Forms.ToolStripDropDownButton()
+    Me.DeleteCurrentFileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+    Me.ToolStripButton2 = New System.Windows.Forms.ToolStripDropDownButton()
+    Me.mnu_ImportFile = New System.Windows.Forms.ToolStripMenuItem()
+    Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
+    Me.RichTextBox = New System.Windows.Forms.RichTextBox()
+    Me.mnu_RTF = New System.Windows.Forms.ContextMenuStrip(Me.components)
+    Me.mnu_RTF_Cut = New System.Windows.Forms.ToolStripMenuItem()
+    Me.mnu_RTF_Copy = New System.Windows.Forms.ToolStripMenuItem()
+    Me.mnu_RTF_Paste = New System.Windows.Forms.ToolStripMenuItem()
+    Me.lst_Clip = New System.Windows.Forms.ListBox()
     Me.tbl_PromoSettings = New System.Windows.Forms.TableLayoutPanel()
     Me.FocusIt = New System.Windows.Forms.Button()
     Me.tbl_LocationSettings = New System.Windows.Forms.TableLayoutPanel()
@@ -77,6 +95,9 @@ Partial Class Frm_Locations
     Me.ToolStripContainer1.TopToolStripPanel.SuspendLayout()
     Me.ToolStripContainer1.SuspendLayout()
     Me.StatusStrip.SuspendLayout()
+    Me.tbl_ContentEdit.SuspendLayout()
+    Me.ToolStrip1.SuspendLayout()
+    Me.mnu_RTF.SuspendLayout()
     Me.tbl_LocationSettings.SuspendLayout()
     Me.Panel1.SuspendLayout()
     Me.tbl_StatusEdit.SuspendLayout()
@@ -122,25 +143,54 @@ Partial Class Frm_Locations
     '
     'tbl_Location
     '
-    Me.tbl_Location.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+    Me.tbl_Location.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.tbl_Location.BackColor = System.Drawing.SystemColors.Control
     Me.tbl_Location.ColumnCount = 2
     Me.tbl_Location.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52.0!))
     Me.tbl_Location.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+    Me.tbl_Location.Controls.Add(Me.cbo_Confirm, 1, 2)
+    Me.tbl_Location.Controls.Add(Me.Label13, 0, 2)
     Me.tbl_Location.Controls.Add(Me.Label1, 0, 0)
     Me.tbl_Location.Controls.Add(Me.txt_Location, 1, 0)
     Me.tbl_Location.Controls.Add(Me.Label7, 0, 1)
     Me.tbl_Location.Controls.Add(Me.cbo_City, 1, 1)
-    Me.tbl_Location.Controls.Add(Me.ck_LocEnabled, 1, 2)
+    Me.tbl_Location.Controls.Add(Me.ck_LocEnabled, 1, 3)
     Me.tbl_Location.Location = New System.Drawing.Point(3, 33)
     Me.tbl_Location.Name = "tbl_Location"
-    Me.tbl_Location.RowCount = 3
+    Me.tbl_Location.RowCount = 4
     Me.tbl_Location.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.tbl_Location.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.tbl_Location.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-    Me.tbl_Location.Size = New System.Drawing.Size(256, 74)
+    Me.tbl_Location.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20.0!))
+    Me.tbl_Location.Size = New System.Drawing.Size(256, 102)
     Me.tbl_Location.TabIndex = 20
+    '
+    'cbo_Confirm
+    '
+    Me.cbo_Confirm.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbo_Confirm.CausesValidation = False
+    Me.cbo_Confirm.ContextMenuStrip = Me.HelpMenu
+    Me.cbo_Confirm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_Confirm.IntegralHeight = False
+    Me.cbo_Confirm.Location = New System.Drawing.Point(55, 52)
+    Me.cbo_Confirm.Margin = New System.Windows.Forms.Padding(3, 0, 3, 0)
+    Me.cbo_Confirm.Name = "cbo_Confirm"
+    Me.cbo_Confirm.Size = New System.Drawing.Size(198, 21)
+    Me.cbo_Confirm.TabIndex = 25
+    '
+    'Label13
+    '
+    Me.Label13.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.Label13.AutoSize = True
+    Me.Label13.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.Label13.Location = New System.Drawing.Point(3, 55)
+    Me.Label13.Name = "Label13"
+    Me.Label13.Size = New System.Drawing.Size(46, 15)
+    Me.Label13.TabIndex = 25
+    Me.Label13.Text = "Confirm"
+    Me.Label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight
     '
     'Label1
     '
@@ -193,7 +243,7 @@ Partial Class Frm_Locations
     Me.ck_LocEnabled.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.ck_LocEnabled.ContextMenuStrip = Me.HelpMenu
-    Me.ck_LocEnabled.Location = New System.Drawing.Point(55, 53)
+    Me.ck_LocEnabled.Location = New System.Drawing.Point(55, 78)
     Me.ck_LocEnabled.Name = "ck_LocEnabled"
     Me.ck_LocEnabled.Size = New System.Drawing.Size(198, 19)
     Me.ck_LocEnabled.TabIndex = 24
@@ -217,13 +267,13 @@ Partial Class Frm_Locations
     Me.mnu_ToolStrip.BackColor = System.Drawing.SystemColors.ButtonFace
     Me.mnu_ToolStrip.Dock = System.Windows.Forms.DockStyle.None
     Me.mnu_ToolStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-    Me.mnu_ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_Location, Me.mnu_Promo})
+    Me.mnu_ToolStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_Location, Me.mnu_Promo, Me.mnu_Content})
     Me.mnu_ToolStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
     Me.mnu_ToolStrip.Location = New System.Drawing.Point(0, 0)
     Me.mnu_ToolStrip.Name = "mnu_ToolStrip"
     Me.mnu_ToolStrip.Padding = New System.Windows.Forms.Padding(0)
     Me.mnu_ToolStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.System
-    Me.mnu_ToolStrip.Size = New System.Drawing.Size(1160, 25)
+    Me.mnu_ToolStrip.Size = New System.Drawing.Size(1179, 25)
     Me.mnu_ToolStrip.Stretch = True
     Me.mnu_ToolStrip.TabIndex = 21
     Me.mnu_ToolStrip.Text = "ToolStrip1"
@@ -255,8 +305,16 @@ Partial Class Frm_Locations
     Me.mnu_Promo.Image = Global.Intelepros.My.Resources.Resources.email
     Me.mnu_Promo.ImageTransparentColor = System.Drawing.Color.Magenta
     Me.mnu_Promo.Name = "mnu_Promo"
-    Me.mnu_Promo.Size = New System.Drawing.Size(101, 22)
+    Me.mnu_Promo.Size = New System.Drawing.Size(89, 22)
     Me.mnu_Promo.Text = "&Promotions"
+    '
+    'mnu_Content
+    '
+    Me.mnu_Content.Image = Global.Intelepros.My.Resources.Resources.page_edit
+    Me.mnu_Content.ImageTransparentColor = System.Drawing.Color.Magenta
+    Me.mnu_Content.Name = "mnu_Content"
+    Me.mnu_Content.Size = New System.Drawing.Size(70, 22)
+    Me.mnu_Content.Text = "Content"
     '
     'ToolStripContainer1
     '
@@ -268,14 +326,15 @@ Partial Class Frm_Locations
     'ToolStripContainer1.ContentPanel
     '
     Me.ToolStripContainer1.ContentPanel.BackColor = System.Drawing.SystemColors.AppWorkspace
+    Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.tbl_ContentEdit)
     Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.tbl_PromoSettings)
     Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.FocusIt)
     Me.ToolStripContainer1.ContentPanel.Controls.Add(Me.tbl_LocationSettings)
-    Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1160, 568)
+    Me.ToolStripContainer1.ContentPanel.Size = New System.Drawing.Size(1179, 568)
     Me.ToolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill
     Me.ToolStripContainer1.Location = New System.Drawing.Point(0, 0)
     Me.ToolStripContainer1.Name = "ToolStripContainer1"
-    Me.ToolStripContainer1.Size = New System.Drawing.Size(1160, 615)
+    Me.ToolStripContainer1.Size = New System.Drawing.Size(1179, 615)
     Me.ToolStripContainer1.TabIndex = 22
     Me.ToolStripContainer1.Text = "ToolStripContainer1"
     '
@@ -292,7 +351,7 @@ Partial Class Frm_Locations
     Me.StatusStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow
     Me.StatusStrip.Location = New System.Drawing.Point(0, 0)
     Me.StatusStrip.Name = "StatusStrip"
-    Me.StatusStrip.Size = New System.Drawing.Size(1160, 22)
+    Me.StatusStrip.Size = New System.Drawing.Size(1179, 22)
     Me.StatusStrip.TabIndex = 23
     '
     'lbl_Status
@@ -302,17 +361,155 @@ Partial Class Frm_Locations
     Me.lbl_Status.Size = New System.Drawing.Size(35, 17)
     Me.lbl_Status.Text = "Done"
     '
+    'tbl_ContentEdit
+    '
+    Me.tbl_ContentEdit.BackColor = System.Drawing.SystemColors.Control
+    Me.tbl_ContentEdit.ColumnCount = 2
+    Me.tbl_ContentEdit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+    Me.tbl_ContentEdit.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 147.0!))
+    Me.tbl_ContentEdit.Controls.Add(Me.ToolStrip1, 0, 0)
+    Me.tbl_ContentEdit.Controls.Add(Me.RichTextBox, 0, 1)
+    Me.tbl_ContentEdit.Controls.Add(Me.lst_Clip, 1, 2)
+    Me.tbl_ContentEdit.Location = New System.Drawing.Point(542, 13)
+    Me.tbl_ContentEdit.Margin = New System.Windows.Forms.Padding(0)
+    Me.tbl_ContentEdit.Name = "tbl_ContentEdit"
+    Me.tbl_ContentEdit.RowCount = 3
+    Me.tbl_ContentEdit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+    Me.tbl_ContentEdit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
+    Me.tbl_ContentEdit.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+    Me.tbl_ContentEdit.Size = New System.Drawing.Size(458, 415)
+    Me.tbl_ContentEdit.TabIndex = 24
+    Me.tbl_ContentEdit.Visible = False
+    '
+    'ToolStrip1
+    '
+    Me.tbl_ContentEdit.SetColumnSpan(Me.ToolStrip1, 2)
+    Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_RTF_Save, Me.cbo_ContentFiles, Me.mnu_RTF_DeleteMenu, Me.ToolStripButton2, Me.ToolStripLabel1})
+    Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+    Me.ToolStrip1.Name = "ToolStrip1"
+    Me.ToolStrip1.Size = New System.Drawing.Size(458, 25)
+    Me.ToolStrip1.TabIndex = 1
+    Me.ToolStrip1.Text = "ToolStrip1"
+    '
+    'mnu_RTF_Save
+    '
+    Me.mnu_RTF_Save.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+    Me.mnu_RTF_Save.Image = Global.Intelepros.My.Resources.Resources.disk
+    Me.mnu_RTF_Save.ImageTransparentColor = System.Drawing.Color.Magenta
+    Me.mnu_RTF_Save.Name = "mnu_RTF_Save"
+    Me.mnu_RTF_Save.Size = New System.Drawing.Size(23, 22)
+    Me.mnu_RTF_Save.Text = "ToolStripButton1"
+    Me.mnu_RTF_Save.ToolTipText = "Save"
+    '
+    'cbo_ContentFiles
+    '
+    Me.cbo_ContentFiles.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+    Me.cbo_ContentFiles.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+    Me.cbo_ContentFiles.Name = "cbo_ContentFiles"
+    Me.cbo_ContentFiles.Size = New System.Drawing.Size(300, 25)
+    '
+    'mnu_RTF_DeleteMenu
+    '
+    Me.mnu_RTF_DeleteMenu.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+    Me.mnu_RTF_DeleteMenu.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteCurrentFileToolStripMenuItem})
+    Me.mnu_RTF_DeleteMenu.Image = Global.Intelepros.My.Resources.Resources.cross
+    Me.mnu_RTF_DeleteMenu.ImageTransparentColor = System.Drawing.Color.Magenta
+    Me.mnu_RTF_DeleteMenu.Name = "mnu_RTF_DeleteMenu"
+    Me.mnu_RTF_DeleteMenu.Size = New System.Drawing.Size(29, 22)
+    Me.mnu_RTF_DeleteMenu.Text = "ToolStripButton1"
+    '
+    'DeleteCurrentFileToolStripMenuItem
+    '
+    Me.DeleteCurrentFileToolStripMenuItem.Image = Global.Intelepros.My.Resources.Resources.page_delete
+    Me.DeleteCurrentFileToolStripMenuItem.Name = "DeleteCurrentFileToolStripMenuItem"
+    Me.DeleteCurrentFileToolStripMenuItem.Size = New System.Drawing.Size(171, 22)
+    Me.DeleteCurrentFileToolStripMenuItem.Text = "Delete Current File"
+    '
+    'ToolStripButton2
+    '
+    Me.ToolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+    Me.ToolStripButton2.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_ImportFile})
+    Me.ToolStripButton2.Image = Global.Intelepros.My.Resources.Resources.add
+    Me.ToolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta
+    Me.ToolStripButton2.Name = "ToolStripButton2"
+    Me.ToolStripButton2.Size = New System.Drawing.Size(29, 22)
+    Me.ToolStripButton2.Text = "ToolStripButton2"
+    '
+    'mnu_ImportFile
+    '
+    Me.mnu_ImportFile.Image = Global.Intelepros.My.Resources.Resources.page_add
+    Me.mnu_ImportFile.Name = "mnu_ImportFile"
+    Me.mnu_ImportFile.Size = New System.Drawing.Size(135, 22)
+    Me.mnu_ImportFile.Text = "Import Text"
+    '
+    'ToolStripLabel1
+    '
+    Me.ToolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right
+    Me.ToolStripLabel1.Name = "ToolStripLabel1"
+    Me.ToolStripLabel1.Size = New System.Drawing.Size(25, 22)
+    Me.ToolStripLabel1.Text = "File"
+    '
+    'RichTextBox
+    '
+    Me.RichTextBox.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.RichTextBox.ContextMenuStrip = Me.mnu_RTF
+    Me.RichTextBox.Location = New System.Drawing.Point(3, 28)
+    Me.RichTextBox.Name = "RichTextBox"
+    Me.tbl_ContentEdit.SetRowSpan(Me.RichTextBox, 2)
+    Me.RichTextBox.Size = New System.Drawing.Size(305, 384)
+    Me.RichTextBox.TabIndex = 0
+    Me.RichTextBox.Text = ""
+    '
+    'mnu_RTF
+    '
+    Me.mnu_RTF.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.mnu_RTF_Cut, Me.mnu_RTF_Copy, Me.mnu_RTF_Paste})
+    Me.mnu_RTF.Name = "mnu_RTF"
+    Me.mnu_RTF.Size = New System.Drawing.Size(103, 70)
+    '
+    'mnu_RTF_Cut
+    '
+    Me.mnu_RTF_Cut.Name = "mnu_RTF_Cut"
+    Me.mnu_RTF_Cut.Size = New System.Drawing.Size(102, 22)
+    Me.mnu_RTF_Cut.Text = "Cut"
+    '
+    'mnu_RTF_Copy
+    '
+    Me.mnu_RTF_Copy.Name = "mnu_RTF_Copy"
+    Me.mnu_RTF_Copy.Size = New System.Drawing.Size(102, 22)
+    Me.mnu_RTF_Copy.Text = "Copy"
+    '
+    'mnu_RTF_Paste
+    '
+    Me.mnu_RTF_Paste.Name = "mnu_RTF_Paste"
+    Me.mnu_RTF_Paste.Size = New System.Drawing.Size(102, 22)
+    Me.mnu_RTF_Paste.Text = "Paste"
+    '
+    'lst_Clip
+    '
+    Me.lst_Clip.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.lst_Clip.FormattingEnabled = True
+    Me.lst_Clip.IntegralHeight = False
+    Me.lst_Clip.Location = New System.Drawing.Point(314, 53)
+    Me.lst_Clip.Name = "lst_Clip"
+    Me.lst_Clip.Size = New System.Drawing.Size(141, 359)
+    Me.lst_Clip.TabIndex = 2
+    '
     'tbl_PromoSettings
     '
     Me.tbl_PromoSettings.BackColor = System.Drawing.SystemColors.Control
     Me.tbl_PromoSettings.ColumnCount = 1
     Me.tbl_PromoSettings.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-    Me.tbl_PromoSettings.Location = New System.Drawing.Point(559, 39)
+    Me.tbl_PromoSettings.Location = New System.Drawing.Point(139, 391)
     Me.tbl_PromoSettings.Name = "tbl_PromoSettings"
     Me.tbl_PromoSettings.RowCount = 1
     Me.tbl_PromoSettings.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
     Me.tbl_PromoSettings.Size = New System.Drawing.Size(458, 415)
     Me.tbl_PromoSettings.TabIndex = 23
+    Me.tbl_PromoSettings.Visible = False
     '
     'FocusIt
     '
@@ -337,6 +534,7 @@ Partial Class Frm_Locations
     Me.tbl_LocationSettings.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 367.0!))
     Me.tbl_LocationSettings.Size = New System.Drawing.Size(536, 367)
     Me.tbl_LocationSettings.TabIndex = 21
+    Me.tbl_LocationSettings.Visible = False
     '
     'Panel1
     '
@@ -542,7 +740,7 @@ Partial Class Frm_Locations
     Me.tbl_MainLoc.Name = "tbl_MainLoc"
     Me.tbl_MainLoc.RowCount = 3
     Me.tbl_MainLoc.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30.0!))
-    Me.tbl_MainLoc.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80.0!))
+    Me.tbl_MainLoc.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 108.0!))
     Me.tbl_MainLoc.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
     Me.tbl_MainLoc.Size = New System.Drawing.Size(262, 361)
     Me.tbl_MainLoc.TabIndex = 38
@@ -563,7 +761,7 @@ Partial Class Frm_Locations
     Me.TableLayoutPanel1.Controls.Add(Me.Label4, 0, 4)
     Me.TableLayoutPanel1.Controls.Add(Me.ck_AlwaysVis, 1, 2)
     Me.TableLayoutPanel1.Controls.Add(Me.cbo_NewStatus, 1, 4)
-    Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 113)
+    Me.TableLayoutPanel1.Location = New System.Drawing.Point(3, 141)
     Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
     Me.TableLayoutPanel1.RowCount = 5
     Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
@@ -571,7 +769,7 @@ Partial Class Frm_Locations
     Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
     Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25.0!))
-    Me.TableLayoutPanel1.Size = New System.Drawing.Size(256, 245)
+    Me.TableLayoutPanel1.Size = New System.Drawing.Size(256, 217)
     Me.TableLayoutPanel1.TabIndex = 36
     '
     'lst_StatusBranch
@@ -585,7 +783,7 @@ Partial Class Frm_Locations
     Me.lst_StatusBranch.Location = New System.Drawing.Point(53, 28)
     Me.lst_StatusBranch.Name = "lst_StatusBranch"
     Me.lst_StatusBranch.ScrollAlwaysVisible = True
-    Me.lst_StatusBranch.Size = New System.Drawing.Size(200, 139)
+    Me.lst_StatusBranch.Size = New System.Drawing.Size(200, 111)
     Me.lst_StatusBranch.TabIndex = 25
     '
     'Label3
@@ -633,7 +831,7 @@ Partial Class Frm_Locations
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.cmd_DeleteLocStatus.ContextMenuStrip = Me.HelpMenu
-    Me.cmd_DeleteLocStatus.Location = New System.Drawing.Point(53, 195)
+    Me.cmd_DeleteLocStatus.Location = New System.Drawing.Point(53, 167)
     Me.cmd_DeleteLocStatus.Margin = New System.Windows.Forms.Padding(3, 0, 3, 0)
     Me.cmd_DeleteLocStatus.Name = "cmd_DeleteLocStatus"
     Me.cmd_DeleteLocStatus.Size = New System.Drawing.Size(200, 25)
@@ -646,7 +844,7 @@ Partial Class Frm_Locations
     Me.Label4.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.Label4.AutoSize = True
     Me.Label4.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-    Me.Label4.Location = New System.Drawing.Point(3, 225)
+    Me.Label4.Location = New System.Drawing.Point(3, 197)
     Me.Label4.Name = "Label4"
     Me.Label4.Size = New System.Drawing.Size(44, 15)
     Me.Label4.TabIndex = 24
@@ -657,7 +855,7 @@ Partial Class Frm_Locations
     '
     Me.ck_AlwaysVis.Anchor = CType((System.Windows.Forms.AnchorStyles.Left Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.ck_AlwaysVis.ContextMenuStrip = Me.HelpMenu
-    Me.ck_AlwaysVis.Location = New System.Drawing.Point(53, 173)
+    Me.ck_AlwaysVis.Location = New System.Drawing.Point(53, 145)
     Me.ck_AlwaysVis.Name = "ck_AlwaysVis"
     Me.ck_AlwaysVis.Size = New System.Drawing.Size(200, 19)
     Me.ck_AlwaysVis.TabIndex = 25
@@ -671,7 +869,7 @@ Partial Class Frm_Locations
     Me.cbo_NewStatus.ContextMenuStrip = Me.HelpMenu
     Me.cbo_NewStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
     Me.cbo_NewStatus.IntegralHeight = False
-    Me.cbo_NewStatus.Location = New System.Drawing.Point(53, 222)
+    Me.cbo_NewStatus.Location = New System.Drawing.Point(53, 194)
     Me.cbo_NewStatus.Margin = New System.Windows.Forms.Padding(3, 0, 3, 0)
     Me.cbo_NewStatus.Name = "cbo_NewStatus"
     Me.cbo_NewStatus.Size = New System.Drawing.Size(200, 21)
@@ -697,7 +895,7 @@ Partial Class Frm_Locations
     '
     Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
     Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-    Me.ClientSize = New System.Drawing.Size(1160, 615)
+    Me.ClientSize = New System.Drawing.Size(1179, 615)
     Me.Controls.Add(Me.ToolStripContainer1)
     Me.HelpButton = True
     Me.MaximizeBox = False
@@ -719,6 +917,11 @@ Partial Class Frm_Locations
     Me.ToolStripContainer1.PerformLayout()
     Me.StatusStrip.ResumeLayout(False)
     Me.StatusStrip.PerformLayout()
+    Me.tbl_ContentEdit.ResumeLayout(False)
+    Me.tbl_ContentEdit.PerformLayout()
+    Me.ToolStrip1.ResumeLayout(False)
+    Me.ToolStrip1.PerformLayout()
+    Me.mnu_RTF.ResumeLayout(False)
     Me.tbl_LocationSettings.ResumeLayout(False)
     Me.Panel1.ResumeLayout(False)
     Me.tbl_StatusEdit.ResumeLayout(False)
@@ -743,7 +946,6 @@ Partial Class Frm_Locations
   Friend WithEvents lbl_Status As System.Windows.Forms.ToolStripStatusLabel
   Friend WithEvents mnu_Location As System.Windows.Forms.ToolStripSplitButton
   Friend WithEvents mnu_AddNewLocation As System.Windows.Forms.ToolStripMenuItem
-  Friend WithEvents mnu_Promo As System.Windows.Forms.ToolStripSplitButton
   Friend WithEvents ck_LocEnabled As System.Windows.Forms.CheckBox
   Friend WithEvents tbl_LocationSettings As System.Windows.Forms.TableLayoutPanel
   Friend WithEvents FocusIt As System.Windows.Forms.Button
@@ -779,4 +981,23 @@ Partial Class Frm_Locations
   Friend WithEvents WhatsThisToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents ReportAnIssueToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
   Friend WithEvents Label12 As System.Windows.Forms.Label
+  Friend WithEvents mnu_Promo As System.Windows.Forms.ToolStripButton
+  Friend WithEvents mnu_Content As System.Windows.Forms.ToolStripButton
+  Friend WithEvents tbl_ContentEdit As System.Windows.Forms.TableLayoutPanel
+  Friend WithEvents RichTextBox As System.Windows.Forms.RichTextBox
+  Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
+  Friend WithEvents mnu_RTF_Save As System.Windows.Forms.ToolStripButton
+  Friend WithEvents mnu_RTF As System.Windows.Forms.ContextMenuStrip
+  Friend WithEvents mnu_RTF_Cut As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents mnu_RTF_Copy As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents mnu_RTF_Paste As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents cbo_ContentFiles As System.Windows.Forms.ToolStripComboBox
+  Friend WithEvents mnu_RTF_DeleteMenu As System.Windows.Forms.ToolStripDropDownButton
+  Friend WithEvents DeleteCurrentFileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents ToolStripButton2 As System.Windows.Forms.ToolStripDropDownButton
+  Friend WithEvents mnu_ImportFile As System.Windows.Forms.ToolStripMenuItem
+  Friend WithEvents lst_Clip As System.Windows.Forms.ListBox
+  Friend WithEvents ToolStripLabel1 As System.Windows.Forms.ToolStripLabel
+  Friend WithEvents cbo_Confirm As System.Windows.Forms.ComboBox
+  Friend WithEvents Label13 As System.Windows.Forms.Label
 End Class

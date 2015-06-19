@@ -12,13 +12,19 @@ Public Module Functions
     Contact
     Booking
   End Enum
+  Public Enum EnumMessageType
+    Status
+    Confirm
+  End Enum
   Public Structure TypeFormField
     Dim ControlName As String
     Dim FieldName As String
     Dim NewValue As String
     Dim OldValue As String
     Dim FieldMessage As String
+    Dim MessageType As EnumMessageType
     Dim FieldType As EnumFieldType
+    Dim OkToWrite As Boolean
   End Structure
   'Public YesterdayDateTime As Date
   ' ''' <summary>
